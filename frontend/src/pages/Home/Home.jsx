@@ -1,13 +1,11 @@
 const Home = () => {
-  const pageTitle = 'Home'
+  const pageTitle = "Home";
 
   return (
     <div>
-      <p>
-        {pageTitle}
-      </p>
+      <h1>{pageTitle} Page</h1>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

@@ -1,11 +1,7 @@
 const Listings = () => {
   const pageTitle = "Listings";
 
-  return (
-    <div>
-      <p>{pageTitle}</p>
-    </div>
-  );
+  return <h1>{pageTitle} Page</h1>;
 };
 
 export default Listings;
