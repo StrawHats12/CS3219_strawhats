@@ -9,6 +9,8 @@ class Listing {
   deadline;
   bidding_id;
   status = "AVAILABLE";
+  createdAt;
+  updatedAt;
 
   constructor(body) {
     this.seller_uid = body.seller_uid;
@@ -20,6 +22,10 @@ class Listing {
     // Generate ID's if needed
     this.id = body.id || this.#generateId();
     this.bidding_id = body.id || this.id;
+
+    // Timestamp metadata
+    this.createdAt = body.createdAt || Date.now();
+    this.updatedAt = Date.now();
   }
 
   setStatus(status) {
