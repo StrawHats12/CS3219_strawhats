@@ -15,6 +15,13 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = LISTINGS_TABLE_NAME;
 
+const getListings = async () => {
+  const params = {
+    TableName: TABLE_NAME,
+  };
+  return await dynamoClient.scan(params).promise();
+};
+
 const getListingsBySellerId = async (id) => {
   const params = {
     TableName: TABLE_NAME,
@@ -61,6 +68,7 @@ const deleteListing = async (id) => {
 
 module.exports = {
   dynamoClient,
+  getListings,
   getListingById,
   getListingsBySellerId,
   addOrUpdateListing,

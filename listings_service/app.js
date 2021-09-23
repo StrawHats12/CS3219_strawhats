@@ -6,6 +6,7 @@ const {
   getListingsBySellerId,
   addOrUpdateListing,
   deleteListing,
+  getListings,
 } = require("./dynamoDb");
 const app = express();
 
@@ -13,6 +14,17 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
+});
+
+app.get("/listings", async (req, res) => {
+  try {
+    const listing = await getListings();
+    console.log(listing);
+    res.json(listing);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: "Something went wrong" });
+  }
 });
 
 app.get("/listing/:id", async (req, res) => {
@@ -53,7 +65,7 @@ app.post("/listing", async (req, res) => {
   }
 });
 
-app.put('/listing/:id', async (req, res) => {
+app.put("/listing/:id", async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   body.id = id;
