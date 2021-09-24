@@ -5,12 +5,12 @@ import useAuth from "../../hooks/useAuth";
 const NavBar = () => {
   const { currentUser } = useAuth();
 
-  console.log(currentUser);
-
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="/">StrawHats</Navbar.Brand>
+        <LinkContainer to="/">
+          <Navbar.Brand>StrawHats</Navbar.Brand>
+        </LinkContainer>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -32,15 +32,15 @@ const NavBar = () => {
               </NavDropdown.Item>
             </NavDropdown> */}
           </Nav>
-          {currentUser ? (
-            <Nav>
-              <Nav.Link href="/authentication">Sign Out</Nav.Link>
-            </Nav>
-          ) : (
-            <Nav>
-              <Nav.Link href="/authentication">Sign In</Nav.Link>
-            </Nav>
-          )}
+          <Nav>
+            <LinkContainer to="/authentication">
+              {currentUser ? (
+                <Nav.Link>Sign Out</Nav.Link>
+              ) : (
+                <Nav.Link>Sign In</Nav.Link>
+              )}
+            </LinkContainer>
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>
