@@ -1,11 +1,16 @@
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
+import useAuth from "../../hooks/useAuth";
 
 const NavBar = () => {
+  const { currentUser } = useAuth();
+
+  console.log(currentUser);
+
   return (
     <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
       <Container>
-        <Navbar.Brand href="#home">StrawHats</Navbar.Brand>
+        <Navbar.Brand href="/">StrawHats</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
@@ -27,9 +32,15 @@ const NavBar = () => {
               </NavDropdown.Item>
             </NavDropdown> */}
           </Nav>
-          <Nav>
-            <Nav.Link href="#login">Login</Nav.Link>
-          </Nav>
+          {currentUser ? (
+            <Nav>
+              <Nav.Link href="/authentication">Sign Out</Nav.Link>
+            </Nav>
+          ) : (
+            <Nav>
+              <Nav.Link href="/authentication">Sign In</Nav.Link>
+            </Nav>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>

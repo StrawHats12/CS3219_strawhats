@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-strawhats-dev-10344-authRole",
+      "UnauthRoleArn": "arn:aws:iam::727167583045:role/amplify-strawhats-dev-10344-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::727167583045:role/amplify-strawhats-dev-10344-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-strawhats-dev-10344-deployment",
+      "UnauthRoleName": "amplify-strawhats-dev-10344-unauthRole",
+      "StackName": "amplify-strawhats-dev-10344",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:727167583045:stack/amplify-strawhats-dev-10344/3938b9d0-1c90-11ec-adda-0a632af20480",
+      "AmplifyAppId": "d35y0d6u0ucr1n"
+    },
+    "categories": {
+      "auth": {
+        "strawhats36aee0c5": {}
+      }
+    }
+  }
+}
