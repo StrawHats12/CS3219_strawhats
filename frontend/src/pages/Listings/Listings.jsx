@@ -3,7 +3,6 @@ import { Container } from "react-bootstrap";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getAllListings } from "../../services/listings-service";
 import ListingsCard from "./ListingsCard";
-// import ListingsCard from "./ListingsCard";
 
 const Listings = () => {
   const pageTitle = "Listings";
