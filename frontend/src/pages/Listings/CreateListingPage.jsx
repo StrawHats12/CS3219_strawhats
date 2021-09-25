@@ -1,6 +1,6 @@
 import ListingForm from "./ListingForm";
 
-const CreateListing = () => {
+const CreateListingPage = () => {
   const pageTitle = "Create Listing";
 
   return (
@@ -11,4 +11,4 @@ const CreateListing = () => {
   );
 };
 
-export default CreateListing;
+export default CreateListingPage;

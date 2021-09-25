@@ -1,4 +1,5 @@
-import Listings from "./Listings";
-import CreateListing from "./CreateListing";
+import ListingPage from "./ListingPage";
+import ListingsPage from "./ListingsPage";
+import CreateListingPage from "./CreateListingPage";
 
-export { CreateListing, Listings };
+export { CreateListingPage, ListingPage, ListingsPage };

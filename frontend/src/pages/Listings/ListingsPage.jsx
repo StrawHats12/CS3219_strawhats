@@ -4,7 +4,7 @@ import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getAllListings } from "../../services/listings-service";
 import ListingsCard from "./ListingsCard";
 
-const Listings = () => {
+const ListingsPage = () => {
   const pageTitle = "Listings";
   const [listings, setListings] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,4 +37,4 @@ const Listings = () => {
   );
 };
 
-export default Listings;
+export default ListingsPage;

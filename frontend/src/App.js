@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
-import { CreateListing, Listings } from "./pages/Listings";
+import { CreateListingPage, ListingPage, ListingsPage } from "./pages/Listings";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import Authentication from "./pages/Authentication";
@@ -16,8 +16,9 @@ function App() {
       <Container>
         <Switch>
           <Route path="/" component={Home} exact />
-          <Route path="/listings" component={Listings} exact />
-          <Route path="/listings/create" component={CreateListing} exact />
+          <Route path="/listings" component={ListingsPage} exact />
+          <Route path="/listings/create" component={CreateListingPage} exact />
+          <Route path="/listings/:id" component={ListingPage} exact />
           <Route path="/authentication" component={Authentication} exact />
           <Route component={NotFound} />
         </Switch>
