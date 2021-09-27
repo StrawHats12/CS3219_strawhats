@@ -3,7 +3,7 @@ import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getListing } from "../../services/listings-service";
-import ListingsCard from "../../components/Listings/ListingsCard";
+import { ListingsCard } from "../../components/Listings";
 
 const ListingsPage = () => {
   const pageTitle = "Listing";
@@ -28,11 +28,7 @@ const ListingsPage = () => {
     <>
       <h1>{pageTitle} Page</h1>
       <Container>
-        {isLoading ? (
-          <StrawhatSpinner />
-        ) : (
-          <ListingsCard listing={listing} />
-        )}
+        {isLoading ? <StrawhatSpinner /> : <ListingsCard listing={listing} />}
       </Container>
     </>
   );

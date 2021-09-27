@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Container } from "react-bootstrap";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getAllListings } from "../../services/listings-service";
-import ListingsCard from "./ListingsCard";
+import { ListingsCard } from "../../components/Listings";
 
 const ListingsPage = () => {
   const pageTitle = "Listings";
@@ -28,7 +28,7 @@ const ListingsPage = () => {
         {isLoading ? (
           <StrawhatSpinner />
         ) : (
-          listings.map((listing, i) => (
+          listings?.map((listing, i) => (
             <ListingsCard listing={listing} key={i} />
           ))
         )}
