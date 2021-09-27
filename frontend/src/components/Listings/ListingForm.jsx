@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import ListingsImagesUpload from "./ListingsImagesUpload";
 
 const LISTING_NAME = "listing_name";
 const DESCRIPTION = "description";
@@ -14,6 +15,7 @@ const ListingForm = (props) => {
     DEADLINE: item[DEADLINE] || "",
   });
   const [errors, setErrors] = useState({});
+  const [imageFiles, setImageFiles] = useState([]); // Image Files
 
   const setField = (field, value) => {
     setForm({
@@ -105,7 +107,9 @@ const ListingForm = (props) => {
           </Form.Text>
         </Form.Group>
       </Form>
-      <Button variant="primary" onClick={handleSubmit}>
+      <Form.Label>Images</Form.Label>
+      <ListingsImagesUpload imageFiles={imageFiles} setImageFiles={setImageFiles} />
+      <Button variant="success" onClick={handleSubmit}>
         Create Listing
       </Button>
     </Container>
