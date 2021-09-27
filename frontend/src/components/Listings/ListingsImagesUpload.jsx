@@ -28,16 +28,16 @@ const ListingsImagesUpload = (props) => {
     });
 
     // Upload file
-    uploadListingImage(currentFile)
+    uploadListingImage(currentFile).finally(() => {
+      setState({
+        ...state,
+        selectedFiles: undefined,
+      });
 
-    setState({
-      ...state,
-      selectedFiles: undefined,
+      let imageFiles = [...props.imageFiles];
+      imageFiles.push(currentFile);
+      props.setImageFiles(imageFiles);
     });
-
-    let imageFiles = [...props.imageFiles];
-    imageFiles.push(currentFile);
-    props.setImageFiles(imageFiles);
   };
 
   const { selectedFiles, currentFile, message } = state;
