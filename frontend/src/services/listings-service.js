@@ -1,5 +1,7 @@
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 import { LISTINGS_ENDPOINT } from "../const";
+import { getCurrentUser } from "../hooks/useAuth";
 
 const getAllListings = async () => {
   try {
@@ -25,4 +27,22 @@ const getListing = async (id) => {
   }
 };
 
-export { getAllListings, getListing };
+const uploadListingImage = async (file, directory = undefined, filename = undefined) => {
+  if (!directory) {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      throw new Error("User is not logged in"); // TODO, throw proper error
+    }
+    directory = currentUser.attributes.sub;
+  }
+
+  if (!filename) {
+    filename = uuidv4();
+  }
+
+  const fileToUpload = { ...file, name: filename };
+
+  
+};
+
+export { getAllListings, getListing, uploadListingImage };

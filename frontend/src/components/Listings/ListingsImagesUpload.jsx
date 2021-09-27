@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button, Card } from "react-bootstrap";
 import Dropzone from "react-dropzone";
+import { uploadListingImage } from "../../services/listings-service";
 import StrawhatSpinner from "../StrawhatSpinner";
 import "./ListingsImageUpload.css";
 
@@ -27,6 +28,7 @@ const ListingsImagesUpload = (props) => {
     });
 
     // Upload file
+    uploadListingImage(currentFile)
 
     setState({
       ...state,
