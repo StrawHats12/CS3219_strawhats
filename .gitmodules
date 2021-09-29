@@ -1,0 +1,6 @@
+[submodule "livestream_service/nginx_build/nginx-rtmp-module"]
+	path = livestream_service/nginx_build/nginx-rtmp-module
+	url = https://github.com/arut/nginx-rtmp-module.git
+[submodule "livestream_service/nginx_build/nginx"]
+	path = livestream_service/nginx_build/nginx
+	url = https://github.com/nginx/nginx.git
