@@ -37,22 +37,15 @@ const createListing = async (listing) => {
   }
 };
 
-const uploadListingImage = async (
-  file,
-  directory = undefined,
-  filename = undefined
-) => {
-  if (!directory) {
-    const currentUser = await getCurrentUser();
-    if (!currentUser) {
-      throw new Error("User is not logged in"); // TODO, throw proper error
-    }
-    directory = currentUser.attributes.sub;
-  }
+const uploadListingImage = async (file) => {
+  // const currentUser = await getCurrentUser();
+  // if (!currentUser) {
+  //   throw new Error("User is not logged in"); // TODO, throw proper error
+  // }
 
-  if (!filename) {
-    filename = uuidv4();
-  }
+  // if (!filename) {
+  const filename = uuidv4();
+  // }
 
   try {
     await Storage.put(filename, file, {

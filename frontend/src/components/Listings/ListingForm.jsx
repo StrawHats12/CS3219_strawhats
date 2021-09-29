@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import ListingsImagesUpload from "./ListingsImagesUpload";
 import { LISTING } from "../../const";
-import { getCurrentUser } from "../../hooks/useAuth";
+import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
 import { createListing } from "../../services/listings-service";
 
 const ListingForm = (props) => {
@@ -55,10 +55,12 @@ const ListingForm = (props) => {
       setErrors(newErrors);
     } else {
       // const seller_id = await getCurrentUser().attributes.sub;
-      const seller_id = await getCurrentUser();
+      const seller_id = await getCurrentUserCredentials();
+
+      console.log(seller_id);
       const listing = {
         ...form,
-        [LISTING.SELLER_ID]: seller_id.attributes.sub,
+        [LISTING.SELLER_ID]: seller_id.identityId,
         [LISTING.IMAGES]: [...imageFiles],
       };
 
