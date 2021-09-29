@@ -9,8 +9,12 @@ const ListingsImagesUpload = (props) => {
   const [state, setState] = useState({
     selectedFiles: undefined,
     currentFile: undefined,
+    uploadedFiles: [],
     message: "",
   });
+
+  const { selectedFiles, currentFile, message } = state;
+  const imageFiles = props.imageFiles;
 
   const onDrop = (files) => {
     if (files.length > 0) {
@@ -20,7 +24,6 @@ const ListingsImagesUpload = (props) => {
 
   const uploadFile = () => {
     let currentFile = state.selectedFiles[0];
-    console.log("Test", currentFile);
 
     setState({
       ...state,
@@ -28,28 +31,29 @@ const ListingsImagesUpload = (props) => {
     });
 
     // Upload file
-    uploadListingImage(currentFile).finally(() => {
-      setState({
-        ...state,
-        selectedFiles: undefined,
+    uploadListingImage(currentFile)
+      .then((filename) => {
+        imageFiles.push(filename);
+        props.setImageFiles(imageFiles);
+
+        state.uploadedFiles.push(currentFile);
+        setState(state);
+      })
+      .finally(() => {
+        setState({
+          ...state,
+          selectedFiles: undefined,
+        });
       });
-
-      let imageFiles = [...props.imageFiles];
-      imageFiles.push(currentFile);
-      props.setImageFiles(imageFiles);
-    });
   };
-
-  const { selectedFiles, currentFile, message } = state;
-  const imageFiles = props.imageFiles;
 
   return (
     <div>
-      {imageFiles.length > 0 && (
+      {state.uploadedFiles.length > 0 && (
         <Card>
           <Card.Header className="card-header">List of Files</Card.Header>
           <ul className="list-group list-group-flush">
-            {imageFiles.map((file, index) => (
+            {state.uploadedFiles.map((file, index) => (
               <li className="list-group-item" key={index}>
                 <a href={file.url}>{file.name}</a>
               </li>

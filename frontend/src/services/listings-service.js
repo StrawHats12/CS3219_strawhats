@@ -28,6 +28,15 @@ const getListing = async (id) => {
   }
 };
 
+const createListing = async (listing) => {
+  try {
+    await axios.post(`${LISTINGS_ENDPOINT}/listing`, listing);
+  } catch (error) {
+    console.log(error); // TODO, handle this error
+    return null;
+  }
+};
+
 const uploadListingImage = async (
   file,
   directory = undefined,
@@ -50,9 +59,11 @@ const uploadListingImage = async (
       contentType: "image/png",
       level: "protected",
     });
+
+    return filename;
   } catch (error) {
     console.log("Error uploading file: ", error); // TODO, Handle Error
   }
 };
 
-export { getAllListings, getListing, uploadListingImage };
+export { createListing, getAllListings, getListing, uploadListingImage };

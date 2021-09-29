@@ -1,18 +1,17 @@
 import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import ListingsImagesUpload from "./ListingsImagesUpload";
-
-const LISTING_NAME = "listing_name";
-const DESCRIPTION = "description";
-const DEADLINE = "deadline";
+import { LISTING } from "../../const";
+import { getCurrentUser } from "../../hooks/useAuth";
+import { createListing } from "../../services/listings-service";
 
 const ListingForm = (props) => {
   const item = props;
 
   const [form, setForm] = useState({
-    LISTING_NAME: item[LISTING_NAME] || "",
-    DESCRIPTION: item[DESCRIPTION] || "",
-    DEADLINE: item[DEADLINE] || "",
+    [LISTING.NAME]: item[LISTING.NAME] || "",
+    [LISTING.DESCRIPTION]: item[LISTING.DESCRIPTION] || "",
+    [LISTING.DEADLINE]: item[LISTING.DEADLINE] || "",
   });
   const [errors, setErrors] = useState({});
   const [imageFiles, setImageFiles] = useState([]); // Image Files
@@ -33,29 +32,37 @@ const ListingForm = (props) => {
   const findFormErrors = () => {
     const newErrors = {};
 
-    if (!form[LISTING_NAME]) {
-      newErrors[LISTING_NAME] = "cannot be blank!";
+    if (!form[LISTING.NAME]) {
+      newErrors[LISTING.NAME] = "cannot be blank!";
     }
 
-    if (!form[DESCRIPTION]) {
-      newErrors[DESCRIPTION] = "cannot be blank!";
+    if (!form[LISTING.DESCRIPTION]) {
+      newErrors[LISTING.DESCRIPTION] = "cannot be blank!";
     }
 
-    if (!form[DEADLINE]) {
-      newErrors[DEADLINE] = "cannot be blank!";
+    if (!form[LISTING.DEADLINE]) {
+      newErrors[LISTING.DEADLINE] = "cannot be blank!";
     }
 
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = findFormErrors();
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // TODO, Submission Logic
+      // const seller_id = await getCurrentUser().attributes.sub;
+      const seller_id = await getCurrentUser();
+      const listing = {
+        ...form,
+        [LISTING.SELLER_ID]: seller_id.attributes.sub,
+        [LISTING.IMAGES]: [...imageFiles],
+      };
+
+      createListing(listing);
       alert("Listing Created!");
     }
   };
@@ -68,12 +75,12 @@ const ListingForm = (props) => {
           <Form.Control
             type="text"
             placeholder="Enter listing name"
-            defaultValue={form[LISTING_NAME]}
-            onChange={(e) => setField(LISTING_NAME, e.target.value)}
-            isInvalid={!!errors[LISTING_NAME]}
+            defaultValue={form[LISTING.NAME]}
+            onChange={(e) => setField(LISTING.NAME, e.target.value)}
+            isInvalid={!!errors[LISTING.NAME]}
           />
           <Form.Control.Feedback type="invalid">
-            {errors[LISTING_NAME]}
+            {errors[LISTING.NAME]}
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formListingDescription">
@@ -82,12 +89,12 @@ const ListingForm = (props) => {
             as="textarea"
             placeholder="Enter listing description"
             style={{ height: "200px" }}
-            defaultValue={form[DESCRIPTION]}
-            onChange={(e) => setField(DESCRIPTION, e.target.value)}
-            isInvalid={!!errors[DESCRIPTION]}
+            defaultValue={form[LISTING.DESCRIPTION]}
+            onChange={(e) => setField(LISTING.DESCRIPTION, e.target.value)}
+            isInvalid={!!errors[LISTING.DESCRIPTION]}
           />
           <Form.Control.Feedback type="invalid">
-            {errors[DESCRIPTION]}
+            {errors[LISTING.DESCRIPTION]}
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formListingName">
@@ -95,12 +102,12 @@ const ListingForm = (props) => {
           <Form.Control
             type="datetime-local"
             placeholder="Enter listingName"
-            defaultValue={form[DEADLINE]}
-            onChange={(e) => setField(DEADLINE, e.target.value)}
-            isInvalid={!!errors[DEADLINE]}
+            defaultValue={form[LISTING.DEADLINE]}
+            onChange={(e) => setField(LISTING.DEADLINE, e.target.value)}
+            isInvalid={!!errors[LISTING.DEADLINE]}
           />
           <Form.Control.Feedback type="invalid">
-            {errors[DEADLINE]}
+            {errors[LISTING.DEADLINE]}
           </Form.Control.Feedback>
           <Form.Text>
             The bidding will close after the bidding deadline.
@@ -108,7 +115,10 @@ const ListingForm = (props) => {
         </Form.Group>
       </Form>
       <Form.Label>Images</Form.Label>
-      <ListingsImagesUpload imageFiles={imageFiles} setImageFiles={setImageFiles} />
+      <ListingsImagesUpload
+        imageFiles={imageFiles}
+        setImageFiles={setImageFiles}
+      />
       <Button variant="success" onClick={handleSubmit}>
         Create Listing
       </Button>
