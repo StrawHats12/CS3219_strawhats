@@ -5,6 +5,11 @@
     height: 100%;
 }
 
+.conversation-header {
+    text-align: center;
+    padding: 10px;
+}
+
 .conversation-messages-container {
     display: flex;
     flex-grow: 1;

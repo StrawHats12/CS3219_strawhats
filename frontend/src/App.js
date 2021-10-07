@@ -36,7 +36,7 @@ function App() {
           />
           <Route path="/listings/:id" component={ListingPage} exact />
           <Route path="/authentication" component={Authentication} exact />
-          <Route path="/messenger/:id" component={Messenger} />
+          <Route path="/messenger" component={Messenger} />
           <Route component={NotFound} />
         </Switch>
       </Container>

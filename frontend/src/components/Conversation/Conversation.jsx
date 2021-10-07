@@ -67,6 +67,9 @@ export default function Conversation({ convo, id }) {
 
   return (
     <div className="conversation-container">
+      <div className="conversation-header">
+        You are currently chatting with {convo.members.find((m) => m !== id)}
+      </div>
       <div className="conversation-messages-container">
         {messages.map((m, index) => {
           const isLastMessage = messages.length - 1 === index;

@@ -13,7 +13,7 @@ export default function ConversationList({ conversations, setOpenConvo, id }) {
               setOpenConvo(c);
             }}
           >
-            {c.members.find((m) => m !== id)}
+            {c.members?.find((m) => m !== id)}
           </ListGroup.Item>
         ))}
       </ListGroup>

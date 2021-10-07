@@ -13,9 +13,9 @@ export async function getMessagesByConvoId(id) {
   return res.data.Items;
 }
 
-export async function createConversation(recipients) {
-  const res = await axios.post(`${API_URL}/conversation`, recipients);
-  return res;
+export async function createConversation(members) {
+  const res = await axios.post(`${API_URL}/conversation`, { members });
+  return res.data;
 }
 
 export async function getConversationByUserId(id) {
