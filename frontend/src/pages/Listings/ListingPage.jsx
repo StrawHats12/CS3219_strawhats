@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import { useParams } from "react-router";
+import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getListing } from "../../services/listings-service";
-import { ListingsCard } from "../../components/Listings";
 
 const ListingsPage = () => {
-  const pageTitle = "Listing";
   const { id } = useParams();
 
-  const [listing, setListing] = useState(null);
+  const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const { listing_name, description, images, seller_uid } = listing;
 
   useEffect(() => {
     getListing(id).then((res) => {
@@ -26,10 +26,24 @@ const ListingsPage = () => {
 
   return (
     <>
-      <h1>{pageTitle} Page</h1>
-      <Container>
-        {isLoading ? <StrawhatSpinner /> : <ListingsCard listing={listing} />}
-      </Container>
+      {isLoading ? (
+        <StrawhatSpinner />
+      ) : (
+        <Container>
+          <h1>{listing_name}</h1>
+          <Row>
+            <Col>
+              <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
+            </Col>
+            <Col>
+              <p>Current Bid: $100</p>
+            </Col>
+          </Row>
+          <Row>
+            <p>{description}</p>
+          </Row>
+        </Container>
+      )}
     </>
   );
 };
