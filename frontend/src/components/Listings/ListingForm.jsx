@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import ListingsImagesUpload from "./ListingsImagesUpload";
 import { LISTING } from "../../const";
-import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
+import { getCurrentUserCredentials } from "../../hooks/useAuth";
 import { createListing } from "../../services/listings-service";
 
 const ListingForm = (props) => {
@@ -14,7 +14,7 @@ const ListingForm = (props) => {
     [LISTING.DEADLINE]: item[LISTING.DEADLINE] || "",
   });
   const [errors, setErrors] = useState({});
-  const [imageFiles, setImageFiles] = useState([]); // Image Files
+  const [imageFiles, setImageFiles] = useState([]);
 
   const setField = (field, value) => {
     setForm({
@@ -54,7 +54,6 @@ const ListingForm = (props) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // const seller_id = await getCurrentUser().attributes.sub;
       const seller_id = await getCurrentUserCredentials();
 
       console.log(seller_id);

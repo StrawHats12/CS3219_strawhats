@@ -2,7 +2,6 @@ import axios from "axios";
 import { Storage } from "aws-amplify";
 import { v4 as uuidv4 } from "uuid";
 import { LISTINGS_ENDPOINT } from "../const";
-import { getCurrentUser } from "../hooks/useAuth";
 
 const getAllListings = async () => {
   try {
