@@ -44,6 +44,22 @@ const createListing = async (listing) => {
   }
 };
 
+const updateListing = async (listing) => {
+  try {
+    const userSession = await getCurrentSession();
+    const token = userSession?.accessToken.jwtToken;
+
+    await axios.put(`${LISTINGS_ENDPOINT}/listing/${listing.id}`, listing, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } catch (error) {
+    console.log(error); // TODO, handle this error
+    return null;
+  }
+};
+
 const deleteListing = async (id) => {
   const userSession = await getCurrentSession();
   const token = userSession?.accessToken.jwtToken;
@@ -91,4 +107,5 @@ export {
   getListing,
   generateListingId,
   uploadListingImage,
+  updateListing,
 };

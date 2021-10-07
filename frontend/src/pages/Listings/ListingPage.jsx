@@ -38,7 +38,7 @@ const ListingsPage = () => {
   };
 
   const handleEdit = () => {
-    console.log("Edit Pressed");
+    history.push(`/listings/edit/${id}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {

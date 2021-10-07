@@ -6,6 +6,7 @@ import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
 import {
   createListing,
   generateListingId,
+  updateListing,
 } from "../../services/listings-service";
 import { useHistory } from "react-router";
 
@@ -79,7 +80,7 @@ const ListingForm = (props) => {
       if (props.create) {
         await createListing(listing);
       } else if (props.edit) {
-        //await
+        await updateListing(listing);
       } else {
         throw new Error("Missing Props in ListingForm.jsx");
       }
@@ -141,7 +142,8 @@ const ListingForm = (props) => {
         setImageFiles={setImageFiles}
       />
       <Button variant="success" onClick={handleSubmit}>
-        Create Listing
+        {props.create && "Create Listing"}
+        {props.edit && "Update Listing"}
       </Button>
     </Container>
   );

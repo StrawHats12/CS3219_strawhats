@@ -69,13 +69,21 @@ app.post("/listing", auth(roles.USER), async (req, res) => {
   }
 });
 
-app.put("/listing/:id", async (req, res) => {
+app.put("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   body.id = id;
   const listing = new Listing(body);
 
   try {
+    const oldListing = await getListingById(id);
+
+    if (oldListing?.Item?.seller_sub !== req.user.sub) {
+      res
+        .status(403)
+        .json({ err: "User is not authorised to update this listing" });
+    }
+
     const newListing = await addOrUpdateListing(listing);
     console.log(newListing);
     res.json(newListing);
@@ -89,7 +97,6 @@ app.delete("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   try {
     const listing = await getListingById(id);
-    console.log(listing);
     if (listing?.Item?.seller_sub !== req.user.sub) {
       res
         .status(403)
