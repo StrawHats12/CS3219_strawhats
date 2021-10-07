@@ -44,6 +44,17 @@ const createListing = async (listing) => {
   }
 };
 
+const deleteListing = async (id) => {
+  const userSession = await getCurrentSession();
+  const token = userSession?.accessToken.jwtToken;
+
+  await axios.delete(`${LISTINGS_ENDPOINT}/listing/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
 const uploadListingImage = async (file) => {
   const filename = uuidv4();
 
@@ -59,12 +70,23 @@ const uploadListingImage = async (file) => {
   }
 };
 
+const deleteListingImages = async (images, seller_uid) => {
+  for (let i = 0; i < images.length; i++) {
+    await Storage.remove(images[i], {
+      level: "protected",
+      identityId: seller_uid,
+    });
+  }
+};
+
 const generateListingId = () => {
   return uuidv4();
 };
 
 export {
   createListing,
+  deleteListing,
+  deleteListingImages,
   getAllListings,
   getListing,
   generateListingId,

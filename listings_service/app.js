@@ -85,9 +85,17 @@ app.put("/listing/:id", async (req, res) => {
   }
 });
 
-app.delete("/listing/:id", async (req, res) => {
+app.delete("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   try {
+    const listing = await getListingById(id);
+    console.log(listing);
+    if (listing?.Item?.seller_sub !== req.user.sub) {
+      res
+        .status(403)
+        .json({ err: "User is not authorised to delete this listing" });
+    }
+
     res.json(await deleteListing(id));
   } catch (err) {
     console.error(err);

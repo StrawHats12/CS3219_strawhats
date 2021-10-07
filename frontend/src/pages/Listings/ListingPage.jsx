@@ -1,25 +1,42 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
-import { useParams } from "react-router";
+import { Button, Col, Container, Modal, Row } from "react-bootstrap";
+import { useHistory, useParams } from "react-router";
 import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { getListing } from "../../services/listings-service";
+import {
+  deleteListing,
+  deleteListingImages,
+  getListing,
+} from "../../services/listings-service";
 
 const ListingsPage = () => {
   const { id } = useParams();
+  const history = useHistory();
 
   const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { listing_name, description, images, seller_uid } = listing;
+
+  const handleCloseDeleteModal = () => setShowDeleteModal(false);
+  const handleShowDeleteModal = () => setShowDeleteModal(true);
+  const handleDelete = async () => {
+    setIsLoading(true);
+    try {
+      await deleteListingImages(images, seller_uid);
+      await deleteListing(id);
+      history.push("/listings");
+    } catch (error) {
+      setIsLoading(false);
+      handleCloseDeleteModal();
+      alert("Error deleting resource");
+    }
+  };
 
   const handleEdit = () => {
     console.log("Edit Pressed");
-  };
-
-  const handleDelete = () => {
-    console.log("Delete Pressed");
   };
 
   useEffect(() => {
@@ -44,6 +61,26 @@ const ListingsPage = () => {
 
   return (
     <>
+      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Delete Listing</Modal.Title>
+        </Modal.Header>
+        {isLoading ? (
+          <StrawhatSpinner />
+        ) : (
+          <Modal.Body>
+            Are you sure you want to delete <strong>{listing_name}</strong>?
+          </Modal.Body>
+        )}
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDeleteModal}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
       {isLoading ? (
         <StrawhatSpinner />
       ) : listing ? (
@@ -51,8 +88,12 @@ const ListingsPage = () => {
           <h1>{listing_name}</h1>
           {isOwner && (
             <>
-              <Button className="m-1" onClick={handleEdit}>Edit</Button>
-              <Button className="m-1" onClick={handleDelete}>Delete</Button>
+              <Button className="m-1" onClick={handleEdit}>
+                Edit
+              </Button>
+              <Button className="m-1" onClick={handleShowDeleteModal}>
+                Delete
+              </Button>
             </>
           )}
           <Row>
