@@ -10,16 +10,20 @@ import {
 import { useHistory } from "react-router";
 
 const ListingForm = (props) => {
-  const item = props;
   const history = useHistory();
+  let item = props.item;
 
-  const [form, setForm] = useState({
-    [LISTING.NAME]: item[LISTING.NAME] || "",
-    [LISTING.DESCRIPTION]: item[LISTING.DESCRIPTION] || "",
-    [LISTING.DEADLINE]: item[LISTING.DEADLINE] || "",
-  });
+  if (props.create) {
+    item = {
+      [LISTING.NAME]: "",
+      [LISTING.DESCRIPTION]: "",
+      [LISTING.DEADLINE]: new Date().toISOString().substr(0, 16),
+    };
+  }
+
+  const [form, setForm] = useState({ ...item });
   const [errors, setErrors] = useState({});
-  const [imageFiles, setImageFiles] = useState([]);
+  const [imageFiles, setImageFiles] = useState(item[LISTING.IMAGES] || []);
 
   const setField = (field, value) => {
     setForm({
@@ -59,20 +63,27 @@ const ListingForm = (props) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      const sellerCredentials = await getCurrentUserCredentials();
-      const seller = await getCurrentUser();
-      const sellerId = sellerCredentials?.identityId;
-      const sellerSub = seller?.attributes?.sub;
-
       const listing = {
         ...form,
-        [LISTING.ID]: generateListingId(),
-        [LISTING.SELLER_ID]: sellerId,
-        [LISTING.SELLER_SUB]: sellerSub,
         [LISTING.IMAGES]: [...imageFiles],
       };
 
-      await createListing(listing);
+      if (props.create) {
+        const sellerCredentials = await getCurrentUserCredentials();
+        const seller = await getCurrentUser();
+        listing[LISTING.ID] = generateListingId();
+        listing[LISTING.SELLER_ID] = sellerCredentials?.identityId;
+        listing[LISTING.SELLER_SUB] = seller?.attributes?.sub;
+      }
+
+      if (props.create) {
+        await createListing(listing);
+      } else if (props.edit) {
+        //await
+      } else {
+        throw new Error("Missing Props in ListingForm.jsx");
+      }
+
       history.push(`/listings/${listing[LISTING.ID]}`);
     }
   };
