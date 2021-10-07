@@ -9,6 +9,8 @@ import {
   deleteListingImages,
   getListing,
 } from "../../services/listings-service";
+import { formatDate, stringToDate } from "../../utils/DateTime";
+import Countdown from "react-countdown";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -18,7 +20,7 @@ const ListingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid } = listing;
+  const { listing_name, description, images, seller_uid, deadline } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -37,6 +39,18 @@ const ListingsPage = () => {
 
   const handleEdit = () => {
     console.log("Edit Pressed");
+  };
+
+  const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      return <p>Bidding has ended! ({formatDate(deadline)})</p>;
+    } else {
+      return (
+        <span>
+          Biding ends in {hours}:{minutes}:{seconds} ({formatDate(deadline)})
+        </span>
+      );
+    }
   };
 
   useEffect(() => {
@@ -102,6 +116,12 @@ const ListingsPage = () => {
             </Col>
             <Col>
               <p>Current Bid: $100</p>
+              {deadline && (
+                <Countdown
+                  date={stringToDate(deadline)}
+                  renderer={countdownRenderer}
+                />
+              )}
             </Col>
           </Row>
           <Row>
