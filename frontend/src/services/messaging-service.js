@@ -1,7 +1,7 @@
 import axios from "axios";
-import Config from "../config.json";
+import { MESSAGING_ENDPOINT } from "../const";
 
-const API_URL = Config.API_URL;
+const API_URL = MESSAGING_ENDPOINT;
 
 export async function sendMessage(body) {
   const res = await axios.post(`${API_URL}/message`, body);

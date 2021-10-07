@@ -1,4 +1,6 @@
 const LISTINGS_ENDPOINT = "http://localhost:8080";
+const MESSAGING_ENDPOINT = "http://localhost:8081";
+const MESSAGING_SOCKET_ENDPOINT = "http://localhost:5000";
 
 const LISTING = {
   ID: "id",
@@ -10,4 +12,9 @@ const LISTING = {
   IMAGES: "images",
 };
 
-export { LISTING, LISTINGS_ENDPOINT };
+export {
+  LISTING,
+  LISTINGS_ENDPOINT,
+  MESSAGING_ENDPOINT,
+  MESSAGING_SOCKET_ENDPOINT,
+};
