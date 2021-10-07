@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
-import { CreateListingPage, ListingPage, ListingsPage } from "./pages/Listings";
+import { CreateListingPage, EditListingPage, ListingPage, ListingsPage } from "./pages/Listings";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import Authentication from "./pages/Authentication";
@@ -21,6 +21,11 @@ function App() {
           <ProtectedRoute
             path="/listings/create"
             component={CreateListingPage}
+            exact
+          />
+          <ProtectedRoute
+            path="/listings/edit/:id"
+            component={EditListingPage}
             exact
           />
           <Route path="/listings/:id" component={ListingPage} exact />
