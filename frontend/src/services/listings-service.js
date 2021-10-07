@@ -2,7 +2,7 @@ import axios from "axios";
 import { Storage } from "aws-amplify";
 import { v4 as uuidv4 } from "uuid";
 import { LISTINGS_ENDPOINT } from "../const";
-import { getCurrentUser } from "../hooks/useAuth";
+import { getCurrentSession } from "../hooks/useAuth";
 
 const getAllListings = async () => {
   try {
@@ -30,7 +30,14 @@ const getListing = async (id) => {
 
 const createListing = async (listing) => {
   try {
-    await axios.post(`${LISTINGS_ENDPOINT}/listing`, listing);
+    const userSession = await getCurrentSession();
+    const token = userSession?.accessToken.jwtToken;
+
+    await axios.post(`${LISTINGS_ENDPOINT}/listing`, listing, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   } catch (error) {
     console.log(error); // TODO, handle this error
     return null;
@@ -52,4 +59,14 @@ const uploadListingImage = async (file) => {
   }
 };
 
-export { createListing, getAllListings, getListing, uploadListingImage };
+const generateListingId = () => {
+  return uuidv4();
+};
+
+export {
+  createListing,
+  getAllListings,
+  getListing,
+  generateListingId,
+  uploadListingImage,
+};

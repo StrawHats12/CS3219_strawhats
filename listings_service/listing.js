@@ -13,15 +13,14 @@ class Listing {
   updatedAt;
 
   constructor(body) {
-    this.seller_uid = body.seller_uid;
+    this.seller_uid = body.seller_uid; // Cognito identity pool "identityID"
+    this.seller_sub = body.seller_sub; // Cognito identity pool "sub" attribute
     this.listing_name = body.listing_name;
     this.description = body.description;
     this.images = body.images || [];
     this.deadline = body.deadline;
-
-    // Generate ID's if needed
-    this.id = body.id || this.#generateId();
-    this.bidding_id = body.id || this.id;
+    this.id = body.id;
+    this.bidding_id = body.id;
 
     // Timestamp metadata
     this.createdAt = body.createdAt || Date.now();
@@ -35,12 +34,6 @@ class Listing {
 
     this.status = status;
     return this;
-  }
-
-  #generateId() {
-    // ID: Unique seller id + current time converted to base64 string
-    const buff = Buffer.from(this.seller_uid + Date.now().toString());
-    return buff.toString("base64");
   }
 }
 

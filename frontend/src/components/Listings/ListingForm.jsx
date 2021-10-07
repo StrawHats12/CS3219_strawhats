@@ -3,10 +3,15 @@ import { Button, Container, Form } from "react-bootstrap";
 import ListingsImagesUpload from "./ListingsImagesUpload";
 import { LISTING } from "../../const";
 import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
-import { createListing } from "../../services/listings-service";
+import {
+  createListing,
+  generateListingId,
+} from "../../services/listings-service";
+import { useHistory } from "react-router";
 
 const ListingForm = (props) => {
   const item = props;
+  const history = useHistory();
 
   const [form, setForm] = useState({
     [LISTING.NAME]: item[LISTING.NAME] || "",
@@ -14,7 +19,7 @@ const ListingForm = (props) => {
     [LISTING.DEADLINE]: item[LISTING.DEADLINE] || "",
   });
   const [errors, setErrors] = useState({});
-  const [imageFiles, setImageFiles] = useState([]); // Image Files
+  const [imageFiles, setImageFiles] = useState([]);
 
   const setField = (field, value) => {
     setForm({
@@ -54,18 +59,21 @@ const ListingForm = (props) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // const seller_id = await getCurrentUser().attributes.sub;
-      const seller_id = await getCurrentUserCredentials();
+      const sellerCredentials = await getCurrentUserCredentials();
+      const seller = await getCurrentUser();
+      const sellerId = sellerCredentials?.identityId;
+      const sellerSub = seller?.attributes?.sub;
 
-      console.log(seller_id);
       const listing = {
         ...form,
-        [LISTING.SELLER_ID]: seller_id.identityId,
+        [LISTING.ID]: generateListingId(),
+        [LISTING.SELLER_ID]: sellerId,
+        [LISTING.SELLER_SUB]: sellerSub,
         [LISTING.IMAGES]: [...imageFiles],
       };
 
-      createListing(listing);
-      alert("Listing Created!");
+      await createListing(listing);
+      history.push(`/listings/${listing[LISTING.ID]}`);
     }
   };
 
