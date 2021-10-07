@@ -22,7 +22,7 @@ const NavBar = () => {
                 <NavDropdown.Item>View Listings</NavDropdown.Item>
               </LinkContainer>
               <LinkContainer exact to="/listings/create">
-                <NavDropdown.Item>Create Listings</NavDropdown.Item>
+                <NavDropdown.Item>Create Listing</NavDropdown.Item>
               </LinkContainer>
             </NavDropdown>
           </Nav>
