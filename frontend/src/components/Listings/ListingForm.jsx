@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import ListingsImagesUpload from "./ListingsImagesUpload";
 import { LISTING } from "../../const";
-import { getCurrentUserCredentials } from "../../hooks/useAuth";
+import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
 import {
   createListing,
   generateListingId,
@@ -59,13 +59,16 @@ const ListingForm = (props) => {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      const seller_id = await getCurrentUserCredentials();
+      const sellerCredentials = await getCurrentUserCredentials();
+      const seller = await getCurrentUser();
+      const sellerId = sellerCredentials?.identityId;
+      const sellerSub = seller?.attributes?.sub;
 
-      console.log(seller_id);
       const listing = {
         ...form,
         [LISTING.ID]: generateListingId(),
-        [LISTING.SELLER_ID]: seller_id.identityId,
+        [LISTING.SELLER_ID]: sellerId,
+        [LISTING.SELLER_SUB]: sellerSub,
         [LISTING.IMAGES]: [...imageFiles],
       };
 

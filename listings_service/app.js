@@ -11,6 +11,7 @@ const {
 
 const cors = require("cors");
 const app = express();
+const { auth, roles } = require("./auth");
 
 app.use(cors());
 app.use(express.json());
@@ -54,7 +55,7 @@ app.get("/listings/:id", async (req, res) => {
   }
 });
 
-app.post("/listing", async (req, res) => {
+app.post("/listing", auth(roles.USER), async (req, res) => {
   const body = req.body;
   const listing = new Listing(body);
 

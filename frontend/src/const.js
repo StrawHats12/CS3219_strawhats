@@ -6,6 +6,7 @@ const LISTING = {
   DESCRIPTION: "description",
   DEADLINE: "deadline",
   SELLER_ID: "seller_uid",
+  SELLER_SUB: "seller_sub",
   IMAGES: "images",
 };
 

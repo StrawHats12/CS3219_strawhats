@@ -13,7 +13,8 @@ class Listing {
   updatedAt;
 
   constructor(body) {
-    this.seller_uid = body.seller_uid;
+    this.seller_uid = body.seller_uid; // Cognito identity pool "identityID"
+    this.seller_sub = body.seller_sub; // Cognito identity pool "sub" attribute
     this.listing_name = body.listing_name;
     this.description = body.description;
     this.images = body.images || [];
