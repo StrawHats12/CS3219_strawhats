@@ -51,4 +51,8 @@ const uploadListingImage = async (file) => {
   }
 };
 
-export { createListing, getAllListings, getListing, uploadListingImage };
+const generateListingId = () => {
+  return uuidv4();
+}
+
+export { createListing, getAllListings, getListing, generateListingId, uploadListingImage };
