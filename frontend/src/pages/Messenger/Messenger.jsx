@@ -13,8 +13,9 @@ import useQuery from "../../hooks/useQueryParams";
 
 import "./Messenger.css";
 
-export default function Messages({ ...props }) {
+export default function Messages() {
   const curConvoMember = useQuery().get("user");
+
   const [isLoading, setIsLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const [openConvo, setOpenConvo] = useState(null);
@@ -45,10 +46,8 @@ export default function Messages({ ...props }) {
           setConversations([...convos, newConvo]);
           setOpenConvo(newConvo);
         }
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
     if (!userId) return;
     fetchConvos();
