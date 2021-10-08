@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const AWS_REGION = "us-east-2";
+const AWS_REGION = "ap-southeast-1";
 const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID;
 const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 
