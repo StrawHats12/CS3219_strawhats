@@ -228,3 +228,5 @@ dist
 .idea/CS3219_strawhats.iml
 .idea/modules.xml
 .idea/vcs.xml
+
+.vscode

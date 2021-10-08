@@ -1,6 +1,6 @@
 {
     "identityPoolName": "strawhats36aee0c5_identitypool_36aee0c5",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "strawh36aee0c5",
     "userPoolName": "strawhats36aee0c5_userpool_36aee0c5",
     "autoVerifiedAttributes": [

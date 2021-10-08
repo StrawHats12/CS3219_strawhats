@@ -14,6 +14,23 @@ const getCurrentUser = async () => {
   }
 };
 
+const getCurrentSession = async () => {
+  try {
+    return await Auth.currentSession();
+  } catch {
+    return null;
+  }
+};
+
+const getCurrentUserCredentials = async () => {
+  try {
+    const credentials = await Auth.currentUserCredentials();
+    return credentials;
+  } catch {
+    return null;
+  }
+};
+
 const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
@@ -31,4 +48,4 @@ const useAuth = () => {
 
 export default useAuth;
 
-export { getCurrentUser };
+export { getCurrentUser, getCurrentUserCredentials, getCurrentSession };

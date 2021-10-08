@@ -17,20 +17,14 @@ const NavBar = () => {
             <LinkContainer to="/">
               <Nav.Link>Home</Nav.Link>
             </LinkContainer>
-            <LinkContainer to="/listings">
-              <Nav.Link>Listings</Nav.Link>
-            </LinkContainer>
-            {/* <NavDropdown title="Placeholder Dropdown" id="collasible-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#action/3.4">
-                Separated link
-              </NavDropdown.Item>
-            </NavDropdown> */}
+            <NavDropdown title="Listings">
+              <LinkContainer exact to="/listings">
+                <NavDropdown.Item>View Listings</NavDropdown.Item>
+              </LinkContainer>
+              <LinkContainer exact to="/listings/create">
+                <NavDropdown.Item>Create Listing</NavDropdown.Item>
+              </LinkContainer>
+            </NavDropdown>
           </Nav>
           <Nav>
             <LinkContainer to="/authentication">

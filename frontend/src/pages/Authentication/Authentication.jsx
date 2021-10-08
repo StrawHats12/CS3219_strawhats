@@ -5,7 +5,6 @@ import {
   AmplifySignOut,
   AmplifySignUp,
 } from "@aws-amplify/ui-react";
-// import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 import { Container } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
 

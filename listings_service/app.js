@@ -8,8 +8,12 @@ const {
   deleteListing,
   getListings,
 } = require("./dynamoDb");
-const app = express();
 
+const cors = require("cors");
+const app = express();
+const { auth, roles } = require("./auth");
+
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -51,7 +55,7 @@ app.get("/listings/:id", async (req, res) => {
   }
 });
 
-app.post("/listing", async (req, res) => {
+app.post("/listing", auth(roles.USER), async (req, res) => {
   const body = req.body;
   const listing = new Listing(body);
 
@@ -65,13 +69,21 @@ app.post("/listing", async (req, res) => {
   }
 });
 
-app.put("/listing/:id", async (req, res) => {
+app.put("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   const body = req.body;
   body.id = id;
   const listing = new Listing(body);
 
   try {
+    const oldListing = await getListingById(id);
+
+    if (oldListing?.Item?.seller_sub !== req.user.sub) {
+      res
+        .status(403)
+        .json({ err: "User is not authorised to update this listing" });
+    }
+
     const newListing = await addOrUpdateListing(listing);
     console.log(newListing);
     res.json(newListing);
@@ -81,9 +93,16 @@ app.put("/listing/:id", async (req, res) => {
   }
 });
 
-app.delete("/listing/:id", async (req, res) => {
+app.delete("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   try {
+    const listing = await getListingById(id);
+    if (listing?.Item?.seller_sub !== req.user.sub) {
+      res
+        .status(403)
+        .json({ err: "User is not authorised to delete this listing" });
+    }
+
     res.json(await deleteListing(id));
   } catch (err) {
     console.error(err);
