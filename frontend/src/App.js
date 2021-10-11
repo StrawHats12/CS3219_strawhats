@@ -4,11 +4,17 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
-import { CreateListingPage, EditListingPage, ListingPage, ListingsPage } from "./pages/Listings";
+import {
+  CreateListingPage,
+  EditListingPage,
+  ListingPage,
+  ListingsPage,
+} from "./pages/Listings";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import Authentication from "./pages/Authentication";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import { ProfilePage } from "./pages/Profile";
 
 function App() {
   return (
@@ -17,6 +23,7 @@ function App() {
       <Container>
         <Switch>
           <Route path="/" component={Home} exact />
+          <Route path="/profile/:username" component={ProfilePage} exact />
           <Route path="/listings" component={ListingsPage} exact />
           <ProtectedRoute
             path="/listings/create"
