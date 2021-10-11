@@ -5,12 +5,12 @@ const { auth, roles } = require("../auth");
 var bidController = require('../controller/bidController');
 
 // Set default API response
-router.get('/', function (req, res) {
-    res.json({
-        status: 'Bidding API',
-        message: 'Bidding API to let you bid for your favorite items!',
-    });
-});
+// router.get('/', function (req, res) {
+//     res.json({
+//         status: 'Bidding API',
+//         message: 'Bidding API to let you bid for your favorite items!',
+//     });
+// });
 
 
 router.route('/addBid')

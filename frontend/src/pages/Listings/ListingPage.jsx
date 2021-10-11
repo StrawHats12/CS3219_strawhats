@@ -16,7 +16,6 @@ import Countdown from "react-countdown";
 const ListingsPage = () => {
   const { id } = useParams();
   const history = useHistory();
-  const user = getCurrentUser();
   const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
@@ -123,7 +122,7 @@ const ListingsPage = () => {
                   renderer={countdownRenderer}
                 />
               )}
-              <PopUp listingInfo = {listing} bidOwner = {user}> Place Bid </PopUp>
+              <PopUp listingInfo = {listing}> Place Bid </PopUp>
             </Col>
           </Row>
           <Row>

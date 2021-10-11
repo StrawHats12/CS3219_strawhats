@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
+import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 
 const GetListingBids = async () => {
     try {
@@ -24,7 +25,7 @@ const GetAccountBids = async () => {
       }
 }
 
-const AddBid = ({listingInfo, bidOwner}) => {
+const AddBid = ({listingInfo}) => {
 
     const [input, setInput] = useState({
         bidPrice: "",
@@ -42,17 +43,30 @@ const AddBid = ({listingInfo, bidOwner}) => {
         });
     }
 
-    function handleClick(event) {
+    async function handleClick(event) {
         event.preventDefault();
-        const newBid = {
-            userIdentifier: bidOwner,
-            bidPrice: input.bidPrice,
-            listingId: listingInfo.id,
-            endBidDateTime: input.endBidDateTime,
-            status: "ONGOING"
+        try {
+            const userSession = await getCurrentSession();
+            const currentUser = await getCurrentUser();
+            const token = userSession?.accessToken.jwtToken;
+            const newBid = {
+                listingId: listingInfo.id,
+                userIdentifier: currentUser.username,
+                bidPrice: input.bidPrice,
+                auctionId: listingInfo.bidding_id,
+                status: "ONGOING"
+            }
+            await axios.post('http://localhost:2001/addBid', newBid, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+            }});
+        } catch (err) {
+            console.log(err);
+            return null;
         }
-        axios.put('http://localhost:2001/createBid', newBid);
+
     }
+
     return <div className = "container">
         <h1> Place Your Bid </h1>
         <br/>
@@ -62,10 +76,10 @@ const AddBid = ({listingInfo, bidOwner}) => {
                 className = "form-control" placeholder="Enter Your Price Here"/>
             </div>
             <br/>
-            <div className = 'form-group'>
+            {/* <div className = 'form-group'>
                 <input name="endBidDateTime" onChange={handleChange} className = "form-control" value={input.endBidDateTime} 
                 autoComplete="off" placeholder="Your bid will expiry after this time"/>
-            </div>
+            </div> */}
             <br/>
             <button onClick={handleClick} className="btn btn-lg btn-info"> Confirm Bid </button>
         </form>

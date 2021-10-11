@@ -1,23 +1,23 @@
 class Bid {
-    listing_id;
-    bid_id;
+    listingId;
+    auctionId
+    bidId;
+    bidPrice
     createdAt;
-    endBidDateTime;
     status = "ONGOING";
-    bidPrice;
     bidOwner;
 
     constructor(body) {
-        this.listing_id = body.listing_id;
-        this.auction_id = body.auction_id;
-        this.bid_id = body.bid_id || this.#generateId();
+        this.listingId = body.listingId; 
+        this.auctionId = body.auctionId;
+        this.bidId = body.bidId || this.#generateId();
         this.bidPrice = body.bidPrice
         this.createdAt = Date.now();
-        this.bidOwner = body.user;
-        if (Date.now() > body.endBidDateTime) {
-            throw err;
-        }
-        this.endAt = body.endAt;
+        this.bidOwner = body.userIdentifier;
+        // if (Date.now() > body.endBidDateTime) {
+        //     throw err;
+        // }
+        // this.endAt = body.endAt;
     }
 
     setDelete() {
