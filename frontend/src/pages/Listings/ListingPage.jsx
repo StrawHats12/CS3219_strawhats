@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
+import PopUp from "../../components/Bids/BidPopUp";
 import {
   deleteListing,
   deleteListingImages,
@@ -15,12 +16,12 @@ import Countdown from "react-countdown";
 const ListingsPage = () => {
   const { id } = useParams();
   const history = useHistory();
-
+  const user = getCurrentUser();
   const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline } = listing;
+  const { listing_name, description, images, seller_uid, deadline} = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -122,6 +123,7 @@ const ListingsPage = () => {
                   renderer={countdownRenderer}
                 />
               )}
+              <PopUp listingInfo = {listing} bidOwner = {user}> Place Bid </PopUp>
             </Col>
           </Row>
           <Row>
