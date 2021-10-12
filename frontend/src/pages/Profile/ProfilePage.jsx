@@ -57,7 +57,7 @@ const ProfilePage = () => {
       {isLoading ? (
         <StrawhatSpinner />
       ) : error ? (
-        <p>{error}</p>
+        <p>{error.toString()}</p>
       ) : (
         <>
           {isEditing ? (
