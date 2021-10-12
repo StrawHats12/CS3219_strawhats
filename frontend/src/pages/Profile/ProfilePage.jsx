@@ -22,11 +22,8 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSaveClicked = () => {
-    setIsEditing(false);
-  };
-
   useEffect(() => {
+    setIsLoading(true);
     getAccount(username)
       .then((account) => {
         setProfile(account);
@@ -37,7 +34,9 @@ const ProfilePage = () => {
       .finally(() => {
         setIsLoading(false);
       });
+  }, [username, isEditing]);
 
+  useEffect(() => {
     getCurrentUser().then((user) => {
       if (user.username === username) {
         setCanEdit(true);
@@ -62,19 +61,12 @@ const ProfilePage = () => {
       ) : (
         <>
           {isEditing ? (
-            <>
-              <ProfileCard edit profile={profile} />
-              <Button
-                variant="secondary"
-                className="m-2"
-                onClick={() => setIsEditing(false)}
-              >
-                Cancel
-              </Button>
-              <Button className="m-2" onClick={handleSaveClicked}>
-                Save
-              </Button>
-            </>
+            <ProfileCard
+              edit
+              setIsEditing={setIsEditing}
+              setIsLoading={setIsLoading}
+              profile={profile}
+            />
           ) : (
             <ProfileCard view profile={profile} />
           )}
