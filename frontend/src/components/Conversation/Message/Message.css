@@ -1,0 +1,23 @@
+.message-container {
+    margin: 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.message-container-own {
+    align-self: flex-end;
+    align-items: flex-end;
+}
+
+.message-text-container {
+    border-radius: 5px;
+    padding: 5px 10px;
+    border: 1px solid #dee2e6;
+}
+
+.message-text-container-own {
+    border: none;
+    background-color: rgb(13,110,253);
+    color: white;
+}
