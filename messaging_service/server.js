@@ -9,6 +9,7 @@ const redis = require("socket.io-redis");
 const PORT = process.env.PORT;
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
+const { auth, roles } = require("./auth");
 
 const app = express();
 
@@ -19,8 +20,8 @@ app.get("/", (req, res) => {
   res.send("Server is up and running!");
 });
 
-app.use("/conversation", conversationRoute);
-app.use("/message", messageRoute);
+app.use("/conversation", auth(roles.USER), conversationRoute);
+app.use("/message", auth(roles.USER), messageRoute);
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
