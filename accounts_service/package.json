@@ -1,5 +1,5 @@
 {
-  "name": "listings_service",
+  "name": "accounts_service",
   "version": "1.0.0",
   "private": true,
   "main": "app.js",
