@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  accounts:
+    build: ./accounts_service
+    ports:
+      - "8090:8090"
+  listings:
+    build: ./listings_service
+    ports:
+      - "8080:8080"
