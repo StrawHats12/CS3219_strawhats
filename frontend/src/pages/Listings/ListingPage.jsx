@@ -20,7 +20,14 @@ const ListingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline } = listing;
+  const {
+    listing_name,
+    description,
+    images,
+    seller_uid,
+    seller_sub,
+    deadline,
+  } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -39,6 +46,10 @@ const ListingsPage = () => {
 
   const handleEdit = () => {
     history.push(`/listings/edit/${id}`);
+  };
+
+  const redirectToChat = () => {
+    history.push(`/messenger/?user=${seller_sub}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -124,6 +135,11 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
+          {!isOwner && (
+            <Button className="m-1" onClick={redirectToChat}>
+              Chat with seller!
+            </Button>
+          )}
           <Row>
             <p>{description}</p>
           </Row>

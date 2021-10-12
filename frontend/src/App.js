@@ -10,6 +10,7 @@ import {
   ListingPage,
   ListingsPage,
 } from "./pages/Listings";
+import Messenger from "./pages/Messenger";
 import NotFound from "./pages/NotFound";
 import "./App.css";
 import Authentication from "./pages/Authentication";
@@ -37,6 +38,7 @@ function App() {
           />
           <Route path="/listings/:id" component={ListingPage} exact />
           <Route path="/authentication" component={Authentication} exact />
+          <ProtectedRoute path="/messenger" component={Messenger} exact />
           <Route component={NotFound} />
         </Switch>
       </Container>

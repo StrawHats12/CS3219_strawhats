@@ -25,6 +25,9 @@ const NavBar = () => {
                 <NavDropdown.Item>Create Listing</NavDropdown.Item>
               </LinkContainer>
             </NavDropdown>
+            <LinkContainer to="/messenger">
+              <Nav.Link>Messenger</Nav.Link>
+            </LinkContainer>
           </Nav>
           <Nav>
             <LinkContainer to="/authentication">
