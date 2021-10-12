@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { ProfileCard, ProfileReviews } from "../../components/Profile";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
+import { getAccount } from "../../services/account-service";
 
 const ProfilePage = () => {
   const pageTitle = "Profile";
@@ -26,33 +27,22 @@ const ProfilePage = () => {
   };
 
   useEffect(() => {
-    // TODO replace stub
-    setProfile({
-      uname: "username",
-      name: "name",
-      about: "about this seller",
-      email: "email",
-      reviews: [
-        {
-          text: "Good seller will buy again!",
-          username: "bob1234",
-          rating: 5,
-        },
-        {
-          text: "Bad seller",
-          username: "notBob1234",
-          rating: 1,
-        },
-      ],
-    });
+    getAccount(username)
+      .then((account) => {
+        setProfile(account);
+      })
+      .catch((err) => {
+        setError(err);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
 
     getCurrentUser().then((user) => {
       if (user.username === username) {
         setCanEdit(true);
       }
     });
-
-    setIsLoading(false);
   }, [username]);
 
   return (
@@ -88,7 +78,7 @@ const ProfilePage = () => {
           ) : (
             <ProfileCard view profile={profile} />
           )}
-          {profile.reviews && !isEditing && (
+          {!!profile?.reviews?.length && !isEditing && (
             <>
               <h2>Reviews</h2>
               <ProfileReviews reviews={profile.reviews} />

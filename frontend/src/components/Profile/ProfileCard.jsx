@@ -14,8 +14,8 @@ const ProfileCard = (props) => {
           </Figure>
         </Col>
         <Col>
-          <h2>{profile.name}</h2>
-          <p>{profile.about}</p>
+          <h2>{profile.name || profile.username}</h2>
+          <p>{profile.about || "This user does not have an about section yet."}</p>
         </Col>
       </Row>
     </Container>
