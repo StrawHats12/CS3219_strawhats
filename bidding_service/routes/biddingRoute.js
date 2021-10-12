@@ -16,4 +16,7 @@ var bidController = require('../controller/bidController');
 router.route('/addBid')
     .post(auth(roles.USER), bidController.addBid);
 
+router.route('/getListingBids/:listingId')
+    .get(auth(roles.USER), bidController.getListingBids);
+
 module.exports = router;

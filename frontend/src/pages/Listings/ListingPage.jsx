@@ -5,6 +5,7 @@ import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import PopUp from "../../components/Bids/BidPopUp";
+import BidTable from "../../components/Bids/BidTable";
 import {
   deleteListing,
   deleteListingImages,
@@ -115,18 +116,20 @@ const ListingsPage = () => {
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
             </Col>
             <Col>
-              <p>Current Bid: $100</p>
+              <p>{description}</p>
+            </Col>
+            <Col>
               {deadline && (
                 <Countdown
                   date={stringToDate(deadline)}
                   renderer={countdownRenderer}
                 />
               )}
-              <PopUp listingInfo = {listing}> Place Bid </PopUp>
             </Col>
           </Row>
           <Row>
-            <p>{description}</p>
+            <Col> <PopUp listingInfo = {listing}> Place Bid </PopUp> </Col>
+            <Col> <BidTable value = {listing}/></Col>
           </Row>
         </Container>
       ) : (

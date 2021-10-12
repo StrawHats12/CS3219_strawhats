@@ -2,9 +2,17 @@ import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 
-const GetListingBids = async () => {
+
+
+const getListingBids = async (listingId) => {
     try {
-        const response = await axios.get('http://localhost:2001/getListingBids');
+        const userSession = await getCurrentSession();
+        const currentUser = await getCurrentUser();
+        const token = userSession?.accessToken.jwtToken;
+        const response = await axios.get(`http://localhost:2001/getListingBids/${listingId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+        }});
         const data = await response?.data?.Items;
         return data;
       } catch (error) {
@@ -86,6 +94,4 @@ const AddBid = ({listingInfo}) => {
     </div>
 }
 
-
-
-export {AddBid, GetListingBids, GetAccountBids};
+export {AddBid, getListingBids, GetAccountBids};
