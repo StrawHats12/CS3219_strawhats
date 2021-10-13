@@ -1,7 +1,8 @@
 const Bid = require("../model/bid")
 const {
     addBidding,
-    getListingBids
+    getListingBids,
+    deleteBid
 } = require("../bidDynamoDb");
 
 exports.addBid = async function (req, res) {
@@ -26,5 +27,15 @@ exports.getListingBids = async function (req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).json({ err: "Cannot retrieve listing's bid."});
+    }
+}
+
+exports.deleteBid = async function (req, res) {
+    const bidId = req.params.bidId
+    try {
+        res.json(await deleteBid(bidId));
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: "Delete bid is not working." });
     }
 }

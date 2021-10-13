@@ -7,7 +7,6 @@ import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 const getListingBids = async (listingId) => {
     try {
         const userSession = await getCurrentSession();
-        const currentUser = await getCurrentUser();
         const token = userSession?.accessToken.jwtToken;
         const response = await axios.get(`http://localhost:2001/getListingBids/${listingId}`, {
             headers: {
@@ -31,6 +30,21 @@ const GetAccountBids = async () => {
         console.log(error); // TODO, handle this error
         return null;
       }
+}
+
+const deleteBid = async (bidId) => {
+    try {
+        const userSession = await getCurrentSession();
+        const token = userSession?.accessToken.jwtToken;
+        const response = await axios.delete(`http://localhost:2001/deleteBid/${bidId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+    } catch (error) {
+        console.log(error); // TODO, handle this error
+        return null;
+    }
 }
 
 const AddBid = ({listingInfo}) => {
@@ -94,4 +108,4 @@ const AddBid = ({listingInfo}) => {
     </div>
 }
 
-export {AddBid, getListingBids, GetAccountBids};
+export {AddBid, getListingBids, deleteBid, GetAccountBids};

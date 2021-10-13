@@ -1,10 +1,9 @@
-import { ConsoleLogger } from "@aws-amplify/core";
 import React, {useEffect, useState} from "react";
-import { useTable } from 'react-table';
 import { getCurrentUser } from "../../hooks/useAuth";
 import { getListingBids } from "../../services/bidding-service";
 import { formatDate } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
+import { deleteBid } from "../../services/bidding-service";
 
 const BidTable = ({value}) => {
     const listingId = value.id;
@@ -33,6 +32,28 @@ const BidTable = ({value}) => {
         });
     }, []);
 
+    const handleDeleteClick = (bidId) => {
+        return deleteBid(bidId);
+    }
+
+    const BidRow = ({bidOwner, bidCreationDate, bidPrice, bidId}) => {
+        return (
+        <tr>
+            <td> {bidOwner} </td>
+            <td> {bidCreationDate} </td>
+            <td> ${bidPrice} </td> 
+            <td>
+                { isUnameLoad 
+                    ? <StrawhatSpinner/> 
+                    : uname == bidOwner 
+                        ? <button onClick={ () => handleDeleteClick(bidId)} className="btn btn-lg btn-info" > Delete </button> 
+                        : "Profile Link to be inserted"
+                }
+            </td>
+        </tr>
+        );
+    }
+
     return(
     <div>
         {isLoading 
@@ -49,20 +70,13 @@ const BidTable = ({value}) => {
                 </thead>
                 <tbody>
                     { bids.map( bid => 
-                    <tr>
-                        <td> {bid.bidOwner} </td>
-                        <td> {formatDate(bid.createdAt)} </td>
-                        <td> {bid.bidPrice} </td> 
-                        <td>
-                            { isUnameLoad 
-                                ? <StrawhatSpinner/> 
-                                : uname == bid.bidOwner 
-                                    ? <button> Delete </button> 
-                                    : "Profile Link to be inserted"
-                            }
-                        </td>
-                    </tr>
-                    )}    
+                    <BidRow 
+                        bidOwner = {bid.bidOwner}
+                        bidCreationDate = {formatDate(bid.createdAt)}
+                        bidPrice = {bid.bidPrice}
+                        bidId = {bid.bidId}
+                        /> 
+                    )}
                 </tbody>
             </table>
             )

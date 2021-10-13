@@ -14,6 +14,7 @@ AWS.config.update({
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
+// ADD BID
 const addBidding = async (bid) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
@@ -23,6 +24,7 @@ const addBidding = async (bid) => {
     return bid;
 }
 
+// GET BID BY LISTING ID
 const getListingBids = async (listingId) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
@@ -34,20 +36,23 @@ const getListingBids = async (listingId) => {
             ':listingId' : listingId
         }
     }
-
-    // dynamoClient.scan(params, (err, bids) => {
-    //     if (err) console.log(err);
-    //     else {
-    //         console.log("returning bids here" + bids);
-    //         return bids;
-    //     }
-    // }).promise();
     return dynamoClient.scan(params).promise();
+}
 
+// DELETE BID BY BIDDING ID
+const deleteBid = async (bidId) => {
+    const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        Key: {
+            bidId,
+        }
+    };
+    return await dynamoClient.delete(params).promise();
 }
 
 module.exports = {
     dynamoClient,
     addBidding,
-    getListingBids
+    getListingBids,
+    deleteBid
 };
