@@ -23,7 +23,7 @@ const addBidding = async (bid) => {
     return bid;
 }
 
-const getListingBids = (listingId) => {
+const getListingBids = async (listingId) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
         FilterExpression: 'contains(#listingId, :listingId)',
@@ -35,20 +35,15 @@ const getListingBids = (listingId) => {
         }
     }
 
-    dynamoClient.scan(params, (err, bids) => {
-        if (err) console.log(err);
-        else {
-            console.log(bids);
-            return bids;
-        }
-    });
-    // dynamoClient.query(params, (err, bids) => {
+    // dynamoClient.scan(params, (err, bids) => {
     //     if (err) console.log(err);
     //     else {
-    //         console.log(bids);
+    //         console.log("returning bids here" + bids);
     //         return bids;
     //     }
-    // });
+    // }).promise();
+    return dynamoClient.scan(params).promise();
+
 }
 
 module.exports = {
