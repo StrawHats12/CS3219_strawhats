@@ -1,7 +1,7 @@
 import axios from "axios";
 import Storage from "@aws-amplify/storage";
 import { ACCOUNTS_ENDPOINT } from "../const";
-import { getCurrentSession, getCurrentUserCredentials } from "../hooks/useAuth";
+import { getCurrentSession, getCurrentUser, getCurrentUserCredentials } from "../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
 
 const getAccount = async (username) => {
@@ -53,4 +53,17 @@ const deleteAccountImage = async (image, uid) => {
   });
 };
 
-export { getAccount, updateAccount };
+const addReview = async (review, username) => {
+  const userSession = await getCurrentSession();
+  const userCredentials = await getCurrentUser();
+  review.username = userCredentials.username;
+  const token = userSession?.accessToken.jwtToken;
+
+  await axios.patch(`${ACCOUNTS_ENDPOINT}/account/${username}`, review, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export { addReview, getAccount, updateAccount };

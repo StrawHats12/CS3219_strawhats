@@ -54,6 +54,32 @@ app.put("/account/:username", auth(roles.USER), async (req, res) => {
   }
 });
 
+app.patch("/account/:username", auth(roles.USER), async (req, res) => {
+  const username = req.params.username;
+  const json = await getAccountByUsername(username);
+  const account = json.Item;
+
+  if (!account.reviews) {
+    account.reviews = [];
+  }
+
+  const review = req.body;
+  review.createdAt = new Date().toISOString();
+
+  if (!review.username || !review.rating) {
+    res.status(400).json({ err: "Invalid review fields" });
+  }
+
+  account.reviews = account.reviews.filter(
+    (item) => item.username !== review.username
+  );
+
+  account.reviews.push(review);
+
+  const newAccount = await addOrUpdateAccount(account);
+  res.json(newAccount);
+});
+
 app.delete("/account/:username", auth(roles.USER), async (req, res) => {
   const username = req.params.username;
   try {

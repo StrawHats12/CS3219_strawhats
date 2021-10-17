@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Container } from "react-bootstrap";
 import { useParams } from "react-router";
-import { ProfileCard, ProfileReviews } from "../../components/Profile";
+import {
+  ProfileCard,
+  ProfileReviews,
+  ReviewModal,
+} from "../../components/Profile";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { getAccount } from "../../services/account-service";
@@ -15,6 +19,7 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState({});
   const [canEdit, setCanEdit] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
   const handleEditClicked = () => {
     if (canEdit) {
@@ -22,19 +27,33 @@ const ProfilePage = () => {
     }
   };
 
+  const handleAddReviewClicked = () => {
+    handleOpenReviewModal();
+  };
+
+  const handleOpenReviewModal = () => {
+    setShowReviewModal(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setShowReviewModal(false);
+  };
+
   useEffect(() => {
-    setIsLoading(true);
-    getAccount(username)
-      .then((account) => {
-        setProfile(account);
-      })
-      .catch((err) => {
-        setError(err);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  }, [username, isEditing]);
+    if (!showReviewModal) {
+      setIsLoading(true);
+      getAccount(username)
+        .then((account) => {
+          setProfile(account);
+        })
+        .catch((err) => {
+          setError(err);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
+  }, [username, isEditing, showReviewModal]);
 
   useEffect(() => {
     getCurrentUser().then((user) => {
@@ -72,7 +91,12 @@ const ProfilePage = () => {
           )}
           {!isEditing && (
             <Container>
-              <h2>Reviews</h2>
+              <div className="d-flex justify-content-between m-0">
+                <h2>Reviews</h2>
+                <Button className="m-2" onClick={handleAddReviewClicked}>
+                  Add Review
+                </Button>
+              </div>
               {!!profile?.reviews?.length ? (
                 <>
                   <ProfileReviews reviews={profile.reviews} />
@@ -84,6 +108,11 @@ const ProfilePage = () => {
           )}
         </>
       )}
+      <ReviewModal
+        showModal={showReviewModal}
+        handleCloseModal={handleCloseReviewModal}
+        accountUsername={username}
+      />
     </>
   );
 };

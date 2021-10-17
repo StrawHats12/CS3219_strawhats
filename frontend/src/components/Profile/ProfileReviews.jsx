@@ -1,4 +1,5 @@
 import { Card, Container } from "react-bootstrap";
+import { formatDate } from "../../utils/DateTime";
 
 const ProfileReviews = (props) => {
   const reviews = props.reviews;
@@ -7,13 +8,17 @@ const ProfileReviews = (props) => {
   );
 
   return (
-    <Container className="m-2">
+    <Container className="mt-2 mb-2 p-0">
       <h3>Avg Rating: {avgRating}</h3>
       {reviews.map((review, idx) => (
-        <Card id={idx}>
+        <Card id={idx} className="mt-2">
           <Card.Body>{review.text}</Card.Body>
           <Card.Footer>
-            Rating: {review.rating} User:{review.username}
+            <div className="d-flex justify-content-between">
+              <p>Rating: {review.rating} </p>
+              <p>{review.username}</p>
+              <p>{formatDate(review.createdAt)}</p>
+            </div>
           </Card.Footer>
         </Card>
       ))}
