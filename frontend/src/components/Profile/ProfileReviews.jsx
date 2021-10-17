@@ -9,8 +9,12 @@ const ProfileReviews = (props) => {
   );
 
   return (
-    <Container className="mt-2 mb-2 p-0">
-      <h3>Avg Rating: {avgRating}</h3>
+    <Container className="my-2 p-0">
+      <div className="d-flex align-items-top">
+        <h3>Average Rating: </h3>
+        &nbsp;
+        <ReactStars count={5} value={avgRating} size={24} edit={false} />
+      </div>
       {reviews.map((review, idx) => (
         <Card id={idx} className="mt-2">
           <Card.Body>{review.text}</Card.Body>
