@@ -1,3 +1,4 @@
+import ReactStars from "react-rating-stars-component";
 import { Card, Container } from "react-bootstrap";
 import { formatDate } from "../../utils/DateTime";
 
@@ -15,7 +16,7 @@ const ProfileReviews = (props) => {
           <Card.Body>{review.text}</Card.Body>
           <Card.Footer>
             <div className="d-flex justify-content-between">
-              <p>Rating: {review.rating} </p>
+              <ReactStars count={5} value={review.rating} edit={false} />
               <p>{review.username}</p>
               <p>{formatDate(review.createdAt)}</p>
             </div>
