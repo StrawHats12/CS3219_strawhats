@@ -1,3 +1,4 @@
+import Storage from "@aws-amplify/storage";
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Figure, Form, Row } from "react-bootstrap";
 import { updateAccount } from "../../services/account-service";
@@ -6,8 +7,8 @@ import PlaceholderProfileImage from "./placeholderProfileImage.jpg";
 const ProfileCard = (props) => {
   const [profile, setProfile] = useState(props.profile);
   const [errors, setErrors] = useState({});
-
-  const image = profile.image || PlaceholderProfileImage;
+  const [imageFile, setImageFile] = useState(null);
+  const [image, setImage] = useState(PlaceholderProfileImage);
 
   const setField = (field, value) => {
     setProfile({
@@ -36,6 +37,11 @@ const ProfileCard = (props) => {
     return newErrors;
   };
 
+  const selectImage = (event) => {
+    setImageFile(event.target.files[0]);
+    setImage(URL.createObjectURL(event.target.files[0]));
+  };
+
   const handleSave = async (e) => {
     e.preventDefault();
     const newErrors = findFormErrors();
@@ -43,7 +49,7 @@ const ProfileCard = (props) => {
       setErrors(newErrors);
     } else {
       props.setIsLoading(true);
-      updateAccount(profile)
+      updateAccount(profile, imageFile)
         .catch((e) => {
           alert(e);
         })
@@ -58,24 +64,36 @@ const ProfileCard = (props) => {
     if (props.edit) {
       setProfile(props.profile); // reset profile
     }
-  }, [props.edit, props.profile]);
+  }, [profile.image, profile.uid, props.edit, props.profile]);
+
+  useEffect(() => {
+    if (profile.image && profile.uid) {
+      Storage.get(profile.image, {
+        level: "protected",
+        identityId: profile.uid,
+      }).then((image) => {
+        setImage(image);
+      });
+    }
+  }, [profile.image, profile.uid]);
 
   if (props.edit) {
     return (
       <Container>
-        <Row>
-          <Col sm={3}>
-            <Figure>
-              <Figure.Image
-                width={180}
-                height={180}
-                alt="profile"
-                src={image}
-              />
-            </Figure>
-          </Col>
-          <Col>
-            <Form>
+        <Form>
+          <Row>
+            <Col sm={3}>
+              <Figure>
+                <Figure.Image
+                  width={180}
+                  height={180}
+                  alt="profile"
+                  src={image}
+                />
+              </Figure>
+              <input type="file" accept="image/*" onChange={selectImage} />
+            </Col>
+            <Col>
               <Form.Group className="mb-3" controlId="formAccountName">
                 <Form.Label>Profile Name</Form.Label>
                 <Form.Control
@@ -102,9 +120,9 @@ const ProfileCard = (props) => {
                   {errors.about}
                 </Form.Control.Feedback>
               </Form.Group>
-            </Form>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </Form>
         <Row>
           <Button
             variant="secondary"

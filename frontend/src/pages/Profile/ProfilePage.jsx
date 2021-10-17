@@ -70,16 +70,18 @@ const ProfilePage = () => {
           ) : (
             <ProfileCard view profile={profile} />
           )}
-          <Container>
-            <h2>Reviews</h2>
-            {!!profile?.reviews?.length && !isEditing ? (
-              <>
-                <ProfileReviews reviews={profile.reviews} />
-              </>
-            ) : (
-              <p>{username} does not have any reviews yet.</p>
-            )}
-          </Container>
+          {!isEditing && (
+            <Container>
+              <h2>Reviews</h2>
+              {!!profile?.reviews?.length ? (
+                <>
+                  <ProfileReviews reviews={profile.reviews} />
+                </>
+              ) : (
+                <p>{username} does not have any reviews yet.</p>
+              )}
+            </Container>
+          )}
         </>
       )}
     </>
