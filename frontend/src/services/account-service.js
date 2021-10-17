@@ -6,6 +6,10 @@ const getAccount = async (username) => {
   const response = await axios.get(`${ACCOUNTS_ENDPOINT}/account/${username}`);
   const data = await response?.data?.Item;
 
+  if (!data) {
+    throw new Error("Account not found");
+  }
+
   return data;
 };
 
