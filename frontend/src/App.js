@@ -20,29 +20,31 @@ import { ProfilePage } from "./pages/Profile";
 function App() {
   return (
     <Router>
-      <NavBar />
-      <Container>
-        <Switch>
-          <Route path="/" component={Home} exact />
-          <Route path="/profile/:username" component={ProfilePage} exact />
-          <Route path="/listings" component={ListingsPage} exact />
-          <ProtectedRoute
-            path="/listings/create"
-            component={CreateListingPage}
-            exact
-          />
-          <ProtectedRoute
-            path="/listings/edit/:id"
-            component={EditListingPage}
-            exact
-          />
-          <Route path="/listings/:id" component={ListingPage} exact />
-          <Route path="/authentication" component={Authentication} exact />
-          <ProtectedRoute path="/messenger" component={Messenger} exact />
-          <Route component={NotFound} />
-        </Switch>
-      </Container>
-      <Footer />
+      <div className="min-vh-100 d-flex flex-column">
+        <NavBar />
+        <Container>
+          <Switch>
+            <Route path="/" component={Home} exact />
+            <Route path="/profile/:username" component={ProfilePage} exact />
+            <Route path="/listings" component={ListingsPage} exact />
+            <ProtectedRoute
+              path="/listings/create"
+              component={CreateListingPage}
+              exact
+            />
+            <ProtectedRoute
+              path="/listings/edit/:id"
+              component={EditListingPage}
+              exact
+            />
+            <Route path="/listings/:id" component={ListingPage} exact />
+            <Route path="/authentication" component={Authentication} exact />
+            <ProtectedRoute path="/messenger" component={Messenger} exact />
+            <Route component={NotFound} />
+          </Switch>
+        </Container>
+        <Footer />
+      </div>
     </Router>
   );
 }

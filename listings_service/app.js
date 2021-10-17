@@ -11,10 +11,12 @@ const {
 
 const cors = require("cors");
 const app = express();
+const morgan = require("morgan");
 const { auth, roles } = require("./auth");
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
@@ -23,7 +25,6 @@ app.get("/", (req, res) => {
 app.get("/listings", async (req, res) => {
   try {
     const listing = await getListings();
-    console.log(listing);
     res.json(listing);
   } catch (err) {
     console.error(err);
@@ -35,7 +36,6 @@ app.get("/listing/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const listing = await getListingById(id);
-    console.log(listing);
     res.json(listing);
   } catch (err) {
     console.error(err);
@@ -47,7 +47,6 @@ app.get("/listings/:id", async (req, res) => {
   const id = req.params.id;
   try {
     const listings = await getListingsBySellerId(id);
-    console.log(listings);
     res.json(listings);
   } catch (err) {
     console.error(err);
@@ -61,7 +60,6 @@ app.post("/listing", auth(roles.USER), async (req, res) => {
 
   try {
     const newListing = await addOrUpdateListing(listing);
-    console.log(newListing);
     res.json(newListing);
   } catch (err) {
     console.error(err);
@@ -85,7 +83,6 @@ app.put("/listing/:id", auth(roles.USER), async (req, res) => {
     }
 
     const newListing = await addOrUpdateListing(listing);
-    console.log(newListing);
     res.json(newListing);
   } catch (err) {
     console.error(err);

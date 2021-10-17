@@ -9,10 +9,12 @@ const {
 
 const cors = require("cors");
 const app = express();
+const morgan = require("morgan");
 const { auth, roles } = require("./auth");
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("tiny"));
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
@@ -22,7 +24,6 @@ app.get("/account/:username", async (req, res) => {
   const username = req.params.username;
   try {
     const account = await getAccountByUsername(username);
-    console.log(account);
     res.json(account);
   } catch (err) {
     console.error(err);
@@ -46,7 +47,6 @@ app.put("/account/:username", auth(roles.USER), async (req, res) => {
     }
 
     const newAccount = await addOrUpdateAccount(account);
-    console.log(newAccount);
     res.json(newAccount);
   } catch (err) {
     console.error(err);
