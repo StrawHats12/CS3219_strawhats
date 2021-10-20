@@ -16,6 +16,7 @@ import "./App.css";
 import Authentication from "./pages/Authentication";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { ProfilePage } from "./pages/Profile";
+import { StreamsPage } from "./pages/Stream";
 
 function App() {
   return (
@@ -27,9 +28,10 @@ function App() {
             <Route path="/" component={Home} exact />
             <Route path="/profile/:username" component={ProfilePage} exact />
             <Route path="/listings" component={ListingsPage} exact />
+            <Route path="/tv" component={StreamsPage} exact />
             <ProtectedRoute
               path="/listings/create"
-              component={CreateListingPage}
+              component={ListingsPage}
               exact
             />
             <ProtectedRoute
