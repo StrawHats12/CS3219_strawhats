@@ -1,0 +1,27 @@
+name: Frontend CI
+on:
+  push:
+    paths:
+      - "frontend/**"
+    branches:
+      - main
+  pull_request:
+    paths:
+      - "frontend/**"
+jobs:
+  test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Nodejs
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14'
+      - name: Install dependencies
+        run: yarn install
+      - test: Test
+        run: yarn test
