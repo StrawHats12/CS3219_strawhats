@@ -5,7 +5,7 @@ import Conversation from "../../components/Conversation";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 
 import {
-  getConversationByUserId,
+  getConversationByUser,
   createConversation,
 } from "../../services/messaging-service";
 import { getCurrentUser } from "../../hooks/useAuth";
@@ -17,22 +17,22 @@ export default function Messages() {
   const curConvoMember = useQuery().get("user");
 
   const [isLoading, setIsLoading] = useState(true);
-  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
   const [openConvo, setOpenConvo] = useState(null);
   const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       const curUser = await getCurrentUser();
-      const curUserId = curUser.attributes.sub;
-      setUserId(curUserId);
+      const curUsername = curUser.username;
+      setUsername(curUsername);
     };
     fetchUser();
   }, []);
 
   useEffect(() => {
     const fetchConvos = async () => {
-      const convos = await getConversationByUserId(userId);
+      const convos = await getConversationByUser(username);
       setConversations(convos);
       if (curConvoMember) {
         // Open convo if it exists, else create new convo
@@ -42,16 +42,16 @@ export default function Messages() {
         if (existingConvo) {
           setOpenConvo(existingConvo);
         } else {
-          const newConvo = await createConversation([curConvoMember, userId]);
+          const newConvo = await createConversation([curConvoMember, username]);
           setConversations([...convos, newConvo]);
           setOpenConvo(newConvo);
         }
       }
       setIsLoading(false);
     };
-    if (!userId) return;
+    if (!username) return;
     fetchConvos();
-  }, [userId]);
+  }, [username]);
 
   return (
     <>
@@ -62,7 +62,7 @@ export default function Messages() {
           <ConversationList
             conversations={conversations}
             setOpenConvo={setOpenConvo}
-            id={userId}
+            username={username}
           />
           {!openConvo ? (
             <div className="empty-conversation">
@@ -71,7 +71,7 @@ export default function Messages() {
                 : "You have no ongoing conversations."}
             </div>
           ) : (
-            <Conversation convo={openConvo} id={userId} />
+            <Conversation convo={openConvo} username={username} />
           )}
         </div>
       )}
