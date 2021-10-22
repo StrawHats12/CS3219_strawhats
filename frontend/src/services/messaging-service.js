@@ -71,3 +71,19 @@ export async function getConversationByUserId(id) {
     return null;
   }
 }
+
+export async function getConversationByUser(user) {
+  try {
+    const userSession = await getCurrentSession();
+    const token = userSession?.accessToken.jwtToken;
+    const res = await axios.get(`${API_URL}/conversation/${user}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return res.data.Items;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

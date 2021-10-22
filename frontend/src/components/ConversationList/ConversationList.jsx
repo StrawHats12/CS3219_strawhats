@@ -1,7 +1,11 @@
 import React from "react";
 import { ListGroup } from "react-bootstrap";
 
-export default function ConversationList({ conversations, setOpenConvo, id }) {
+export default function ConversationList({
+  conversations,
+  setOpenConvo,
+  username,
+}) {
   return (
     <div style={{ width: 200 }}>
       <ListGroup variant="flush">
@@ -13,7 +17,7 @@ export default function ConversationList({ conversations, setOpenConvo, id }) {
               setOpenConvo(c);
             }}
           >
-            {c.members?.find((m) => m !== id)}
+            {c.members?.find((m) => m !== username)}
           </ListGroup.Item>
         ))}
       </ListGroup>

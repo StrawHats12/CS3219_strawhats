@@ -15,6 +15,21 @@ AWS.config.update({
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = ACCOUNTS_TABLE_NAME;
 
+const getAccountById = async (id) => {
+  const params = {
+    TableName: TABLE_NAME,
+    IndexName: "uid-index",
+    ExpressionAttributeValues: {
+      ":id": id,
+    },
+    ExpressionAttributeNames: {
+      "#uid": "uid",
+    },
+    KeyConditionExpression: "#uid = :id",
+  };
+  return await dynamoClient.query(params).promise();
+};
+
 const getAccountByUsername = async (username) => {
   const params = {
     TableName: TABLE_NAME,
@@ -46,6 +61,7 @@ const deleteAccount = async (username) => {
 
 module.exports = {
   dynamoClient,
+  getAccountById,
   getAccountByUsername,
   addOrUpdateAccount,
   deleteAccount,

@@ -5,6 +5,7 @@ const {
   getAccountByUsername,
   addOrUpdateAccount,
   deleteAccount,
+  getAccountById,
 } = require("./dynamoDb");
 
 const cors = require("cors");
@@ -18,6 +19,17 @@ app.use(morgan("tiny"));
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
+});
+
+app.get("/account/id/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    const account = await getAccountById(id);
+    res.json(account);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ err: "Something went wrong" });
+  }
 });
 
 app.get("/account/:username", async (req, res) => {
