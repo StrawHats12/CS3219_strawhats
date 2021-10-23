@@ -13,9 +13,15 @@ const LISTING = {
   IMAGES: "images",
 };
 
+const LIVESTREAM = {
+  PLAYBACK_BASE_URL: "https://stream.mux.com/",
+  CREATE_STREAM_URL: "localhost:9000/create",
+}
+
 export {
   ACCOUNTS_ENDPOINT,
   LISTING,
+  LIVESTREAM,
   LISTINGS_ENDPOINT,
   MESSAGING_ENDPOINT,
   MESSAGING_SOCKET_ENDPOINT,
