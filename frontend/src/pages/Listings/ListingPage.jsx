@@ -4,6 +4,7 @@ import { useHistory, useParams } from "react-router";
 import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
+import { getAccountById } from "../../services/account-service";
 import {
   deleteListing,
   deleteListingImages,
@@ -48,8 +49,9 @@ const ListingsPage = () => {
     history.push(`/listings/edit/${id}`);
   };
 
-  const redirectToChat = () => {
-    history.push(`/messenger/?user=${seller_sub}`);
+  const redirectToChat = async () => {
+    const user = await getAccountById(seller_uid);
+    history.push(`/messenger/?user=${user.username}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {

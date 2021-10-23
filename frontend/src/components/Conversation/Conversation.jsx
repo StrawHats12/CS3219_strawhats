@@ -12,7 +12,7 @@ import useSocket from "../../hooks/useSocket";
 import Message from "./Message";
 import "./Conversation.css";
 
-export default function Conversation({ convo, id }) {
+export default function Conversation({ convo, username: id }) {
   const { socket } = useSocket({ id });
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(true);

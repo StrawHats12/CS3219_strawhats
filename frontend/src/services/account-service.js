@@ -1,7 +1,11 @@
 import axios from "axios";
 import Storage from "@aws-amplify/storage";
 import { ACCOUNTS_ENDPOINT } from "../const";
-import { getCurrentSession, getCurrentUser, getCurrentUserCredentials } from "../hooks/useAuth";
+import {
+  getCurrentSession,
+  getCurrentUser,
+  getCurrentUserCredentials,
+} from "../hooks/useAuth";
 import { v4 as uuidv4 } from "uuid";
 
 const getAccount = async (username) => {
@@ -13,6 +17,17 @@ const getAccount = async (username) => {
   }
 
   return data;
+};
+
+const getAccountById = async (id) => {
+  const response = await axios.get(`${ACCOUNTS_ENDPOINT}/account/id/${id}`);
+  const data = await response?.data?.Items;
+
+  if (!data || data.length === 0) {
+    throw new Error("Account not found");
+  }
+
+  return data[0];
 };
 
 const updateAccount = async (account, image) => {
@@ -66,4 +81,4 @@ const addReview = async (review, username) => {
   });
 };
 
-export { addReview, getAccount, updateAccount };
+export { addReview, getAccount, updateAccount, getAccountById };
