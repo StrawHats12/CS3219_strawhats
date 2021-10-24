@@ -1,4 +1,4 @@
-import StreamCreator from "./StreamCreator";
+import StreamControlPanel from "./StreamControlPanel";
 import StreamViewer from "./StreamViewer";
 
-export {StreamCreator, StreamViewer};
+export {StreamControlPanel, StreamViewer};

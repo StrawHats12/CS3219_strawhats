@@ -9,7 +9,7 @@ import {
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { getAccount } from "../../services/account-service";
-import {StreamCreator, StreamViewer} from "../../components/Livestream"
+import {StreamControlPanel, StreamViewer} from "../../components/Livestream"
 
 const Livestream = () => {
   const pageTitle = "Livestream";
@@ -20,8 +20,8 @@ const Livestream = () => {
 
   return <>
     <h1> Tuned into Livestream ID: {playbackId}</h1>
-    <StreamCreator/>
-    <StreamViewer playbackId={"12"}/>
+    <StreamControlPanel/>
+    <StreamViewer playbackId={"EKqAQOvWvI5VFxznGHlOmyBM8roiPDvBDhD019weKHvM"}/>
   </>;
 };
 

@@ -20,13 +20,32 @@ const generateStream = async (creatorId) => {
   return data;
 }
 
-const destroyStream = async (targetStream) => {
-  console.log("destorying stream:", targetStream)
-  const livestreamId = targetStream // todo: get livestreamId
+const destroyStream = async (targetStreamId) => {
+  console.log("destorying stream:", targetStreamId)
+  const livestreamId = targetStreamId // todo: get livestreamId
   const destoryUrl = LIVESTREAM.DESTORY_STREAM_BASE_URL + livestreamId
   const response = await axios.delete(destoryUrl)
       .catch(e => {
         console.error("there was a network error when trying to destroy a stream", e)
       })
 }
-export {generateStream, destroyStream};
+
+const fetchPrivateStreamDetails = async (streamerId) => {
+  console.log("fetch Private stream details for", streamerId)
+  const payload = {
+    id:Number(streamerId)
+  }
+  const fetchUrl = LIVESTREAM.FETCH_STREAM_PRIVATE_DETAILS_URL + streamerId
+  let response = await axios
+      .get(fetchUrl)
+      .then((r) => {
+        console.log("backend response for fetching for streamer id:", r)
+        return r
+      })
+      .catch((e) => {
+        console.error ("some error trying to fetch private stream details:", e)
+      })
+  console.log("fetched these details from backend:", response)
+  return response?.data
+}
+export {generateStream, destroyStream, fetchPrivateStreamDetails};

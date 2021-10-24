@@ -15,6 +15,7 @@ app.use(express.static("public"));
 app.use(morgan("tiny"));
 
 const Mux = require("@mux/mux-node");
+const stream = require("stream");
 const {Video} = new Mux(
     process.env.MUX_TOKEN_ID,
     process.env.MUX_TOKEN_SECRET
@@ -98,16 +99,27 @@ const publicStreamDetails = (stream) => ({
   recentAssets: stream["recent_asset_ids"],
 });
 
+const getPrivateStreamDetails = (streamerId) => {
+  const stream = streamIds[streamerId]
+  return stream
+      ? {
+        streamer_id: streamerId,
+        stream_key: stream.stream_key,
+        playback_ids: stream.playback_ids,
+        live_stream_id: stream.id,
+      }
+      : {}
+}
+
 // API for getting the current live stream and its state for bootstrapping the app
-app.get("/stream", async (req, res) => {
-  const id = req.body.id;
-
+app.get("/fetchStream/:id", async (req, res) => {
+  const id = Number(req.params.id);
+  console.log("trying to fetch stream details for id:", id)
+  console.log("streams id is now:", streamIds)
   if (!id || !streamIds[id]) {
-    res.status(500).send(`Unknown ID}`); // Change status code
+    return res.status(500).send(`Unknown ID`); // Change status code
   }
-
-  // const stream = await Video.LiveStreams.get(STREAM.id);
-  res.json(publicStreamDetails(streamIds[id]));
+  return res.json(getPrivateStreamDetails(id));
 });
 
 // API which Returns the 5 most recent VOD assets made from our Live Stream
@@ -178,20 +190,16 @@ app.post("/create", (req, res) => {
   }
 
   console.log("req:", req)
-
+  // todo: create only if the stream details don't exist yet:
   initStream()
       .then((stream) => {
         console.log("HERE ARE YOUR STREAM DETAILS, KEEP THEM SECRET!");
         const streamKey = stream.stream_key;
         console.log(`Stream Key: ${streamKey}`);
-        const response = {
-          streamer_id: streamerId,
-          stream_key: streamKey,
-          playback_ids: stream.playback_ids
-        };
+        console.log(`Live stream id: ${streamIds}`);
         streamIds[streamerId] = stream;
         console.log(streamIds);
-        res.status(200).send(response);
+        res.status(200).send(getPrivateStreamDetails(streamerId));
       })
       .catch((err) => {
         res
@@ -203,8 +211,8 @@ app.post("/create", (req, res) => {
 });
 
 app.delete("/destroy/:id", (req, res) => {
-  console.log("[destroy api called user streamer id: ", req.params.id)
-  const livestreamId = "xxx"
+  console.log("[destroy api called user livestream id: ", req.params.id)
+  const livestreamId = req.params.id
   // Video.LiveStreams.del(livestreamId)
   //     .then(r =>
   //         delete streamIds[live_stream_id] // cleanup
