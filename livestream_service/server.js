@@ -22,13 +22,6 @@ const {Video} = new Mux(
 );
 let STREAM;
 
-// Storage Configuration
-// const util = require("util");
-// const fs = require("fs");
-// const stateFilePath = "./.data/stream";
-// const readFile = util.promisify(fs.readFile);
-// const writeFile = util.promisify(fs.writeFile);
-
 // Authentication Configuration
 // const webhookUser = {
 //   name: "muxer",
@@ -37,6 +30,7 @@ let STREAM;
 
 const streamIds = {};
 
+// ========= todo: add auth,  middleware would be necessary ==========
 // Authentication Middleware
 // const auth = (req, res, next) => {
 // function unauthorized(res) {
@@ -71,20 +65,7 @@ const createLiveStream = async () => {
   });
 };
 
-// Reads a state file looking for an existing Live Stream, if it can't find one,
-// creates a new one, saving the new live stream to our state file and global
-// STREAM variable.
 const initStream = async () => {
-  // try {
-  //   const stateFile = await readFile(stateFilePath, "utf8");
-  //   STREAM = JSON.parse(stateFile);
-  //   console.log("Found an existing stream! Fetching updated data.");
-  //   STREAM = await Video.LiveStreams.get(STREAM.id);
-  // } catch (err) {
-  //   console.log("No stream found, creating a new one.");
-  //   STREAM = await createLiveStream();
-  //   await writeFile(stateFilePath, JSON.stringify(STREAM));
-  // }
   STREAM = await createLiveStream();
   return STREAM;
 };
@@ -119,28 +100,6 @@ app.get("/fetchStream/:id", async (req, res) => {
   return res.json(getPrivateStreamDetails(id));
 });
 
-// API which Returns the 5 most recent VOD assets made from our Live Stream
-// app.get("/recent", async (req, res) => {
-//   const recentAssetIds = STREAM["recent_asset_ids"] || [];
-
-//   // For each VOD asset we know about, get the details from Mux Video
-//   const assets = await Promise.all(
-//     recentAssetIds
-//       .reverse()
-//       .slice(0, 5)
-//       .map((assetId) =>
-//         Video.Assets.get(assetId).then((asset) => {
-//           return {
-//             playbackId: getPlaybackId(asset),
-//             status: asset.status,
-//             createdAt: asset.created_at,
-//           };
-//         })
-//       )
-//   );
-//   res.json(assets);
-// });
-
 // API which Listens for callbacks from Mux
 // app.post("/mux-hook", auth, function (req, res) {
 //   STREAM.status = req.body.data.status;
@@ -161,19 +120,6 @@ app.get("/fetchStream/:id", async (req, res) => {
 //     default:
 //     // Relaxing.
 //   }
-
-//   res.status(200).send("Thanks, Mux!");
-// });
-
-// Starts the HTTP listener for our application.
-// Note: glitch helpfully remaps HTTP 80 and 443 to process.env.PORT
-// initialize().then((stream) => {
-//   const listener = http.listen(process.env.PORT || 4000, function () {
-//     console.log("Your app is listening on port " + listener.address().port);
-//     console.log("HERE ARE YOUR STREAM DETAILS, KEEP THEM SECRET!");
-//     console.log(`Stream Key: ${stream.stream_key}`);
-//   });
-// });
 
 app.get("/", (req, res) => {
   return res.status(200).send("things working");
