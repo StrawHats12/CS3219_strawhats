@@ -230,3 +230,6 @@ dist
 .idea/vcs.xml
 
 .vscode
+.idea/
+frontend/package-lock.json
+*.pem

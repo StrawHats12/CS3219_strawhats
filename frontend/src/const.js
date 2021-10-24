@@ -15,7 +15,8 @@ const LISTING = {
 
 const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
-  CREATE_STREAM_URL: "localhost:9000/create",
+  CREATE_STREAM_URL: "http://localhost:9000/create",
+  DESTORY_STREAM_BASE_URL: "http://localhost:9000/destroy/"
 }
 
 export {

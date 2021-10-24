@@ -1,21 +1,23 @@
 require("dotenv").config();
+var cors = require("cors")
 const express = require("express");
 // const basicAuth = require("basic-auth");
 const app = express();
+app.use(cors());
+
 const http = require("http").Server(app);
 const morgan = require("morgan");
 const io = require("socket.io")(http); //TODO remove socket.io if not needed (from package.json)
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.use(morgan("tiny"));
 
-// Setup the Mux SDK
 const Mux = require("@mux/mux-node");
-const { Video } = new Mux(
-  process.env.MUX_TOKEN_ID,
-  process.env.MUX_TOKEN_SECRET
+const {Video} = new Mux(
+    process.env.MUX_TOKEN_ID,
+    process.env.MUX_TOKEN_SECRET
 );
 let STREAM;
 
@@ -55,7 +57,7 @@ const streamIds = {};
 const createLiveStream = async () => {
   if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
     console.error(
-      "It looks like you haven't set up your Mux token in the .env file yet."
+        "It looks like you haven't set up your Mux token in the .env file yet."
     );
     return;
   }
@@ -64,14 +66,14 @@ const createLiveStream = async () => {
   return await Video.LiveStreams.create({
     playback_policy: "public",
     reconnect_window: 10,
-    new_asset_settings: { playback_policy: "public" },
+    new_asset_settings: {playback_policy: "public"},
   });
 };
 
 // Reads a state file looking for an existing Live Stream, if it can't find one,
 // creates a new one, saving the new live stream to our state file and global
 // STREAM variable.
-const initialize = async () => {
+const initStream = async () => {
   // try {
   //   const stateFile = await readFile(stateFilePath, "utf8");
   //   STREAM = JSON.parse(stateFile);
@@ -164,32 +166,56 @@ app.get("/stream", async (req, res) => {
 //   });
 // });
 
-app.post("/create", (req, res) => {
-  const id = req.body.id;
+app.get("/", (req, res) => {
+  return res.status(200).send("things working");
+})
 
-  if (!id) {
+app.post("/create", (req, res) => {
+  const streamerId = req.body.id;
+
+  if (!streamerId) {
     res.status(500).send(`Unknown ID}`); // Change status code
   }
 
-  initialize()
-    .then((stream) => {
-      console.log("HERE ARE YOUR STREAM DETAILS, KEEP THEM SECRET!");
-      const streamKey = stream.stream_key;
-      console.log(`Stream Key: ${streamKey}`);
-      const response = { stream_key: streamKey };
-      streamIds[id] = stream;
-      console.log(streamIds);
-      res.status(200).send(response);
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send(
-          `Stream could not be created due to an unknown error. Please try again.\nError: ${err.toString()}`
-        );
-    });
+  console.log("req:", req)
+
+  initStream()
+      .then((stream) => {
+        console.log("HERE ARE YOUR STREAM DETAILS, KEEP THEM SECRET!");
+        const streamKey = stream.stream_key;
+        console.log(`Stream Key: ${streamKey}`);
+        const response = {
+          streamer_id: streamerId,
+          stream_key: streamKey,
+          playback_ids: stream.playback_ids
+        };
+        streamIds[streamerId] = stream;
+        console.log(streamIds);
+        res.status(200).send(response);
+      })
+      .catch((err) => {
+        res
+            .status(500)
+            .send(
+                `Stream could not be created due to an unknown error. Please try again.\nError: ${err.toString()}`
+            );
+      });
 });
 
-app.listen(9000, function () {
-  console.log("Your app is listening on port " + 9000);
+app.delete("/destroy/:id", (req, res) => {
+  console.log("[destroy api called user streamer id: ", req.params.id)
+  const livestreamId = "xxx"
+  // Video.LiveStreams.del(livestreamId)
+  //     .then(r =>
+  //         delete streamIds[live_stream_id] // cleanup
+  //     )
+  //     .catch(e => {
+  //       console.error("Something wrong happened when livestream backend tried to make api" +
+  //           " call to delete the livestream", e)
+  //     })
+  res.status(200).send("nicely done deleting")
+})
+
+app.listen(process.env.SERVER_PORT, function () {
+  console.log("Your app is listening on port " + process.env.SERVER_PORT);
 });
