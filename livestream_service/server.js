@@ -113,7 +113,7 @@ const getPrivateStreamDetails = (streamerId) => {
 
 // API for getting the current live stream and its state for bootstrapping the app
 app.get("/fetchStream/:id", async (req, res) => {
-  const id = Number(req.params.id);
+  const id = (req.params.id).toString();
   console.log("trying to fetch stream details for id:", id)
   console.log("streams id is now:", streamIds)
   return res.json(getPrivateStreamDetails(id));

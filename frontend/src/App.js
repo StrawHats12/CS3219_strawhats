@@ -39,7 +39,7 @@ function App() {
               exact
             />
             <Route path="/listings/:id" component={ListingPage} exact />
-            <Route path="/tv/:playbackId" component={Livestream} exact />
+            <Route path="/tv/:streamerId" component={Livestream} exact />
             <Route path="/authentication" component={Authentication} exact />
             <ProtectedRoute path="/messenger" component={Messenger} exact />
             <Route component={NotFound} />

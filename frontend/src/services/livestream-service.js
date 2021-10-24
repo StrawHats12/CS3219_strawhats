@@ -5,7 +5,7 @@ import {LIVESTREAM} from "../const";
 const generateStream = async (creatorId) => {
   console.log("Register creator id to get stream key", creatorId)
   const payload = {
-    "id": creatorId
+    "id": creatorId.toString()
   }
 
   console.log(`Trying to create a stream \n url ${LIVESTREAM.CREATE_STREAM_URL}`)
@@ -32,13 +32,13 @@ const destroyStream = async (streamerId) => {
 const fetchPrivateStreamDetails = async (streamerId) => {
   console.log("fetch Private stream details for", streamerId)
   const payload = {
-    id:Number(streamerId)
+    id:streamerId.toString()
   }
   const fetchUrl = LIVESTREAM.FETCH_STREAM_PRIVATE_DETAILS_URL + streamerId
   let response = await axios
       .get(fetchUrl)
       .then((r) => {
-        console.log("backend response for fetching for streamer id:", r)
+        console.log(`backend response for fetching for streamer id ${streamerId}: `, r)
         return r
       })
       .catch((e) => {

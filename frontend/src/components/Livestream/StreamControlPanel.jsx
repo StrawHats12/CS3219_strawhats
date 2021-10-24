@@ -3,8 +3,8 @@ import {Button, Card, Container, Form} from "react-bootstrap";
 import {useEffect, useState} from "react";
 
 // todo: change to stream controls element which can create, delete streams
-const StreamControlPanel = () => {
-  const [streamerId, setStreamerId] = useState("12")
+const StreamControlPanel = (props) => {
+  const {streamerId/* ,playbackIds, updatePlaybackIds*/} = props
   const [livestreamId, setLivestreamId] = useState(undefined)
   const [playbackIds, setPlaybackIds] = useState([])
   const [streamKey, setStreamKey] = useState(undefined)
@@ -13,10 +13,10 @@ const StreamControlPanel = () => {
     e.preventDefault();
     generateStream(streamerId).then(streamData => {
       console.log("Registered for a stream, here's the stream data", streamData)
-      setPlaybackIds(streamData.playback_ids)
+      setPlaybackIds(streamData.playback_ids) // to deprecate
+      // updatePlaybackIds(streamData.playback_ids)
       setStreamKey(streamData.stream_key)
       setLivestreamId(streamData.live_stream_id)
-      setStreamerId(streamData.streamer_id)
     })
   }
 
@@ -26,6 +26,7 @@ const StreamControlPanel = () => {
       console.log("deleted livestream for streamer id:", streamerId)
     })
     setLivestreamId(undefined)
+    // updatePlaybackIds([])
     setPlaybackIds([])
     setStreamKey(undefined)
   }
@@ -37,6 +38,8 @@ const StreamControlPanel = () => {
       const {live_stream_id, playback_ids, stream_key} = response
       setLivestreamId(live_stream_id);
       setPlaybackIds(playback_ids);
+      // updatePlaybackIds(playback_ids);
+      console.log("synced w backend, playback ids: ", playback_ids)
       setStreamKey(stream_key)
     }
   }, [])
@@ -45,7 +48,7 @@ const StreamControlPanel = () => {
 
   const playbackIdDisplay = playbackIds && playbackIds.length > 0
       ? playbackIds.map((pid, idx) => {
-        return <div id={idx}>
+        return <div key={idx}>
           <Card> Playback id: {pid.id}</Card>
           <Button
               onClick={handleStreamDestroy}
@@ -56,19 +59,9 @@ const StreamControlPanel = () => {
 
 
   const generatorForm = <Form>
-    <Form.Group className={"mb-3"} controlId={"sellerId"}>
-      <Form.Label>Stream Key</Form.Label>
-      <Form.Control
-          type={"text"}
-          placeholder={"Type your unique creator ID here"}
-          onChange={(e) => {
-            setStreamerId(e.target.value)
-          }}
-      />
-      <Button size={"sm"} variant={"primary"} onClick={handleStreamCreation}>
-        Generate stream key
-      </Button>
-    </Form.Group>
+    <Button size={"sm"} variant={"primary"} onClick={handleStreamCreation}>
+      Generate stream key
+    </Button>
   </Form>
 
   return <>
