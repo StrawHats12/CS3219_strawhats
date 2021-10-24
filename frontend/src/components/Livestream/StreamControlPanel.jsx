@@ -22,23 +22,28 @@ const StreamControlPanel = () => {
 
   const handleStreamDestroy = async (e) => {
     e.preventDefault();
-    destroyStream(livestreamId).then(() => {
-      console.log("deleted livestream")
+    destroyStream(streamerId).then(() => {
+      console.log("deleted livestream for streamer id:", streamerId)
     })
+    setLivestreamId(undefined)
+    setPlaybackIds([])
+    setStreamKey(undefined)
   }
 
   // attempt to fetch private stream details from the backend:
   useEffect(async () => {
-    const response  = await fetchPrivateStreamDetails(streamerId)
-    const {live_stream_id, playback_ids, stream_key} = response
-    setLivestreamId(live_stream_id);
-    setPlaybackIds(playback_ids);
-    setStreamKey(stream_key)
+    const response = await fetchPrivateStreamDetails(streamerId)
+    if (response) {
+      const {live_stream_id, playback_ids, stream_key} = response
+      setLivestreamId(live_stream_id);
+      setPlaybackIds(playback_ids);
+      setStreamKey(stream_key)
+    }
   }, [])
 
   const streamKeyDisplay = streamKey && <Card> Your Stream Key: {streamKey}</Card>;
 
-  const playbackIdDisplay = playbackIds.length > 0
+  const playbackIdDisplay = playbackIds && playbackIds.length > 0
       ? playbackIds.map((pid, idx) => {
         return <div id={idx}>
           <Card> Playback id: {pid.id}</Card>
@@ -68,7 +73,7 @@ const StreamControlPanel = () => {
 
   return <>
     <Container>
-      {livestreamId ? playbackIdDisplay: generatorForm}
+      {livestreamId ? playbackIdDisplay : generatorForm}
       {streamKeyDisplay}
     </Container>
   </>

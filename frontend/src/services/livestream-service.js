@@ -20,10 +20,9 @@ const generateStream = async (creatorId) => {
   return data;
 }
 
-const destroyStream = async (targetStreamId) => {
-  console.log("destorying stream:", targetStreamId)
-  const livestreamId = targetStreamId // todo: get livestreamId
-  const destoryUrl = LIVESTREAM.DESTORY_STREAM_BASE_URL + livestreamId
+const destroyStream = async (streamerId) => {
+  console.log("destorying stream for streamer id:", streamerId)
+  const destoryUrl = LIVESTREAM.DESTORY_STREAM_BASE_URL + streamerId
   const response = await axios.delete(destoryUrl)
       .catch(e => {
         console.error("there was a network error when trying to destroy a stream", e)

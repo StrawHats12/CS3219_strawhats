@@ -116,9 +116,6 @@ app.get("/fetchStream/:id", async (req, res) => {
   const id = Number(req.params.id);
   console.log("trying to fetch stream details for id:", id)
   console.log("streams id is now:", streamIds)
-  if (!id || !streamIds[id]) {
-    return res.status(500).send(`Unknown ID`); // Change status code
-  }
   return res.json(getPrivateStreamDetails(id));
 });
 
@@ -212,16 +209,18 @@ app.post("/create", (req, res) => {
 
 app.delete("/destroy/:id", (req, res) => {
   console.log("[destroy api called user livestream id: ", req.params.id)
-  const livestreamId = req.params.id
-  // Video.LiveStreams.del(livestreamId)
-  //     .then(r =>
-  //         delete streamIds[live_stream_id] // cleanup
-  //     )
-  //     .catch(e => {
-  //       console.error("Something wrong happened when livestream backend tried to make api" +
-  //           " call to delete the livestream", e)
-  //     })
-  res.status(200).send("nicely done deleting")
+  const streamerId = req.params.id
+  const livestreamId = streamIds[streamerId].id
+  console.log(`streamerId ${streamerId}'s livestream id ${livestreamId} needs to be deleted`)
+  Video.LiveStreams.del(livestreamId)
+      .then(r =>
+          delete streamIds[streamerId] // cleanup
+      )
+      .catch(e => {
+        console.error("Something wrong happened when livestream backend tried to make api" +
+            " call to delete the livestream", e)
+      })
+  res.status(200).send(`deleted ${streamerId}'s stream. previous livestream id: ${livestreamId}`)
 })
 
 app.listen(process.env.SERVER_PORT, function () {
