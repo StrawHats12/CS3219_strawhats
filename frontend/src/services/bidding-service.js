@@ -1,8 +1,9 @@
 import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
-
-
+import { propTypes } from "react-bootstrap/esm/Image";
+import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
+import { formatDate, stringToDate } from "../utils/DateTime";
 
 const getListingBids = async (listingId) => {
     try {
@@ -49,9 +50,17 @@ const deleteBid = async (bidId) => {
 
 const AddBid = ({listingInfo}) => {
 
+    const currentdate = new Date(); 
+    const datetime = "Last Sync: " + currentdate.getDate() + "/"
+                    + (currentdate.getMonth()+1)  + "/" 
+                    + currentdate.getFullYear() + " @ "  
+                    + currentdate.getHours() + ":"  
+                    + currentdate.getMinutes() + ":" 
+                    + currentdate.getSeconds();
+
     const [input, setInput] = useState({
         bidPrice: "",
-        endBidDateTime: ""
+        bidDeadline: datetime
     })
 
     function handleChange(event) {
@@ -68,6 +77,10 @@ const AddBid = ({listingInfo}) => {
     async function handleClick(event) {
         event.preventDefault();
         try {
+            if (!input.bidPrice) {
+                alert("Bid Price cannot be empty!");
+                return;
+            }
             const userSession = await getCurrentSession();
             const currentUser = await getCurrentUser();
             const token = userSession?.accessToken.jwtToken;
@@ -76,12 +89,14 @@ const AddBid = ({listingInfo}) => {
                 userIdentifier: currentUser.username,
                 bidPrice: input.bidPrice,
                 auctionId: listingInfo.bidding_id,
+                bidDeadline: input.bidDeadline,
                 status: "ONGOING"
             }
             await axios.post('http://localhost:2001/addBid', newBid, {
                 headers: {
                     Authorization: `Bearer ${token}`,
             }});
+            alert("Bid added");
         } catch (err) {
             console.log(err);
             return null;
@@ -98,11 +113,15 @@ const AddBid = ({listingInfo}) => {
                 className = "form-control" placeholder="Enter Your Price Here"/>
             </div>
             <br/>
+            <DateTimePickerComponent placeholder="Choose a date and time to end your bid." 
+                value = {input.bidDeadline}
+                min ={stringToDate(listingInfo.createdAt)}
+                max ={stringToDate(listingInfo.deadline)} />
             {/* <div className = 'form-group'>
                 <input name="endBidDateTime" onChange={handleChange} className = "form-control" value={input.endBidDateTime} 
                 autoComplete="off" placeholder="Your bid will expiry after this time"/>
             </div> */}
-            <br/>
+            <br/> <br/>
             <button onClick={handleClick} className="btn btn-lg btn-info"> Confirm Bid </button>
         </form>
     </div>

@@ -59,7 +59,7 @@ const BidTable = ({value}) => {
         {isLoading 
         ? <StrawhatSpinner/> 
         : (
-            <table>
+            <table class="styled-table">
                 <thead>
                     <tr>
                         <th> Bid Owner </th>

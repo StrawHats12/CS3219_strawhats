@@ -8,12 +8,18 @@ class PopUp extends React.Component {
     super(contact);
     this.state = { 
         modalOpened: false,
+        loadModal: false,
+        openModal: false
     };
     this.toggleModal = this.toggleModal.bind(this);
   }
 
   toggleModal() {
     this.setState(prevState => ({ modalOpened: !prevState.modalOpened }));
+  }
+
+  setModalOpen() {
+    this.setState(prevState => ({ loadModal: !prevState.loadModal, openModal: !prevState.openModal }));
   }
 
   render() {
@@ -24,15 +30,16 @@ class PopUp extends React.Component {
         <ModalButton handleClick={this.toggleModal}>
           Add Bid
         </ModalButton>
+        
         <Modal
+          style= "margin: auto; display: block;"
           isOpen={this.state.modalOpened}
           onRequestClose={this.toggleModal}
           contentLabel="Modal with image"
         >
-       <AddBid listingInfo = {listingInfo}/>
-       <br/>
-        <button onClick={this.toggleModal}
-        className="btn btn-lg btn-info"> Close </button>
+          <AddBid listingInfo = {listingInfo}/>
+          <br/>
+          <button onClick={this.toggleModal} className="btn btn-lg btn-info"> Close </button>
         </Modal>
       </div>
     );

@@ -99,7 +99,7 @@ const ListingsPage = () => {
       {isLoading ? (
         <StrawhatSpinner />
       ) : listing ? (
-        <Container>
+        <Container fluid>
           <h1>{listing_name}</h1>
           {isOwner && (
             <>
@@ -127,9 +127,17 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
+          <br/>
           <Row>
-            <Col> <PopUp listingInfo = {listing}> Place Bid </PopUp> </Col>
-            <Col> <BidTable value = {listing}/></Col>
+            <Col xs={2}> 
+              <h3> Place Your Bid! </h3>
+              <PopUp listingInfo = {listing}> Place Bid </PopUp> 
+ 
+            </Col>
+            <Col xs={9}> 
+              <h3> Ongoing Bids </h3> 
+              <BidTable value = {listing}/>   
+            </Col>
           </Row>
         </Container>
       ) : (
