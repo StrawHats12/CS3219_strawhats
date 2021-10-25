@@ -1,7 +1,8 @@
 import {destroyStream, fetchPrivateStreamDetails, generateStream} from "../../services/livestream-service";
-import {Button, Card, Container, Form} from "react-bootstrap";
+import {Button, Card, Container, Form, Modal} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {StreamViewer} from "./index";
+import {MESSAGES} from "../../const";
 
 // todo: change to stream controls element which can create, delete streams
 const StreamControlPanel = (props) => {
@@ -10,6 +11,12 @@ const StreamControlPanel = (props) => {
   const [playbackIds, setPlaybackIds] = useState([])
   const [streamKey, setStreamKey] = useState(undefined)
   const [displayStream, setDisplayStream] = useState(false)
+  const [showModal, setShowModal] = useState(false)
+
+
+
+  const handleClose = () => setShowModal(false);
+  const handleShow = () => setShowModal(true);
 
   const handleStreamCreation = async (e) => {
     e.preventDefault();
@@ -55,6 +62,9 @@ const StreamControlPanel = (props) => {
       ? playbackIds.map((pid, idx) => {
         return <div key={idx}>
           <Card> Playback id: {pid.id}</Card>
+          <Button variant="primary" onClick={handleShow}>
+            Streaming Instructions
+          </Button>
           <Button onClick={handleStreamDestroy}>
             Destroy Stream
           </Button>
@@ -63,6 +73,21 @@ const StreamControlPanel = (props) => {
                 ? <div>Hide Stream</div>
                 : <div>Show Stream</div>}
           </Button>
+
+          <Modal show={showModal} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Streaming Instructions</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>{MESSAGES.STREAMING_INSTRUCTIONS}</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={handleClose}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
       })
       : <p>No playback ids to show</p>
