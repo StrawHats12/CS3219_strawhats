@@ -49,16 +49,17 @@ const StreamControlPanel = (props) => {
   };
 
   // attempt to fetch private stream details from the backend:
-  useEffect(async () => {
-    const response = await fetchPrivateStreamDetails(streamerId);
-    if (response) {
-      const { live_stream_id, playback_ids, stream_key } = response;
-      setLivestreamId(live_stream_id);
-      setPlaybackIds(playback_ids);
-      console.log("synced w backend, playback ids: ", playback_ids);
-      setStreamKey(stream_key);
-    }
-  }, []);
+  useEffect(() => {
+    fetchPrivateStreamDetails(streamerId).then((response) => {
+      if (response) {
+        const { live_stream_id, playback_ids, stream_key } = response;
+        setLivestreamId(live_stream_id);
+        setPlaybackIds(playback_ids);
+        console.log("synced w backend, playback ids: ", playback_ids);
+        setStreamKey(stream_key);
+      }
+    });
+  }, [streamerId]);
 
   const streamKeyDisplay = streamKey && (
     <Card> Your Stream Key: {streamKey}</Card>
