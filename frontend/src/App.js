@@ -16,7 +16,7 @@ import "./App.css";
 import Authentication from "./pages/Authentication";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { ProfilePage } from "./pages/Profile";
-import Livestream from "./pages/Livestream1";
+import Livestream from "./pages/Livestream";
 
 function App() {
   return (
