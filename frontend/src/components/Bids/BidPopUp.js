@@ -37,9 +37,7 @@ class PopUp extends React.Component {
           onRequestClose={this.toggleModal}
           contentLabel="Modal with image"
         >
-          <AddBid listingInfo = {listingInfo}/>
-          <br/>
-          <button onClick={this.toggleModal} className="btn btn-lg btn-info"> Close </button>
+          <AddBid listingInfo = {listingInfo} toggleModal = {this.toggleModal}/>
         </Modal>
       </div>
     );
@@ -47,3 +45,4 @@ class PopUp extends React.Component {
 }
 
 export default PopUp;
+

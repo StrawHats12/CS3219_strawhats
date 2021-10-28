@@ -48,8 +48,8 @@ const deleteBid = async (bidId) => {
     }
 }
 
-const AddBid = ({listingInfo}) => {
-
+const AddBid = ({listingInfo, toggleModal}) => {
+    
     const currentdate = new Date(); 
     const datetime = "Last Sync: " + currentdate.getDate() + "/"
                     + (currentdate.getMonth()+1)  + "/" 
@@ -117,12 +117,12 @@ const AddBid = ({listingInfo}) => {
                 value = {input.bidDeadline}
                 min ={stringToDate(listingInfo.createdAt)}
                 max ={stringToDate(listingInfo.deadline)} />
-            {/* <div className = 'form-group'>
-                <input name="endBidDateTime" onChange={handleChange} className = "form-control" value={input.endBidDateTime} 
-                autoComplete="off" placeholder="Your bid will expiry after this time"/>
-            </div> */}
+                
             <br/> <br/>
             <button onClick={handleClick} className="btn btn-lg btn-info"> Confirm Bid </button>
+            <br/> <br/>
+            <button onClick={toggleModal} className="btn btn-lg btn-info"> Close </button>
+
         </form>
     </div>
 }
