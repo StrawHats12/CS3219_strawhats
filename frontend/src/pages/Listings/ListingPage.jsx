@@ -59,6 +59,13 @@ const ListingsPage = () => {
     return Date.parse(deadline) > Date.now();
   }
 
+  async function isOwnerOfListing(listing) {
+    const pokemon = await getCurrentUser();
+    console.log("FROM CURRENTUSER:" + pokemon.sub); 
+    console.log("FROM LISTING:" + listing.id);
+    return pokemon.sub == listing.id;
+  }
+
   useEffect(() => {
     async function checkOwner(id) {
       const user = await getCurrentUser();
@@ -136,21 +143,27 @@ const ListingsPage = () => {
           <Row>
             <Col xs={2}> 
               { 
-                hasExpired(deadline)
-                ?  
-                <div>
-                  <h3> Place Your Bid! </h3>
-                  <PopUp listingInfo = {listing}/>
-                </div>
-                :
-                <div>
-                    <h3> Bid has ended. </h3>
-                    <p> You can no longer bid for this item. </p>
-                </div> 
+                isOwnerOfListing(listing) 
+                  ?
+                    <div>
+                      <h3> Unable to Bid </h3>
+                      <p> You cannot bid for your own items.</p>
+                    </div>
+                  : hasExpired(deadline) 
+                    ?  
+                    <div>
+                      <h3> Place Your Bid! </h3>
+                      <PopUp listingInfo = {listing}/>
+                    </div>
+                    :
+                    <div>
+                        <h3> Bid has ended. </h3>
+                        <p> You can no longer bid for this item. </p>
+                    </div> 
               }
             </Col>
             <Col xs={9}> 
-              { hasExpired(deadline)
+              { hasExpired(deadline) 
                 ?
                 <div>
                   <h3> Ongoing Bids </h3> 
