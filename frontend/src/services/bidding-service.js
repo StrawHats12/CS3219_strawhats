@@ -4,6 +4,7 @@ import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
 import { stringToDate } from "../utils/DateTime";
 
+
 const getListingBids = async (listingId) => {
     try {
         const userSession = await getCurrentSession();
@@ -115,16 +116,17 @@ const AddBid = ({listingInfo, toggleModal}) => {
                     required/>
             </div>
             <br/>
+            <label> Bid End Date: </label>
             <DateTimePickerComponent placeholder="Choose a date and time to end your bid." 
                 value = {input.bidDeadline}
                 min ={stringToDate(listingInfo.createdAt)}
                 max ={stringToDate(listingInfo.deadline)} 
                 required/>
             <br/> <br/>
-            <button type="submit" className="btn btn-lg btn-info"> Confirm Bid </button>
+            <button type="submit" class="btn btn-success"> Confirm Bid </button>
         </form>
         <br/>
-        <button onClick={toggleModal} className="btn btn-lg btn-info"> Close </button>
+        <button onClick={toggleModal} class="btn btn-dark"> Close </button>
     </div>)
 }
 
