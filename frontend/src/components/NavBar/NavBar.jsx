@@ -25,15 +25,25 @@ const NavBar = () => {
                 <NavDropdown.Item>Create Listing</NavDropdown.Item>
               </LinkContainer>
             </NavDropdown>
+            <LinkContainer to="/messenger">
+              <Nav.Link>Messenger</Nav.Link>
+            </LinkContainer>
           </Nav>
           <Nav>
-            <LinkContainer to="/authentication">
-              {currentUser ? (
-                <Nav.Link>Sign Out</Nav.Link>
-              ) : (
+            {currentUser ? (
+              <NavDropdown title={currentUser.username}>
+                <LinkContainer exact to={`/profile/${currentUser.username}`}>
+                  <NavDropdown.Item>My Profile</NavDropdown.Item>
+                </LinkContainer>
+                <LinkContainer exact to="/authentication">
+                  <NavDropdown.Item>Sign Out</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
+            ) : (
+              <LinkContainer to="/authentication">
                 <Nav.Link>Sign In</Nav.Link>
-              )}
-            </LinkContainer>
+              </LinkContainer>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>
