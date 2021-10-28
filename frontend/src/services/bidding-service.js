@@ -92,7 +92,6 @@ const AddBid = ({listingInfo, toggleModal}) => {
                 headers: {
                     Authorization: `Bearer ${token}`,
             }});
-            alert("Bid added");
         } catch (err) {
             console.log(err);
             return null;
@@ -103,7 +102,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
     return (
     <div className = "container">
         <h1> Place Your Bid </h1>
-        <br/>
+        <br/> <br/>
         <form onSubmit={handleClick}>
             <div className = "form-group">
                 <label> Bid Price: </label>
@@ -122,7 +121,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
                 min ={stringToDate(listingInfo.createdAt)}
                 max ={stringToDate(listingInfo.deadline)} 
                 required/>
-            <br/> <br/>
+            <br/> <br/> 
             <button type="submit" class="btn btn-success"> Confirm Bid </button>
         </form>
         <br/>

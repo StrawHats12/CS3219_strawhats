@@ -46,7 +46,7 @@ const BidTable = ({value}) => {
                 { isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname == bidOwner 
-                        ? <button onClick={ () => handleDeleteClick(bidId)} className="btn btn-lg btn-info" > Delete </button> 
+                        ? <button onClick={ () => handleDeleteClick(bidId)} class="btn btn-danger" > Delete </button> 
                         : "Profile Link to be inserted"
                 }
             </td>

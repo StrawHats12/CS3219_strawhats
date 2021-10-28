@@ -13,6 +13,7 @@ import {
 } from "../../services/listings-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
+import { ConsoleLogger } from "@aws-amplify/core";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -53,6 +54,10 @@ const ListingsPage = () => {
       );
     }
   };
+  
+  const hasExpired = (deadline) => {
+    return Date.parse(deadline) > Date.now();
+  }
 
   useEffect(() => {
     async function checkOwner(id) {
@@ -130,13 +135,32 @@ const ListingsPage = () => {
           <br/>
           <Row>
             <Col xs={2}> 
-              <h3> Place Your Bid! </h3>
-              <PopUp listingInfo = {listing}/>
- 
+              { 
+                hasExpired(deadline)
+                ?  
+                <div>
+                  <h3> Place Your Bid! </h3>
+                  <PopUp listingInfo = {listing}/>
+                </div>
+                :
+                <div>
+                    <h3> Bid has ended. </h3>
+                    <p> You can no longer bid for this item. </p>
+                </div> 
+              }
             </Col>
             <Col xs={9}> 
-              <h3> Ongoing Bids </h3> 
-              <BidTable value = {listing}/>   
+              { hasExpired(deadline)
+                ?
+                <div>
+                  <h3> Ongoing Bids </h3> 
+                </div>
+                :
+                <div>
+                  <h3> Past Bids </h3> 
+                </div>
+              }  
+              <BidTable value = {listing}/> 
             </Col>
           </Row>
         </Container>
