@@ -59,13 +59,6 @@ const ListingsPage = () => {
     return Date.parse(deadline) > Date.now();
   }
 
-  async function isOwnerOfListing(listing) {
-    const pokemon = await getCurrentUser();
-    console.log("FROM CURRENTUSER:" + pokemon.sub); 
-    console.log("FROM LISTING:" + listing.id);
-    return pokemon.sub == listing.id;
-  }
-
   useEffect(() => {
     async function checkOwner(id) {
       const user = await getCurrentUser();
@@ -143,7 +136,7 @@ const ListingsPage = () => {
           <Row>
             <Col xs={2}> 
               { 
-                isOwnerOfListing(listing) 
+                isOwner
                   ?
                     <div>
                       <h3> Unable to Bid </h3>
