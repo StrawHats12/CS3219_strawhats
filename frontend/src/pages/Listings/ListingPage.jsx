@@ -4,7 +4,6 @@ import { useHistory, useParams } from "react-router";
 import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { getAccountById } from "../../services/account-service";
 import PopUp from "../../components/Bids/BidPopUp";
 import BidTable from "../../components/Bids/BidTable";
 import {
@@ -22,15 +21,6 @@ const ListingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const {
-    listing_name,
-    description,
-    images,
-    seller_uid,
-    seller_sub,
-    deadline,
-  } = listing;
-
   const { listing_name, description, images, seller_uid, deadline} = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
@@ -50,11 +40,6 @@ const ListingsPage = () => {
 
   const handleEdit = () => {
     history.push(`/listings/edit/${id}`);
-  };
-
-  const redirectToChat = async () => {
-    const user = await getAccountById(seller_uid);
-    history.push(`/messenger/?user=${user.username}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -142,16 +127,11 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          {!isOwner && (
-            <Button className="m-1" onClick={redirectToChat}>
-              Chat with seller!
-            </Button>
-          )}
           <br/>
           <Row>
             <Col xs={2}> 
               <h3> Place Your Bid! </h3>
-              <PopUp listingInfo = {listing}> Place Bid </PopUp> 
+              <PopUp listingInfo = {listing}/>
  
             </Col>
             <Col xs={9}> 
@@ -166,6 +146,7 @@ const ListingsPage = () => {
           correct.
         </Container>
       )}
+      
     </>
   );
 };

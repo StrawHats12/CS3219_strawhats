@@ -21,7 +21,7 @@ const BidTable = ({value}) => {
             }
             setUname(res.username);
             setIsUnameLoading(false);
-        })
+        });
         getListingBids(listingId).then((res) => {
             if (!res) {
                 setIsLoading(false);

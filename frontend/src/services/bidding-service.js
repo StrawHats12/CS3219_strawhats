@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
-import { propTypes } from "react-bootstrap/esm/Image";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
-import { formatDate, stringToDate } from "../utils/DateTime";
+import { stringToDate } from "../utils/DateTime";
+
 
 const getListingBids = async (listingId) => {
     try {
@@ -37,7 +37,7 @@ const deleteBid = async (bidId) => {
     try {
         const userSession = await getCurrentSession();
         const token = userSession?.accessToken.jwtToken;
-        const response = await axios.delete(`http://localhost:2001/deleteBid/${bidId}`, {
+        await axios.delete(`http://localhost:2001/deleteBid/${bidId}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -48,8 +48,8 @@ const deleteBid = async (bidId) => {
     }
 }
 
-const AddBid = ({listingInfo}) => {
-
+const AddBid = ({listingInfo, toggleModal}) => {
+    
     const currentdate = new Date(); 
     const datetime = "Last Sync: " + currentdate.getDate() + "/"
                     + (currentdate.getMonth()+1)  + "/" 
@@ -75,12 +75,8 @@ const AddBid = ({listingInfo}) => {
     }
 
     async function handleClick(event) {
-        event.preventDefault();
+        event.preventDefault();         
         try {
-            if (!input.bidPrice) {
-                alert("Bid Price cannot be empty!");
-                return;
-            }
             const userSession = await getCurrentSession();
             const currentUser = await getCurrentUser();
             const token = userSession?.accessToken.jwtToken;
@@ -104,27 +100,34 @@ const AddBid = ({listingInfo}) => {
 
     }
 
-    return <div className = "container">
+    return (
+    <div className = "container">
         <h1> Place Your Bid </h1>
         <br/>
-        <form>
-            <div className = 'form-group'>
-                <input name="bidPrice" onChange={handleChange}  autoComplete="off" value={input.bidPrice} 
-                className = "form-control" placeholder="Enter Your Price Here"/>
+        <form onSubmit={handleClick}>
+            <div className = "form-group">
+                <label> Bid Price: </label>
+                <input name = "bidPrice" 
+                    onChange = {handleChange} 
+                    autoComplete = "off" 
+                    value = {input.bidPrice} 
+                    className = "form-control" 
+                    placeholder = "Enter Your Price Here"
+                    required/>
             </div>
             <br/>
+            <label> Bid End Date: </label>
             <DateTimePickerComponent placeholder="Choose a date and time to end your bid." 
                 value = {input.bidDeadline}
                 min ={stringToDate(listingInfo.createdAt)}
-                max ={stringToDate(listingInfo.deadline)} />
-            {/* <div className = 'form-group'>
-                <input name="endBidDateTime" onChange={handleChange} className = "form-control" value={input.endBidDateTime} 
-                autoComplete="off" placeholder="Your bid will expiry after this time"/>
-            </div> */}
+                max ={stringToDate(listingInfo.deadline)} 
+                required/>
             <br/> <br/>
-            <button onClick={handleClick} className="btn btn-lg btn-info"> Confirm Bid </button>
+            <button type="submit" class="btn btn-success"> Confirm Bid </button>
         </form>
-    </div>
+        <br/>
+        <button onClick={toggleModal} class="btn btn-dark"> Close </button>
+    </div>)
 }
 
 export {AddBid, getListingBids, deleteBid, GetAccountBids};
