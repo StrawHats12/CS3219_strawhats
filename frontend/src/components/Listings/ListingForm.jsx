@@ -5,6 +5,7 @@ import { LISTING } from "../../const";
 import { getCurrentUser, getCurrentUserCredentials } from "../../hooks/useAuth";
 import {
   createListing,
+  deleteListingImages,
   generateListingId,
   updateListing,
 } from "../../services/listings-service";
@@ -25,6 +26,7 @@ const ListingForm = (props) => {
   const [form, setForm] = useState({ ...item });
   const [errors, setErrors] = useState({});
   const [imageFiles, setImageFiles] = useState(item[LISTING.IMAGES] || []);
+  const [deleteImages, setDeleteImages] = useState([]);
 
   const setField = (field, value) => {
     setForm({
@@ -85,6 +87,7 @@ const ListingForm = (props) => {
         throw new Error("Missing Props in ListingForm.jsx");
       }
 
+      deleteListingImages(deleteImages, listing[LISTING.SELLER_ID]);
       history.push(`/listings/${listing[LISTING.ID]}`);
     }
   };
@@ -140,6 +143,8 @@ const ListingForm = (props) => {
       <ListingsImagesUpload
         imageFiles={imageFiles}
         setImageFiles={setImageFiles}
+        deleteImages={deleteImages}
+        setDeleteImages={setDeleteImages}
       />
       <Button variant="success" onClick={handleSubmit}>
         {props.create && "Create Listing"}

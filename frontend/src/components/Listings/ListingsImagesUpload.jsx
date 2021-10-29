@@ -14,7 +14,6 @@ const ListingsImagesUpload = (props) => {
   });
 
   const { selectedFiles, currentFile, message } = state;
-  const imageFiles = props.imageFiles;
 
   const onDrop = (files) => {
     if (files.length > 0) {
@@ -33,8 +32,8 @@ const ListingsImagesUpload = (props) => {
     // Upload file
     uploadListingImage(currentFile)
       .then((filename) => {
-        imageFiles.push(filename);
-        props.setImageFiles(imageFiles);
+        props.imageFiles.push(filename);
+        props.setImageFiles(props.imageFiles);
       })
       .finally(() => {
         setState({
@@ -44,16 +43,29 @@ const ListingsImagesUpload = (props) => {
       });
   };
 
+  const deleteImage = (imagename, index) => {
+    props.deleteImages.push(imagename);
+    props.setDeleteImages(props.deleteImages);
+    props.setImageFiles(
+      props.imageFiles.filter((filename, index) => imagename !== filename)
+    );
+  };
+
   return (
     <div>
-      {imageFiles.length > 0 && (
+      {props.imageFiles.length > 0 && (
         <Card>
           <Card.Header className="card-header">List of Files</Card.Header>
           <ul className="list-group list-group-flush">
-            {imageFiles.map((filename, index) => (
-              <li className="list-group-item" key={index}>
+            {props.imageFiles.map((filename, index) => (
+              <li className="list-group-item" key={filename}>
                 <p>{filename}</p>
-                <LazyImage imagename={filename} />
+                <div className="d-flex justify-content-between align-items-center">
+                  <LazyImage imagename={filename} />
+                  <Button onClick={() => deleteImage(filename, index)}>
+                    Delete Image
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>
