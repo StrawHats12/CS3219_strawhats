@@ -94,7 +94,16 @@ export default function Conversation({ convo, user }) {
       ) : (
         <>
           <div className="conversation-header">
-            <img src={otherUser.image ?? PlaceholderProfileImage} />
+            <img
+              src={otherUser.image ?? PlaceholderProfileImage}
+              alt=""
+              style={{
+                width: 30,
+                height: 30,
+                objectFit: "cover",
+                marginRight: 5,
+              }}
+            />
             {otherUser.username}
           </div>
           <div className="conversation-messages-container">
@@ -107,6 +116,7 @@ export default function Conversation({ convo, user }) {
                   isYourMessage={m.sender_id === user.username}
                   sender={m.sender_id === user.username ? user : otherUser}
                   setRef={setRef}
+                  key={m.id}
                 />
               );
             })}
