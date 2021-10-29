@@ -2,7 +2,7 @@ import axios from "axios";
 import { Storage } from "aws-amplify";
 import { v4 as uuidv4 } from "uuid";
 import { LISTINGS_ENDPOINT } from "../const";
-import { getCurrentSession } from "../hooks/useAuth";
+import { getCurrentSession, getCurrentUserCredentials } from "../hooks/useAuth";
 
 const getAllListings = async () => {
   try {
@@ -26,6 +26,24 @@ const getListing = async (id) => {
     console.log(error); // TODO, handle this error
     return null;
   }
+};
+
+const getAllListingsBySellerId = async (id) => {
+  try {
+    const response = await axios.get(`${LISTINGS_ENDPOINT}/listings/${id}`);
+    const data = await response?.data?.Items;
+
+    return data;
+  } catch (error) {
+    console.log(error); // TODO, handle this error
+    return null;
+  }
+};
+
+const getOwnListings = async () => {
+  const currentUserCredentials = await getCurrentUserCredentials();
+
+  return getAllListingsBySellerId(currentUserCredentials?.identityId);
 };
 
 const createListing = async (listing) => {
@@ -108,4 +126,5 @@ export {
   generateListingId,
   uploadListingImage,
   updateListing,
+  getOwnListings,
 };

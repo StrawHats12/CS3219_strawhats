@@ -18,18 +18,24 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 import { ProfilePage } from "./pages/Profile";
 import Livestream from "./pages/Livestream";
 import ErrorBoundary from "./utils/ErrorBoundary";
+import MyListingsPage from "./pages/Listings/MyListingsPage";
 
 function App() {
   return (
-    <ErrorBoundary>
-      <Router>
-        <div className="min-vh-100 d-flex flex-column">
-          <NavBar />
+    <Router>
+      <div className="min-vh-100 d-flex flex-column">
+        <NavBar />
+        <ErrorBoundary>
           <Container>
             <Switch>
               <Route path="/" component={Home} exact />
               <Route path="/profile/:username" component={ProfilePage} exact />
               <Route path="/listings" component={ListingsPage} exact />
+              <ProtectedRoute
+                path="/listings/self"
+                component={MyListingsPage}
+                exact
+              />
               <ProtectedRoute
                 path="/listings/create"
                 component={CreateListingPage}
@@ -51,10 +57,10 @@ function App() {
               <Route component={NotFound} />
             </Switch>
           </Container>
-          <Footer />
-        </div>
-      </Router>
-    </ErrorBoundary>
+        </ErrorBoundary>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
