@@ -3,13 +3,13 @@ import { Button, Card } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import { uploadListingImage } from "../../services/listings-service";
 import StrawhatSpinner from "../StrawhatSpinner";
+import LazyImage from "./LazyImage";
 import "./ListingsImageUpload.css";
 
 const ListingsImagesUpload = (props) => {
   const [state, setState] = useState({
     selectedFiles: undefined,
     currentFile: undefined,
-    uploadedFiles: [],
     message: "",
   });
 
@@ -35,9 +35,6 @@ const ListingsImagesUpload = (props) => {
       .then((filename) => {
         imageFiles.push(filename);
         props.setImageFiles(imageFiles);
-
-        state.uploadedFiles.push(currentFile);
-        setState(state);
       })
       .finally(() => {
         setState({
@@ -49,13 +46,14 @@ const ListingsImagesUpload = (props) => {
 
   return (
     <div>
-      {state.uploadedFiles.length > 0 && (
+      {imageFiles.length > 0 && (
         <Card>
           <Card.Header className="card-header">List of Files</Card.Header>
           <ul className="list-group list-group-flush">
-            {state.uploadedFiles.map((file, index) => (
+            {imageFiles.map((filename, index) => (
               <li className="list-group-item" key={index}>
-                <a href={file.url}>{file.name}</a>
+                <p>{filename}</p>
+                <LazyImage imagename={filename} />
               </li>
             ))}
           </ul>
