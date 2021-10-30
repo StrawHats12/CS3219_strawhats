@@ -40,8 +40,8 @@ const UserBidTable = () => {
     }, []);
 
     
-    const handleDeleteClick = (bidId) => {
-        return deleteBid(bidId);
+    const handleDeleteClick = (bidId, bidPrice) => {
+        return deleteBid(bidId, bidPrice);
     }    
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId, listingId}) => {
@@ -72,7 +72,7 @@ const UserBidTable = () => {
                                     onConfirmOrDismiss={() => handleDeclarative()}
                                     show={showDeclarative}
                                     showCancelButton={true}
-                                    onConfirm={() => handleDeleteClick(bidId)}
+                                    onConfirm={() => handleDeleteClick(bidId, bidPrice)}
                                     text={'Do you really want to delete?'}
                                     title={'Confirm Deletion'}
                                     type={'info'}

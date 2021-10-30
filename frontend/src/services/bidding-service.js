@@ -36,11 +36,11 @@ const getAccountBids = async (uname) => {
       }
 }
 
-const deleteBid = async (bidId) => {
+const deleteBid = async (bidId, bidPrice) => {
     try {
         const userSession = await getCurrentSession();
         const token = userSession?.accessToken.jwtToken;
-        await axios.delete(`http://localhost:2001/deleteBid/${bidId}`, {
+        await axios.delete(`http://localhost:2001/deleteBid/${bidId}/${bidPrice}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -106,7 +106,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
         <br/>
         <form onSubmit={handleClick}>
             <div className = "form-group">
-                <label> Bid Price: </label>
+                <h5> Bid Price: </h5>
                 <input name = "bidPrice" 
                     onChange = {handleChange} 
                     autoComplete = "off" 
@@ -116,8 +116,8 @@ const AddBid = ({listingInfo, toggleModal}) => {
                     required/>
             </div>
             <br/>
-            <label> Bid End Date: </label>
-            <br/>
+            <h5> Bid End Date: </h5>
+            <p> You may choose a date beyond the listing's end date to ensure your bid does not expire. </p>
             <input type="datetime-local" 
                     name="bidDeadline"
                     value={input.bidDeadline}

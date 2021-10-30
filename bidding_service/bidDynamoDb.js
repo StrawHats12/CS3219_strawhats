@@ -41,11 +41,12 @@ const getListingBids = async (listingId) => {
 }
 
 // DELETE BID BY BIDDING ID
-const deleteBid = async (bidId) => {
+const deleteBid = async (bidId, bidPrice) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
         Key: {
-            bidId,
+           "bidId": bidId,
+           "bidPrice": bidPrice
         }
     };
     return await dynamoClient.delete(params).promise();

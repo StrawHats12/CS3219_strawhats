@@ -9,7 +9,7 @@ router.route('/addBid')
 router.route('/getListingBids/:listingId')
     .get(auth(roles.USER), bidController.getListingBids);
 
-router.route('/deleteBid/:bidId')
+router.route('/deleteBid/:bidId/:bidPrice')
     .delete(auth(roles.USER), bidController.deleteBid);
 
 router.route('/getAccountBids/:uname')

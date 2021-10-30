@@ -23,7 +23,7 @@ exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
-        listBids.Items = listBids.Items.reverse()
+        listBids.Items = listBids.Items.reverse();
         res.json(listBids);
     } catch (err) {
         console.log(err);
@@ -33,8 +33,9 @@ exports.getListingBids = async function (req, res) {
 
 exports.deleteBid = async function (req, res) {
     const bidId = req.params.bidId
+    const bidPrice = req.params.bidPrice
     try {
-        res.json(await deleteBid(bidId));
+        res.json(await deleteBid(bidId, bidPrice));
     } catch (err) {
         console.log(err);
         res.status(500).json({ err: "Delete bid is not working." });
