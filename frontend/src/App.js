@@ -29,7 +29,7 @@ function App() {
           <Container>
             <Switch>
               <Route path="/" component={Home} exact />
-              <Route path="/profile/:username" component={ProfilePage} exact />
+              <Route path="/profile/:uid" component={ProfilePage} exact />
               <Route path="/listings" component={ListingsPage} exact />
               <ProtectedRoute
                 path="/listings/self"

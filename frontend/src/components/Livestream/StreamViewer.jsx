@@ -2,7 +2,7 @@ import ReactPlayer from "react-player"
 import {LIVESTREAM} from "../../const";
 
 const StreamViewer = (props) => {
-  const isTestingFlag = true; // just for testing, can't have livestream all the time
+  const isTestingFlag = false; // just for testing, can't have livestream all the time
   const {playbackIds} = props;
   const playbackId = playbackIds.length > 0
       ? playbackIds[0].id
