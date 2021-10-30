@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
-import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
-import { stringToDate } from "../utils/DateTime";
+import { formatTDateTime } from "../utils/DateTime";
 
 
 const getListingBids = async (listingId) => {
@@ -16,34 +15,38 @@ const getListingBids = async (listingId) => {
         const data = await response?.data?.Items;
         return data;
       } catch (error) {
-        console.log(error); // TODO, handle this error
+        console.log(error);
         return null;
       }
 }
 
-const GetAccountBids = async () => {
-    try {
-        const response = await axios.get('http://localhost:2001/getAccountBids');
-        const data = await response?.data?.Items;
-    
-        return data;
-      } catch (error) {
-        console.log(error); // TODO, handle this error
-        return null;
-      }
-}
-
-const deleteBid = async (bidId) => {
+const getAccountBids = async (uname) => {
     try {
         const userSession = await getCurrentSession();
         const token = userSession?.accessToken.jwtToken;
-        await axios.delete(`http://localhost:2001/deleteBid/${bidId}`, {
+        const response = await axios.get(`http://localhost:2001/getAccountBids/${uname}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+        }});
+        const data = await response?.data?.Items;
+        return data;
+      } catch (error) {
+        console.log(error); 
+        return null;
+      }
+}
+
+const deleteBid = async (bidId, bidPrice) => {
+    try {
+        const userSession = await getCurrentSession();
+        const token = userSession?.accessToken.jwtToken;
+        await axios.delete(`http://localhost:2001/deleteBid/${bidId}/${bidPrice}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
     } catch (error) {
-        console.log(error); // TODO, handle this error
+        console.log(error); 
         return null;
     }
 }
@@ -51,12 +54,11 @@ const deleteBid = async (bidId) => {
 const AddBid = ({listingInfo, toggleModal}) => {
     
     const currentdate = new Date(); 
-    const datetime = "Last Sync: " + currentdate.getDate() + "/"
-                    + (currentdate.getMonth()+1)  + "/" 
-                    + currentdate.getFullYear() + " @ "  
+    var datetime = currentdate.getFullYear() + "-"  
+                    + (currentdate.getMonth() + 1) + "-"
+                    + currentdate.getDate()  + "T"   
                     + currentdate.getHours() + ":"  
-                    + currentdate.getMinutes() + ":" 
-                    + currentdate.getSeconds();
+                    + currentdate.getMinutes()
 
     const [input, setInput] = useState({
         bidPrice: "",
@@ -64,15 +66,14 @@ const AddBid = ({listingInfo, toggleModal}) => {
     })
 
     function handleChange(event) {
-        const {name, value} = event.target;
-
         setInput(prevInput => {
             return {
                 ...prevInput,
-                [name]: value
+                [event.target.name]: event.target.value
             }
         });
     }
+
 
     async function handleClick(event) {
         event.preventDefault();         
@@ -92,7 +93,6 @@ const AddBid = ({listingInfo, toggleModal}) => {
                 headers: {
                     Authorization: `Bearer ${token}`,
             }});
-            alert("Bid added");
         } catch (err) {
             console.log(err);
             return null;
@@ -106,7 +106,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
         <br/>
         <form onSubmit={handleClick}>
             <div className = "form-group">
-                <label> Bid Price: </label>
+                <h5> Bid Price: </h5>
                 <input name = "bidPrice" 
                     onChange = {handleChange} 
                     autoComplete = "off" 
@@ -116,18 +116,21 @@ const AddBid = ({listingInfo, toggleModal}) => {
                     required/>
             </div>
             <br/>
-            <label> Bid End Date: </label>
-            <DateTimePickerComponent placeholder="Choose a date and time to end your bid." 
-                value = {input.bidDeadline}
-                min ={stringToDate(listingInfo.createdAt)}
-                max ={stringToDate(listingInfo.deadline)} 
-                required/>
-            <br/> <br/>
-            <button type="submit" class="btn btn-success"> Confirm Bid </button>
+            <h5> Bid End Date: </h5>
+            <p> You may choose a date beyond the listing's end date to ensure your bid does not expire. </p>
+            <input type="datetime-local" 
+                    name="bidDeadline"
+                    value={input.bidDeadline}
+                    onChange={handleChange}
+                    min={formatTDateTime(listingInfo.createdAt)}
+                    format="yyyy-MM-ddTHH:mm"
+                    required/>
+            <br/> <br/> 
+            <button type="submit" className="btn btn-success"> Confirm Bid </button>
         </form>
         <br/>
-        <button onClick={toggleModal} class="btn btn-dark"> Close </button>
+        <button onClick={toggleModal} className="btn btn-dark"> Close </button>
     </div>)
 }
 
-export {AddBid, getListingBids, deleteBid, GetAccountBids};
+export {AddBid, getListingBids, deleteBid, getAccountBids};

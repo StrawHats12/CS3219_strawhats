@@ -2,7 +2,8 @@ const Bid = require("../model/bid")
 const {
     addBidding,
     getListingBids,
-    deleteBid
+    deleteBid,
+    getAccountBids
 } = require("../bidDynamoDb");
 
 exports.addBid = async function (req, res) {
@@ -22,7 +23,7 @@ exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
-        console.log(listBids);
+        listBids.Items = listBids.Items.reverse();
         res.json(listBids);
     } catch (err) {
         console.log(err);
@@ -32,10 +33,23 @@ exports.getListingBids = async function (req, res) {
 
 exports.deleteBid = async function (req, res) {
     const bidId = req.params.bidId
+    const bidPrice = req.params.bidPrice
     try {
-        res.json(await deleteBid(bidId));
+        res.json(await deleteBid(bidId, bidPrice));
     } catch (err) {
         console.log(err);
         res.status(500).json({ err: "Delete bid is not working." });
+    }
+}
+
+exports.getAccountBids = async function (req, res) {
+    const uname = req.params.uname
+    try {
+        const accountBids = await getAccountBids(uname);
+        console.log(accountBids);
+        res.json(accountBids);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: "Cannot retrieve account's bid."});
     }
 }

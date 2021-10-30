@@ -38,6 +38,9 @@ const NavBar = () => {
                 <LinkContainer exact to={`/listings/self`}>
                   <NavDropdown.Item>My Listings</NavDropdown.Item>
                 </LinkContainer>
+                <LinkContainer exact to={`/UserBids`}>
+                  <NavDropdown.Item>My Bids</NavDropdown.Item>
+                </LinkContainer>
                 <LinkContainer exact to="/authentication">
                   <NavDropdown.Item>Sign Out</NavDropdown.Item>
                 </LinkContainer>
