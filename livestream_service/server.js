@@ -5,14 +5,32 @@ const express = require("express");
 const app = express();
 app.use(cors());
 
-const http = require("http").Server(app);
+const http = require("http").createServer(app);
 const morgan = require("morgan");
 const io = require("socket.io")(http); //TODO remove socket.io if not needed (from package.json)
+const { Server } = require("socket.io");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(morgan("tiny"));
+
+const chatIo = new Server(http, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
+
+chatIo.on("connection", (socket) => {
+  const id = socket.handshake.query.id;
+  console.log("Connection with: " + id);
+  socket.join(id);
+});
+
+http.listen(7070, () => {
+  console.log("Messaging socket running!");
+});
 
 const Mux = require("@mux/mux-node");
 const stream = require("stream");
@@ -22,6 +40,21 @@ const { Video } = new Mux(
 );
 
 const { auth, roles } = require("./auth");
+
+// Livestream messages
+chatIo.on("connection", (socket) => {
+  const id = socket.handshake.query.id;
+  console.log("Connection with: " + id);
+  socket.join(id);
+
+  socket.on("send-message", ({ livestream_id, text, sender_id }) => {
+    socket.broadcast.to(livestream_id).emit("receive-message", {
+      sender_id: sender_id,
+      text,
+      livestream_id,
+    });
+  });
+});
 
 let STREAM;
 

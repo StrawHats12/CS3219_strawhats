@@ -11,6 +11,7 @@ import {
   deleteListingImages,
   getListing,
 } from "../../services/listings-service";
+import { getAccountById } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 
@@ -21,7 +22,7 @@ const ListingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline} = listing;
+  const { listing_name, description, images, seller_uid, deadline } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -40,6 +41,11 @@ const ListingsPage = () => {
 
   const handleEdit = () => {
     history.push(`/listings/edit/${id}`);
+  };
+
+  const redirectToChat = async () => {
+    const user = await getAccountById(seller_uid);
+    history.push(`/messenger/?user=${user.username}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -111,6 +117,11 @@ const ListingsPage = () => {
               </Button>
             </>
           )}
+          {!isOwner && (
+            <Button className="m-1" onClick={redirectToChat}>
+              Chat with seller!
+            </Button>
+          )}
           <Row>
             <Col>
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
@@ -127,16 +138,15 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          <br/>
+          <br />
           <Row>
-            <Col xs={2}> 
+            <Col xs={2}>
               <h3> Place Your Bid! </h3>
-              <PopUp listingInfo = {listing}/>
- 
+              <PopUp listingInfo={listing} />
             </Col>
-            <Col xs={9}> 
-              <h3> Ongoing Bids </h3> 
-              <BidTable value = {listing}/>   
+            <Col xs={9}>
+              <h3> Ongoing Bids </h3>
+              <BidTable value={listing} />
             </Col>
           </Row>
         </Container>
@@ -146,7 +156,6 @@ const ListingsPage = () => {
           correct.
         </Container>
       )}
-      
     </>
   );
 };
