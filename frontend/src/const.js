@@ -1,5 +1,6 @@
-const LISTINGS_ENDPOINT = "http://localhost:8080";
-const ACCOUNTS_ENDPOINT = "http://localhost:8090";
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const LISTINGS_ENDPOINT = BACKEND_URL || "http://localhost:8080";
+const ACCOUNTS_ENDPOINT = BACKEND_URL || "http://localhost:8090";
 const MESSAGING_ENDPOINT = "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = "http://localhost:5000";
 

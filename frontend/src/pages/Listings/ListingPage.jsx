@@ -4,7 +4,8 @@ import { useHistory, useParams } from "react-router";
 import { ListingsCarousel } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { getAccountById } from "../../services/account-service";
+import PopUp from "../../components/Bids/BidPopUp";
+import BidTable from "../../components/Bids/BidTable";
 import {
   deleteListing,
   deleteListingImages,
@@ -16,19 +17,11 @@ import Countdown from "react-countdown";
 const ListingsPage = () => {
   const { id } = useParams();
   const history = useHistory();
-
   const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const {
-    listing_name,
-    description,
-    images,
-    seller_uid,
-    seller_sub,
-    deadline,
-  } = listing;
+  const { listing_name, description, images, seller_uid, deadline} = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -47,11 +40,6 @@ const ListingsPage = () => {
 
   const handleEdit = () => {
     history.push(`/listings/edit/${id}`);
-  };
-
-  const redirectToChat = async () => {
-    const user = await getAccountById(seller_uid);
-    history.push(`/messenger/?user=${user.username}`);
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -111,7 +99,7 @@ const ListingsPage = () => {
       {isLoading ? (
         <StrawhatSpinner />
       ) : listing ? (
-        <Container>
+        <Container fluid>
           <h1>{listing_name}</h1>
           {isOwner && (
             <>
@@ -128,7 +116,9 @@ const ListingsPage = () => {
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
             </Col>
             <Col>
-              <p>Current Bid: $100</p>
+              <p>{description}</p>
+            </Col>
+            <Col>
               {deadline && (
                 <Countdown
                   date={stringToDate(deadline)}
@@ -137,13 +127,17 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          {!isOwner && (
-            <Button className="m-1" onClick={redirectToChat}>
-              Chat with seller!
-            </Button>
-          )}
+          <br/>
           <Row>
-            <p>{description}</p>
+            <Col xs={2}> 
+              <h3> Place Your Bid! </h3>
+              <PopUp listingInfo = {listing}/>
+ 
+            </Col>
+            <Col xs={9}> 
+              <h3> Ongoing Bids </h3> 
+              <BidTable value = {listing}/>   
+            </Col>
           </Row>
         </Container>
       ) : (
@@ -152,6 +146,7 @@ const ListingsPage = () => {
           correct.
         </Container>
       )}
+      
     </>
   );
 };

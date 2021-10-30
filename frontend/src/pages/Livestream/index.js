@@ -1,3 +1,3 @@
 import Livestream from "./Livestream";
 
-export { Livestream };
+export default Livestream;

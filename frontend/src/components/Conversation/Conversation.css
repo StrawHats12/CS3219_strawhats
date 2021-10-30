@@ -3,11 +3,16 @@
     flex-direction: column;
     flex-grow: 1;
     height: 100%;
+    background-color: #f9f9fa;
 }
 
 .conversation-header {
     text-align: center;
     padding: 10px;
+    display: flex;
+    background: white;
+    border: 1px #f9f9fa;
+    align-items: center;
 }
 
 .conversation-messages-container {
