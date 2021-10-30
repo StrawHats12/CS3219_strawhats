@@ -34,7 +34,8 @@ const getListingBids = async (listingId) => {
         },
         ExpressionAttributeValues: {
             ':listingId' : listingId
-        }
+        },
+        // ScanIndexFoward: "true"
     }
     return dynamoClient.scan(params).promise();
 }
@@ -50,9 +51,26 @@ const deleteBid = async (bidId) => {
     return await dynamoClient.delete(params).promise();
 }
 
+// GET BIDS BY BIDDING USERNAME
+const getAccountBids = async (uname) => {
+    const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        FilterExpression: 'contains(#bidOwner, :bidOwner)',
+        ExpressionAttributeNames: {
+            '#bidOwner' : 'bidOwner'
+        },
+        ExpressionAttributeValues: {
+            ':bidOwner' : uname
+        },
+    };
+    return dynamoClient.scan(params).promise();
+}
+
+
 module.exports = {
     dynamoClient,
     addBidding,
     getListingBids,
-    deleteBid
+    deleteBid,
+    getAccountBids
 };

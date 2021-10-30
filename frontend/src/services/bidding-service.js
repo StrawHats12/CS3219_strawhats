@@ -15,19 +15,23 @@ const getListingBids = async (listingId) => {
         const data = await response?.data?.Items;
         return data;
       } catch (error) {
-        console.log(error); // TODO, handle this error
+        console.log(error);
         return null;
       }
 }
 
-const GetAccountBids = async () => {
+const getAccountBids = async (uname) => {
     try {
-        const response = await axios.get('http://localhost:2001/getAccountBids');
+        const userSession = await getCurrentSession();
+        const token = userSession?.accessToken.jwtToken;
+        const response = await axios.get(`http://localhost:2001/getAccountBids/${uname}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+        }});
         const data = await response?.data?.Items;
-    
         return data;
       } catch (error) {
-        console.log(error); // TODO, handle this error
+        console.log(error); 
         return null;
       }
 }
@@ -119,15 +123,14 @@ const AddBid = ({listingInfo, toggleModal}) => {
                     value={input.bidDeadline}
                     onChange={handleChange}
                     min={formatTDateTime(listingInfo.createdAt)}
-                    max={listingInfo.deadline}
                     format="yyyy-MM-ddTHH:mm"
                     required/>
             <br/> <br/> 
-            <button type="submit" class="btn btn-success"> Confirm Bid </button>
+            <button type="submit" className="btn btn-success"> Confirm Bid </button>
         </form>
         <br/>
-        <button onClick={toggleModal} class="btn btn-dark"> Close </button>
+        <button onClick={toggleModal} className="btn btn-dark"> Close </button>
     </div>)
 }
 
-export {AddBid, getListingBids, deleteBid, GetAccountBids};
+export {AddBid, getListingBids, deleteBid, getAccountBids};

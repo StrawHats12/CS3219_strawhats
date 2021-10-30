@@ -78,7 +78,7 @@ const ListingsPage = () => {
       setIsLoading(false);
     });
   }, [id]);
-
+  console.log(listing);
   return (
     <>
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
@@ -160,6 +160,7 @@ const ListingsPage = () => {
                 ?
                 <div>
                   <h3> Ongoing Bids </h3> 
+                  <p> Sorted by price </p>
                 </div>
                 :
                 <div>

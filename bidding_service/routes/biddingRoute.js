@@ -1,7 +1,6 @@
 let router = require('express').Router();
 const { auth, roles } = require("../auth");
 
-// Import contact controller
 var bidController = require('../controller/bidController');
 
 router.route('/addBid')
@@ -12,5 +11,8 @@ router.route('/getListingBids/:listingId')
 
 router.route('/deleteBid/:bidId')
     .delete(auth(roles.USER), bidController.deleteBid);
+
+router.route('/getAccountBids/:uname')
+    .get(auth(roles.USER), bidController.getAccountBids);
 
 module.exports = router;
