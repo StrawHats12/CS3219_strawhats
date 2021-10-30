@@ -32,10 +32,10 @@ class PopUp extends React.Component {
         </ModalButton>
         
         <Modal
-          style= "margin: auto; display: block;"
           isOpen={this.state.modalOpened}
           onRequestClose={this.toggleModal}
           contentLabel="Modal with image"
+          ariaHideApp={false}
         >
           <AddBid listingInfo = {listingInfo} toggleModal = {this.toggleModal}/>
         </Modal>

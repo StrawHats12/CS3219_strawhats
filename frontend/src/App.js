@@ -19,6 +19,7 @@ import { ProfilePage } from "./pages/Profile";
 import Livestream from "./pages/Livestream";
 import ErrorBoundary from "./utils/ErrorBoundary";
 import MyListingsPage from "./pages/Listings/MyListingsPage";
+import UserBids from "./pages/Bids/UserBids"
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               />
               <Route path="/authentication" component={Authentication} exact />
               <ProtectedRoute path="/messenger" component={Messenger} exact />
+              <ProtectedRoute path="/UserBids" component={UserBids} exact />
               <Route component={NotFound} />
             </Switch>
           </Container>
