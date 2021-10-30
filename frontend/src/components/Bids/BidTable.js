@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { getListingBids } from "../../services/bidding-service";
-import { formatDate, formatTime,formatTDateTime } from "../../utils/DateTime";
+import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
 import { deleteBid } from "../../services/bidding-service";
 
@@ -34,17 +34,19 @@ const BidTable = ({value}) => {
         return deleteBid(bidId);
     }
 
+    
+
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
         var profileLink = "http://localhost:3000/profile/" + bidOwner;
         return (
         <tr>
             <td> <a href={profileLink}> {bidOwner} </a> </td>
-            <td> {formatDate(bidCreationDate)} </td>
+            <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
             <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    bidExpiry > Date.now() 
+                    new Date(bidExpiry).getTime() < Date.now() 
                         ? <button type="button" class="btn btn-secondary" disabled> expired </button>
                         : bidStatus === "ONGOING"
                             ? <button type="button" class="btn btn-success" disabled> ongoing </button>
@@ -75,7 +77,7 @@ const BidTable = ({value}) => {
                     <tr>
                         <th> Bid Owner </th>
                         <th> Date of Bid </th>
-                        <th> Bid Expiry Date </th>
+                        <th> Bid Expiry </th>
                         <th> Price </th>
                         <th> Status </th>
                         <th> Action </th>

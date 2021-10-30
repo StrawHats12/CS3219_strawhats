@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
-import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
 import { formatTDateTime } from "../utils/DateTime";
 
 
