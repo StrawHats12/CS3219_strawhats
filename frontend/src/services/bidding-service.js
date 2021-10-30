@@ -51,12 +51,11 @@ const deleteBid = async (bidId) => {
 const AddBid = ({listingInfo, toggleModal}) => {
     
     const currentdate = new Date(); 
-    const datetime = "Last Sync: " + currentdate.getDate() + "/"
-                    + (currentdate.getMonth()+1)  + "/" 
-                    + currentdate.getFullYear() + " @ "  
+    var datetime = currentdate.getFullYear() + "-"  
+                    + (currentdate.getMonth() + 1) + "-"
+                    + currentdate.getDate()  + "T"   
                     + currentdate.getHours() + ":"  
-                    + currentdate.getMinutes() + ":" 
-                    + currentdate.getSeconds();
+                    + currentdate.getMinutes()
 
     const [input, setInput] = useState({
         bidPrice: "",
@@ -120,6 +119,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
                 value = {input.bidDeadline}
                 min ={stringToDate(listingInfo.createdAt)}
                 max ={stringToDate(listingInfo.deadline)} 
+                format ={"yyyy-MM-ddTHH:mm"}
                 required/>
             <br/> <br/> 
             <button type="submit" class="btn btn-success"> Confirm Bid </button>

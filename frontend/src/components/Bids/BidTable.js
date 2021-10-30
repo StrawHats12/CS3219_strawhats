@@ -12,7 +12,7 @@ const BidTable = ({value}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
     const [uname, setUname] = useState(null);
-
+    console.log(value);
     useEffect( () => {
         getCurrentUser().then((res) => {
             if (!res) {
@@ -36,18 +36,27 @@ const BidTable = ({value}) => {
         return deleteBid(bidId);
     }
 
-    const BidRow = ({bidOwner, bidCreationDate, bidPrice, bidId}) => {
+    const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
+        var profileLink = "localhost:3000/profile/" + bidOwner;
         return (
         <tr>
-            <td> {bidOwner} </td>
-            <td> {bidCreationDate} </td>
+            <td> <a href="{!'http://' + profileLink}"> {bidOwner} </a> </td>
+            <td> {formatDate(bidCreationDate)} </td>
+            <td> {bidExpiry} </td>
             <td> ${bidPrice} </td> 
+            <td> 
+                {
+                    bidStatus == "ONGOING"
+                        ? <button type="button" class="btn btn-success" disabled> ongoing </button>
+                        : <button type="button" class="btn btn-secondary" disabled> expired </button>
+                }
+            </td>
             <td>
                 { isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname == bidOwner 
                         ? <button onClick={ () => handleDeleteClick(bidId)} class="btn btn-danger" > Delete </button> 
-                        : "Profile Link to be inserted"
+                        : <button type="button" class="btn btn-secondary" disabled> - </button>
                 }
             </td>
         </tr>
@@ -64,7 +73,9 @@ const BidTable = ({value}) => {
                     <tr>
                         <th> Bid Owner </th>
                         <th> Date of Bid </th>
+                        <th> Bid Expiry Date </th>
                         <th> Price </th>
+                        <th> Status </th>
                         <th> Action </th>
                     </tr>
                 </thead>
@@ -72,8 +83,10 @@ const BidTable = ({value}) => {
                     { bids.map( bid => 
                     <BidRow 
                         bidOwner = {bid.bidOwner}
-                        bidCreationDate = {formatDate(bid.createdAt)}
+                        bidCreationDate = {bid.createdAt}
+                        bidExpiry = {bid.bidDeadline}
                         bidPrice = {bid.bidPrice}
+                        bidStatus = {bid.status}
                         bidId = {bid.bidId}
                         /> 
                     )}
