@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 import {DateTimePickerComponent} from '@syncfusion/ej2-react-calendars';
-import { stringToDate } from "../utils/DateTime";
+import { formatTDateTime } from "../utils/DateTime";
 
 
 const getListingBids = async (listingId) => {
@@ -63,15 +63,14 @@ const AddBid = ({listingInfo, toggleModal}) => {
     })
 
     function handleChange(event) {
-        const {name, value} = event.target;
-
         setInput(prevInput => {
             return {
                 ...prevInput,
-                [name]: value
+                [event.target.name]: event.target.value
             }
         });
     }
+
 
     async function handleClick(event) {
         event.preventDefault();         
@@ -101,7 +100,7 @@ const AddBid = ({listingInfo, toggleModal}) => {
     return (
     <div className = "container">
         <h1> Place Your Bid </h1>
-        <br/> <br/>
+        <br/>
         <form onSubmit={handleClick}>
             <div className = "form-group">
                 <label> Bid Price: </label>
@@ -115,12 +114,15 @@ const AddBid = ({listingInfo, toggleModal}) => {
             </div>
             <br/>
             <label> Bid End Date: </label>
-            <DateTimePickerComponent placeholder="Choose a date and time to end your bid." 
-                value = {input.bidDeadline}
-                min ={stringToDate(listingInfo.createdAt)}
-                max ={stringToDate(listingInfo.deadline)} 
-                format ={"yyyy-MM-ddTHH:mm"}
-                required/>
+            <br/>
+            <input type="datetime-local" 
+                    name="bidDeadline"
+                    value={input.bidDeadline}
+                    onChange={handleChange}
+                    min={formatTDateTime(listingInfo.createdAt)}
+                    max={listingInfo.deadline}
+                    format="yyyy-MM-ddTHH:mm"
+                    required/>
             <br/> <br/> 
             <button type="submit" class="btn btn-success"> Confirm Bid </button>
         </form>

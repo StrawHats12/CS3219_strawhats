@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { getListingBids } from "../../services/bidding-service";
-import { formatDate } from "../../utils/DateTime";
+import { formatDate, formatTime,formatTDateTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
 import { deleteBid } from "../../services/bidding-service";
 
@@ -11,7 +11,6 @@ const BidTable = ({value}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
     const [uname, setUname] = useState(null);
-    console.log(value);
     useEffect( () => {
         getCurrentUser().then((res) => {
             if (!res) {
@@ -41,17 +40,21 @@ const BidTable = ({value}) => {
         <tr>
             <td> <a href={profileLink}> {bidOwner} </a> </td>
             <td> {formatDate(bidCreationDate)} </td>
-            <td> {bidExpiry} </td>
+            <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    bidStatus === "ONGOING"
-                        ? <button type="button" class="btn btn-success" disabled> ongoing </button>
-                        : <button type="button" class="btn btn-secondary" disabled> expired </button>
+                    bidExpiry > Date.now() 
+                        ? <button type="button" class="btn btn-secondary" disabled> expired </button>
+                        : bidStatus === "ONGOING"
+                            ? <button type="button" class="btn btn-success" disabled> ongoing </button>
+                            : <button type="button" class="btn btn-success" disabled> nothing </button>
+                            
                 }
             </td>
             <td>
-                { isUnameLoad 
+                { 
+                    isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname === bidOwner 
                         ? <button onClick={ () => handleDeleteClick(bidId)} class="btn btn-danger" > Delete </button> 

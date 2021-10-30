@@ -49,7 +49,7 @@ const ListingsPage = () => {
     } else {
       return (
         <span>
-          Biding ends in {hours}:{minutes}:{seconds} ({formatDate(deadline)})
+          Bidding ends in {hours}:{minutes}:{seconds} ({formatDate(deadline)})
         </span>
       );
     }
