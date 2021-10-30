@@ -1,5 +1,5 @@
 import React from "react";
-import { ListGroup } from "react-bootstrap";
+import { Card, ListGroup } from "react-bootstrap";
 
 export default function ConversationList({
   conversations,
@@ -7,7 +7,8 @@ export default function ConversationList({
   username,
 }) {
   return (
-    <div style={{ width: 200 }}>
+    <Card style={{ width: "200px" }}>
+      <Card.Header as="h5">Conversation List</Card.Header>
       <ListGroup variant="flush">
         {conversations.map((c, index) => (
           <ListGroup.Item
@@ -21,6 +22,6 @@ export default function ConversationList({
           </ListGroup.Item>
         ))}
       </ListGroup>
-    </div>
+    </Card>
   );
 }

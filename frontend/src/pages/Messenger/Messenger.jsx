@@ -1,3 +1,4 @@
+import Storage from "@aws-amplify/storage";
 import React, { useState, useEffect } from "react";
 
 import ConversationList from "../../components/ConversationList";
@@ -8,6 +9,7 @@ import {
   getConversationByUser,
   createConversation,
 } from "../../services/messaging-service";
+import { getAccount } from "../../services/account-service";
 import { getCurrentUser } from "../../hooks/useAuth";
 import useQuery from "../../hooks/useQueryParams";
 
@@ -17,22 +19,32 @@ export default function Messages() {
   const curConvoMember = useQuery().get("user");
 
   const [isLoading, setIsLoading] = useState(true);
-  const [username, setUsername] = useState("");
+  const [user, setUser] = useState(null);
   const [openConvo, setOpenConvo] = useState(null);
   const [conversations, setConversations] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
       const curUser = await getCurrentUser();
-      const curUsername = curUser.username;
-      setUsername(curUsername);
+      getAccount(curUser.username).then((acc) => setUser(acc));
+      getAccount(curUser.username).then((user) => {
+        setUser(user);
+        if (user.image && user.uid) {
+          Storage.get(user.image, {
+            level: "protected",
+            identityId: user.uid,
+          }).then((image) => {
+            setUser({ ...user, image });
+          });
+        }
+      });
     };
     fetchUser();
   }, []);
 
   useEffect(() => {
     const fetchConvos = async () => {
-      const convos = await getConversationByUser(username);
+      const convos = await getConversationByUser(user.username);
       setConversations(convos);
       if (curConvoMember) {
         // Open convo if it exists, else create new convo
@@ -42,16 +54,19 @@ export default function Messages() {
         if (existingConvo) {
           setOpenConvo(existingConvo);
         } else {
-          const newConvo = await createConversation([curConvoMember, username]);
+          const newConvo = await createConversation([
+            curConvoMember,
+            user.username,
+          ]);
           setConversations([...convos, newConvo]);
           setOpenConvo(newConvo);
         }
       }
       setIsLoading(false);
     };
-    if (!username) return;
+    if (!user) return;
     fetchConvos();
-  }, [username]);
+  }, [user]);
 
   return (
     <>
@@ -62,7 +77,7 @@ export default function Messages() {
           <ConversationList
             conversations={conversations}
             setOpenConvo={setOpenConvo}
-            username={username}
+            username={user.username}
           />
           {!openConvo ? (
             <div className="empty-conversation">
@@ -71,7 +86,7 @@ export default function Messages() {
                 : "You have no ongoing conversations."}
             </div>
           ) : (
-            <Conversation convo={openConvo} username={username} />
+            <Conversation convo={openConvo} user={user} />
           )}
         </div>
       )}
