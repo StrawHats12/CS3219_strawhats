@@ -44,11 +44,12 @@ const UserBidTable = () => {
         return deleteBid(bidId);
     }    
 
-    const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
-        var profileLink = "http://localhost:3000/profile/" + bidOwner;
+    const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId, listingId}) => {
+        console.log(listingId);
+        var listingLink = "http://localhost:3000/listings/" + listingId;
         return (
         <tr> 
-            <td> <a href={profileLink}> {bidOwner} </a> </td>
+            <td> <a href={listingLink}> Visit Listing </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
             <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
@@ -94,7 +95,7 @@ const UserBidTable = () => {
             <table className="styled-table">
                 <thead>
                     <tr>
-                        <th> Bid Owner </th>
+                        <th> Listing </th>
                         <th> Date of Bid </th>
                         <th> Bid Expiry </th>
                         <th> Price </th>
@@ -111,6 +112,7 @@ const UserBidTable = () => {
                         bidPrice = {bid.bidPrice}
                         bidStatus = {bid.status}
                         bidId = {bid.bidId}
+                        listingId = {bid.auctionId}
                         /> 
                     )}
                 </tbody>
