@@ -15,10 +15,6 @@ class Bid {
         this.createdAt = Date.now();
         this.bidOwner = body.userIdentifier;
         this.bidDeadline = body.bidDeadline;
-        // if (Date.now() > body.endBidDateTime) {
-        //     throw err;
-        // }
-        // this.endAt = body.endAt;
     }
 
     setDelete() {

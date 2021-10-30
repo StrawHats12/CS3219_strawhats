@@ -43,7 +43,7 @@ const deleteBid = async (bidId) => {
             },
           });
     } catch (error) {
-        console.log(error); // TODO, handle this error
+        console.log(error); 
         return null;
     }
 }

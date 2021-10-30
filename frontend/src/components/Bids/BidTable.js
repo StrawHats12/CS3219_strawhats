@@ -7,7 +7,6 @@ import { deleteBid } from "../../services/bidding-service";
 
 const BidTable = ({value}) => {
     const listingId = value.id;
-    const currentUsername = getCurrentUser().username;
     const [bids, setBids] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
@@ -37,16 +36,16 @@ const BidTable = ({value}) => {
     }
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
-        var profileLink = "localhost:3000/profile/" + bidOwner;
+        var profileLink = "http://localhost:3000/profile/" + bidOwner;
         return (
         <tr>
-            <td> <a href="{!'http://' + profileLink}"> {bidOwner} </a> </td>
+            <td> <a href={profileLink}> {bidOwner} </a> </td>
             <td> {formatDate(bidCreationDate)} </td>
             <td> {bidExpiry} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    bidStatus == "ONGOING"
+                    bidStatus === "ONGOING"
                         ? <button type="button" class="btn btn-success" disabled> ongoing </button>
                         : <button type="button" class="btn btn-secondary" disabled> expired </button>
                 }
@@ -54,7 +53,7 @@ const BidTable = ({value}) => {
             <td>
                 { isUnameLoad 
                     ? <StrawhatSpinner/> 
-                    : uname == bidOwner 
+                    : uname === bidOwner 
                         ? <button onClick={ () => handleDeleteClick(bidId)} class="btn btn-danger" > Delete </button> 
                         : <button type="button" class="btn btn-secondary" disabled> - </button>
                 }
