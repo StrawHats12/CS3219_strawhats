@@ -230,3 +230,5 @@ dist
 .idea/vcs.xml
 
 .vscode
+.idea/
+livestream_service/livestream.pem
