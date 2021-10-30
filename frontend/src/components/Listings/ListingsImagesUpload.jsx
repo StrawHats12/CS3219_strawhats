@@ -3,18 +3,17 @@ import { Button, Card } from "react-bootstrap";
 import Dropzone from "react-dropzone";
 import { uploadListingImage } from "../../services/listings-service";
 import StrawhatSpinner from "../StrawhatSpinner";
+import LazyImage from "./LazyImage";
 import "./ListingsImageUpload.css";
 
 const ListingsImagesUpload = (props) => {
   const [state, setState] = useState({
     selectedFiles: undefined,
     currentFile: undefined,
-    uploadedFiles: [],
     message: "",
   });
 
   const { selectedFiles, currentFile, message } = state;
-  const imageFiles = props.imageFiles;
 
   const onDrop = (files) => {
     if (files.length > 0) {
@@ -33,11 +32,8 @@ const ListingsImagesUpload = (props) => {
     // Upload file
     uploadListingImage(currentFile)
       .then((filename) => {
-        imageFiles.push(filename);
-        props.setImageFiles(imageFiles);
-
-        state.uploadedFiles.push(currentFile);
-        setState(state);
+        props.imageFiles.push(filename);
+        props.setImageFiles(props.imageFiles);
       })
       .finally(() => {
         setState({
@@ -47,15 +43,29 @@ const ListingsImagesUpload = (props) => {
       });
   };
 
+  const deleteImage = (imagename, index) => {
+    props.deleteImages.push(imagename);
+    props.setDeleteImages(props.deleteImages);
+    props.setImageFiles(
+      props.imageFiles.filter((filename, index) => imagename !== filename)
+    );
+  };
+
   return (
     <div>
-      {state.uploadedFiles.length > 0 && (
+      {props.imageFiles.length > 0 && (
         <Card>
           <Card.Header className="card-header">List of Files</Card.Header>
           <ul className="list-group list-group-flush">
-            {state.uploadedFiles.map((file, index) => (
-              <li className="list-group-item" key={index}>
-                <a href={file.url}>{file.name}</a>
+            {props.imageFiles.map((filename, index) => (
+              <li className="list-group-item" key={filename}>
+                <p>{filename}</p>
+                <div className="d-flex justify-content-between align-items-center">
+                  <LazyImage imagename={filename} />
+                  <Button onClick={() => deleteImage(filename, index)}>
+                    Delete Image
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>

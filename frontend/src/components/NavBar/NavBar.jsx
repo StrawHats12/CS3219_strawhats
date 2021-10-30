@@ -35,6 +35,9 @@ const NavBar = () => {
                 <LinkContainer exact to={`/profile/${currentUser.username}`}>
                   <NavDropdown.Item>My Profile</NavDropdown.Item>
                 </LinkContainer>
+                <LinkContainer exact to={`/listings/self`}>
+                  <NavDropdown.Item>My Listings</NavDropdown.Item>
+                </LinkContainer>
                 <LinkContainer exact to="/authentication">
                   <NavDropdown.Item>Sign Out</NavDropdown.Item>
                 </LinkContainer>
