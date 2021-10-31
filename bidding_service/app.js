@@ -10,7 +10,7 @@ app.get("/", (req, res) => {
     res.send("Time to start Bidding!");
 });
 
-app.use("/", require("./routes/biddingRoute"))
+app.use("/bid", require("./routes/biddingRoute"))
 
 app.listen(PORT, () => {
     console.log(`Bidding Service Listening on port ${PORT}`);
