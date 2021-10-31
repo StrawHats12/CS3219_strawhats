@@ -3,16 +3,16 @@ const { auth, roles } = require("../auth");
 
 var bidController = require('../controller/bidController');
 
-router.route('/bid/addBid')
+router.route('/addBid')
     .post(auth(roles.USER), bidController.addBid);
 
-router.route('/bid/getListingBids/:listingId')
+router.route('/getListingBids/:listingId')
     .get(bidController.getListingBids);
 
-router.route('/bid/deleteBid/:bidId/:bidPrice')
+router.route('/deleteBid/:bidId/:bidPrice')
     .delete(auth(roles.USER), bidController.deleteBid);
 
-router.route('/bid/getAccountBids/:uname')
+router.route('/getAccountBids/:uname')
     .get(bidController.getAccountBids);
 
 module.exports = router;

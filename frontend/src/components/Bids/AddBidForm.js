@@ -16,6 +16,7 @@ const AddBidForm = ({listingInfo}) => {
         setShowDeclarative(!showDeclarative);
     }
 
+    const placerFunction = () => {return;}
     
     function handleChange(event) {
     setInput((prevInput) => {
@@ -25,7 +26,7 @@ const AddBidForm = ({listingInfo}) => {
         };
     });
     }
-
+    
     async function handleClick() {
         try {
           const userSession = await getCurrentSession();
@@ -36,7 +37,6 @@ const AddBidForm = ({listingInfo}) => {
             userIdentifier: currentUser.username,
             bidPrice: input.bidPrice,
             auctionId: listingInfo.bidding_id,
-            // bidDeadline: input.bidDeadline,
             status: "ONGOING",
           };
           await axios.post(`${BIDDING_ENDPOINT}/addBid`, newBid, {
@@ -67,7 +67,7 @@ const AddBidForm = ({listingInfo}) => {
                 onConfirmOrDismiss={() => handleDeclarative()}
                 show={showDeclarative}
                 showCancelButton={true}
-                onConfirm={input.bidPrice ? () => handleClick() : () => ()}
+                onConfirm={input.bidPrice ? () => handleClick() : () => placerFunction()}
                 text={input.bidPrice ?  'Do you really want to add bid?' : "Bid price cannot be empty "}
                 title={input.bidPrice ? 'Confirm Bidding' : "Go back to listing."}
                 type={'info'}

@@ -8,8 +8,9 @@ const getListingBids = async (listingId) => {
   try {
     const userSession = await getCurrentSession();
     const token = userSession?.accessToken.jwtToken;
+    console.log(`${BIDDING_ENDPOINT}/getListingBids/${listingId}`);
     const response = await axios.get(
-      `${BIDDING_ENDPOINT}/bid/getListingBids/${listingId}`,
+      `${BIDDING_ENDPOINT}/getListingBids/${listingId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -79,7 +80,7 @@ const AddBidForm = ({listingInfo}) => {
         };
     });
     }
-
+    console.log(BIDDING_ENDPOINT);
     async function handleClick() {
         try {
           const userSession = await getCurrentSession();
