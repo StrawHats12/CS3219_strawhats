@@ -3,6 +3,7 @@ import { getCurrentUser } from "../../hooks/useAuth";
 import { getAccountBids } from "../../services/bidding-service";
 import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
+import {getListing} from "../../services/listings-service";
 
 const UserBidTable = () => {
     const [bids, setBids] = useState(null);
@@ -32,9 +33,12 @@ const UserBidTable = () => {
 
     }, []);
 
+    async function isListingExpired(listingId){
+        var listing = await getListing(listingId);
+        return new Date(listing.deadline).getTime() < Date.now();
+    }
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId, listingId}) => {
-        console.log(listingId);
         var listingLink = "http://localhost:3000/listings/" + listingId;
         return (
         <tr> 
@@ -43,11 +47,11 @@ const UserBidTable = () => {
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    new Date(bidExpiry).getTime() < Date.now() 
+                    bidStatus === "WINNER"
+                    ? <button type="button" className="btn btn-success" disabled> Winner </button>
+                    : isListingExpired(listingId)
                         ? <button type="button" className="btn btn-secondary" disabled> expired </button>
-                        : bidStatus === "ONGOING"
-                            ? <button type="button" className="btn btn-success" disabled> ongoing </button>
-                            : <button type="button" className="btn btn-success" disabled> nothing </button>
+                        : <button type="button" className="btn btn-success" disabled> ongoing </button>
                 }
             </td>
             <td>
@@ -55,20 +59,7 @@ const UserBidTable = () => {
                     isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname === bidOwner 
-                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button>
-                            // <div>
-                            //     <Alert
-                            //         onConfirmOrDismiss={() => handleDeclarative()}
-                            //         show={showDeclarative}
-                            //         showCancelButton={true}
-                            //         onConfirm={() => handleDeleteClick(bidId, bidPrice)}
-                            //         text={'Do you really want to delete?'}
-                            //         title={'Confirm Deletion'}
-                            //         type={'info'}
-                            //     />
-                            //     <button onClick={ () => handleDeclarative()} className="btn btn-danger" > Delete </button> 
-                            // </div>
-                        )
+                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button> )
                         : <button type="button" className="btn btn-secondary" disabled> - </button>
                 }
             </td>

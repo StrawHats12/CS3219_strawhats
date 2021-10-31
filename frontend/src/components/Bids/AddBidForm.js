@@ -60,6 +60,7 @@ const AddBidForm = ({listingInfo}) => {
                 value={input.bidPrice}
                 className="form-control"
                 placeholder="Enter Your Price Here"
+                type="number"
                 required
             />
             <br/>
