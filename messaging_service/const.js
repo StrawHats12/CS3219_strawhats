@@ -7,7 +7,8 @@ const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const CONVERSATIONS_TABLE_NAME = "strawhats_conversations";
 const MESSAGES_TABLE_NAME = "strawhats_messages";
 
-const PORT = 8081;
+const PORT = process.env.PORT || 8081;
+const SOCKET_PORT = process.env.SOCKET_PORT || 5050;
 
 module.exports = {
   AWS_REGION,
@@ -16,4 +17,5 @@ module.exports = {
   CONVERSATIONS_TABLE_NAME,
   MESSAGES_TABLE_NAME,
   PORT,
+  SOCKET_PORT
 };

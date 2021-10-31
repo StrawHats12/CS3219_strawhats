@@ -6,12 +6,12 @@ const http = require("http");
 
 const { Server } = require("socket.io");
 
-const redis = require("socket.io-redis");
+// const redis = require("socket.io-redis");
 
-const PORT = process.env.PORT;
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const { auth, roles } = require("./auth");
+const { PORT, SOCKET_PORT } = require("./const");
 
 const app = express();
 const server = http.createServer(app);
@@ -65,6 +65,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(process.env.SOCKET_PORT, () => {
+server.listen(SOCKET_PORT, () => {
   console.log("Messaging socket running!");
 });
