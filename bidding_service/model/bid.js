@@ -16,6 +16,11 @@ class Bid {
         this.bidOwner = body.userIdentifier;
     }
 
+    setWinner() {
+        this.status = "WINNER";
+        return this;
+    }
+
     #generateId () {
         // ID: Unique bidder id + current time converted to base64 string thanks samuel
         const buff = Buffer.from(this.bidding_id + Date.now().toString());

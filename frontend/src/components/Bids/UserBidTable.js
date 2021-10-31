@@ -3,19 +3,12 @@ import { getCurrentUser } from "../../hooks/useAuth";
 import { getAccountBids } from "../../services/bidding-service";
 import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
-import { deleteBid } from "../../services/bidding-service";
-import Alert from './Alert';
 
 const UserBidTable = () => {
     const [bids, setBids] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
     const [uname, setUname] = useState(null);
-    const [showDeclarative, setShowDeclarative] = useState(false);
-
-    const handleDeclarative = () => {
-        setShowDeclarative(!showDeclarative);
-    }
 
     useEffect( () => {
         getCurrentUser().then((res) => {
@@ -39,10 +32,6 @@ const UserBidTable = () => {
 
     }, []);
 
-    
-    const handleDeleteClick = (bidId, bidPrice) => {
-        return deleteBid(bidId, bidPrice);
-    }    
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId, listingId}) => {
         console.log(listingId);

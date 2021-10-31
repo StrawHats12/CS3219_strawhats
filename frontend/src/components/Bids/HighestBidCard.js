@@ -4,6 +4,7 @@ import StrawhatSpinner from "../StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { BIDDING_ENDPOINT } from "../../const";
 import Alert from './Alert';
+import {setWinningBid} from "../../services/bidding-service"
 
 const HighestBidCard = ({listingInfo}) => {
     const listingId = listingInfo.id;
@@ -37,7 +38,7 @@ const HighestBidCard = ({listingInfo}) => {
     }, []);
 
     async function handleClick(bidId) {
-
+        return setWinningBid(bidId);
     }
 
     return (
@@ -49,15 +50,15 @@ const HighestBidCard = ({listingInfo}) => {
                 ? new Date(listingInfo.deadline).getTime() < Date.now() 
                     ? listingInfo.seller_sub === uname
                         ?
-                            ( // Winner is available and expired listing
+                            ( // Winner is available and owner of listing
                                 <>
                                 <Alert
                                     onConfirmOrDismiss={() => handleDeclarative()}
                                     show={showDeclarative}
                                     showCancelButton={true}
-                                    onConfirm={() => handleClick()}
-                                    text={"Are you sure you want to set the winner?"}
-                                    title={"Press OK to set the winner."}
+                                    onConfirm={() => handleClick(bid[0].bidId)}
+                                    title={"Set the winner?"}
+                                    text={"Do remember to contact your winner!"}
                                     type={'info'}
                                 />
                                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
@@ -66,13 +67,13 @@ const HighestBidCard = ({listingInfo}) => {
                                         <i className="material-icons"> lens_blur </i>
                                         <a> {bid[0].bidOwner} </a>
                                         <p> Bid Price: ${bid[0].bidPrice} </p>
-                                        <button className="btn btn-success"> Set Winner </button>
+                                        <button onClick={ () => handleDeclarative()} className="btn btn-success"> Set Winner </button>
                                     </div>
                                 </div>
                                 </>
                             ) 
                             :
-                            ( // Winner is available and expired listing
+                            ( // Winner is available and not owner of listing
                                 <>
                                 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
                                 <div className="winningBid-card-header"> Winning Bid </div>
@@ -80,6 +81,7 @@ const HighestBidCard = ({listingInfo}) => {
                                         <i className="material-icons"> lens_blur </i>
                                         <a> {bid[0].bidOwner} </a>
                                         <p> Bid Price: ${bid[0].bidPrice} </p>
+                                        <p> Please wait for your seller to contact if you are the winner! </p>
                                     </div>
                                 </div>
                                 </>

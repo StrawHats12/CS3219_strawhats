@@ -3,9 +3,6 @@ import { getCurrentUser } from "../../hooks/useAuth";
 import { getListingBids } from "../../services/bidding-service";
 import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
-import { deleteBid } from "../../services/bidding-service";
-import Alert from './Alert';
-
 
 const BidTable = ({value}) => {
     const listingId = value.id;
@@ -13,11 +10,6 @@ const BidTable = ({value}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
     const [uname, setUname] = useState(null);
-    const [showDeclarative, setShowDeclarative] = useState(false);
-
-    const handleDeclarative = () => {
-        setShowDeclarative(!showDeclarative);
-    }
 
     useEffect( () => {
         getCurrentUser().then((res) => {
@@ -38,10 +30,6 @@ const BidTable = ({value}) => {
         });
     }, []);
 
-    
-    const handleDeleteClick = (bidId, bidPrice) => {
-        return deleteBid(bidId, bidPrice);
-    }    
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
         var profileLink = "http://localhost:3000/profile/" + bidOwner;
@@ -64,20 +52,7 @@ const BidTable = ({value}) => {
                     isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname === bidOwner 
-                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button>
-                            // <div>
-                            //     <Alert
-                            //         onConfirmOrDismiss={() => handleDeclarative()}
-                            //         show={showDeclarative}
-                            //         showCancelButton={true}
-                            //         onConfirm={() => handleDeleteClick(bidId, bidPrice)}
-                            //         text={'Do you really want to delete?'}
-                            //         title={'Confirm Deletion'}
-                            //         type={'info'}
-                            //     />
-                            //     <button onClick={ () => handleDeclarative()} className="btn btn-danger" > Delete </button> 
-                            // </div>
-                        )
+                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button> )
                         : <button type="button" className="btn btn-secondary" disabled> - </button>
                 }
             </td>

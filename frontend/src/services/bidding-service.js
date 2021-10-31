@@ -79,6 +79,21 @@ const deleteBid = async (bidId, bidPrice) => {
   }
 };
 
+const setWinningBid = async (bidId) => {
+    try {
+        const userSession = await getCurrentSession();
+        const token = userSession?.accessToken.jwtToken;
+        await axios.delete(`${BIDDING_ENDPOINT}/setWinning/${bidId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
+
 const AddBidForm = ({listingInfo}) => {
     const [input, setInput] = useState({
         bidPrice: "",
@@ -157,4 +172,4 @@ const AddBidForm = ({listingInfo}) => {
     )
 };
 
-export { AddBidForm, getListingBids, deleteBid, getAccountBids, getWinningBid };
+export { AddBidForm, getListingBids, deleteBid, getAccountBids, getWinningBid, setWinningBid };
