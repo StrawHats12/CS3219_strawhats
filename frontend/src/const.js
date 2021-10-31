@@ -4,7 +4,7 @@ const ACCOUNTS_ENDPOINT = BACKEND_URL || "http://localhost:8090";
 const MESSAGING_ENDPOINT = BACKEND_URL || "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:5050";
 const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:7070";
-const BIDDING_ENDPOINT = "http://localhost:2001/bid"; // `${BACKEND_URL}/bid` ||
+const BIDDING_ENDPOINT = `${BACKEND_URL}/bid` || "http://localhost:2001/bid";
 
 const LISTING = {
   ID: "id",
