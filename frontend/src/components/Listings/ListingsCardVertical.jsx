@@ -6,7 +6,7 @@ import placeholder from "./placeholder-image.jpg";
 
 const ListingsCardVertical = (props) => {
   const listing = props.listing;
-  const { id, listing_name, description, images, seller_uid } = listing || {};
+  const { id, listing_name, images, seller_uid } = listing || {};
   const [image, setImage] = useState(placeholder);
 
   useEffect(() => {
@@ -28,7 +28,6 @@ const ListingsCardVertical = (props) => {
         <Card.Img variant="top" src={image} />
         <Card.Body>
           <Card.Title>{listing_name}</Card.Title>
-          <Card.Text>{description}</Card.Text>
         </Card.Body>
       </Card>
     </Link>

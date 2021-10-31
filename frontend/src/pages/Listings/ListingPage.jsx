@@ -147,7 +147,7 @@ const ListingsPage = () => {
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
             </Col>
             <Col>
-              <p>{description}</p>
+              <div style={{ whiteSpace: "pre-line" }}>{description}</div>
             </Col>
             <Col>
               {deadline && (

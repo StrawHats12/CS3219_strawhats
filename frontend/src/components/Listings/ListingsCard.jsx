@@ -32,7 +32,11 @@ const ListingsCard = (props) => {
           <Col>
             <Card.Body>
               <Card.Title>{listing_name}</Card.Title>
-              <Card.Text>{description}</Card.Text>
+              <Card.Text>
+                {description.length > 350
+                  ? description.slice(0, 350) + "..."
+                  : description}
+              </Card.Text>
             </Card.Body>
           </Col>
         </Row>
