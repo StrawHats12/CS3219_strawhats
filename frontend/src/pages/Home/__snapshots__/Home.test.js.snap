@@ -2,9 +2,85 @@
 
 exports[`Home page renders correctly 1`] = `
 <div>
-  <h1>
-    Home
-     Page
-  </h1>
+  <div
+    className="d-flex justify-content-around align-items-center text-white hero"
+  >
+    <div>
+      <div
+        className="d-flex justify-content-left align-items-center"
+      >
+        <img
+          alt=""
+          src="logo192.png"
+          style={
+            Object {
+              "width": "80px",
+            }
+          }
+        />
+        <div
+          className="mx-2"
+        >
+          <h1>
+            Strawhats
+          </h1>
+          <h3>
+            Auctions made easy.
+          </h3>
+        </div>
+      </div>
+      <ul
+        className="pl-7 mt-3"
+      >
+        <li>
+          <h5>
+            Live Video Streaming
+          </h5>
+        </li>
+        <li>
+          <h5>
+            Easy to use
+          </h5>
+        </li>
+        <li>
+          <h5>
+            Free forever
+          </h5>
+        </li>
+      </ul>
+    </div>
+    <img
+      alt=""
+      className="hero-img"
+      src="hero.png"
+    />
+  </div>
+  <div
+    className="container"
+  >
+    <h1
+      className="heading"
+    >
+      Featured Listings
+    </h1>
+    <div
+      className="d-flex justify-content-around align-items-center flex-wrap"
+    >
+      <div
+        className="mx-auto text-center container"
+      >
+        <div
+          className="spinner-border"
+          role="status"
+        >
+          <span
+            className="visually-hidden"
+          >
+            Loading...
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 `;
