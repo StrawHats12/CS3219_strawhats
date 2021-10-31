@@ -1,65 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
-import { BIDDING_ENDPOINT } from "../const";
-import Alert from '../components/Bids/Alert';
-
-const getListingBids = async (listingId) => {
-  try {
-    const userSession = await getCurrentSession();
-    const token = userSession?.accessToken.jwtToken;
-    const response = await axios.get(
-      `${BIDDING_ENDPOINT}/bid/getListingBids/${listingId}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const data = await response?.data?.Items;
-    return data;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
-
-const getAccountBids = async (uname) => {
-  try {
-    const userSession = await getCurrentSession();
-    const token = userSession?.accessToken.jwtToken;
-    const response = await axios.get(
-      `${BIDDING_ENDPOINT}/getAccountBids/${uname}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    const data = await response?.data?.Items;
-    return data;
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
-
-const deleteBid = async (bidId, bidPrice) => {
-  try {
-    const userSession = await getCurrentSession();
-    const token = userSession?.accessToken.jwtToken;
-    await axios.delete(`${BIDDING_ENDPOINT}/deleteBid/${bidId}/${bidPrice}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
+import { getCurrentSession, getCurrentUser } from "../../hooks/useAuth";
+import { BIDDING_ENDPOINT } from "../../const";
+import Alert from './Alert';
 
 const AddBidForm = ({listingInfo}) => {
+    
     const [input, setInput] = useState({
         bidPrice: "",
     });
@@ -135,6 +81,6 @@ const AddBidForm = ({listingInfo}) => {
             </button>        
         </div>
     )
-};
+} 
 
-export { AddBidForm, getListingBids, deleteBid, getAccountBids };
+export default AddBidForm;
