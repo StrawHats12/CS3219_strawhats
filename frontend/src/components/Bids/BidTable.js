@@ -49,11 +49,10 @@ const BidTable = ({value}) => {
         <tr> 
             <td> <a href={profileLink}> {bidOwner} </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
-            <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    new Date(bidExpiry).getTime() < Date.now() 
+                    new Date(value.deadline).getTime() < Date.now() 
                         ? <button type="button" className="btn btn-secondary" disabled> expired </button>
                         : bidStatus === "ONGOING"
                             ? <button type="button" className="btn btn-success" disabled> ongoing </button>
@@ -95,7 +94,6 @@ const BidTable = ({value}) => {
                     <tr>
                         <th> Bid Owner </th>
                         <th> Date of Bid </th>
-                        <th> Bid Expiry </th>
                         <th> Price </th>
                         <th> Status </th>
                         <th> Action </th>
@@ -106,7 +104,6 @@ const BidTable = ({value}) => {
                     <BidRow key = {bid.bidId}
                         bidOwner = {bid.bidOwner}
                         bidCreationDate = {bid.createdAt}
-                        bidExpiry = {bid.bidDeadline}
                         bidPrice = {bid.bidPrice}
                         bidStatus = {bid.status}
                         bidId = {bid.bidId}

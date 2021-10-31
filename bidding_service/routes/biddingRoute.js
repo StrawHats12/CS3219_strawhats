@@ -15,4 +15,7 @@ router.route('/deleteBid/:bidId/:bidPrice')
 router.route('/getAccountBids/:uname')
     .get(bidController.getAccountBids);
 
+router.route('/getWinningBid/:listingId')
+    .get(bidController.getWinningBid);
+
 module.exports = router;

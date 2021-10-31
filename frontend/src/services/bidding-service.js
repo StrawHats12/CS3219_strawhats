@@ -4,11 +4,30 @@ import { getCurrentSession, getCurrentUser } from "../hooks/useAuth";
 import { BIDDING_ENDPOINT } from "../const";
 import Alert from '../components/Bids/Alert';
 
+const getWinningBid = async (listingId) => {
+    try {
+        const userSession = await getCurrentSession();
+        const token = userSession?.accessToken.jwtToken;
+        const response = await axios.get(
+          `${BIDDING_ENDPOINT}/getWinningBid/${listingId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response?.data?.Items;
+        return data;
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
+}
+
 const getListingBids = async (listingId) => {
   try {
     const userSession = await getCurrentSession();
     const token = userSession?.accessToken.jwtToken;
-    console.log(`${BIDDING_ENDPOINT}/getListingBids/${listingId}`);
     const response = await axios.get(
       `${BIDDING_ENDPOINT}/getListingBids/${listingId}`,
       {
@@ -23,7 +42,7 @@ const getListingBids = async (listingId) => {
     console.log(error);
     return null;
   }
-};
+}
 
 const getAccountBids = async (uname) => {
   try {
@@ -138,4 +157,4 @@ const AddBidForm = ({listingInfo}) => {
     )
 };
 
-export { AddBidForm, getListingBids, deleteBid, getAccountBids };
+export { AddBidForm, getListingBids, deleteBid, getAccountBids, getWinningBid };

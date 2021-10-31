@@ -9,6 +9,7 @@ import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { AddBidForm } from "../../services/bidding-service";
 import BidTable from "../../components/Bids/BidTable";
+import HighestBidCard from "../../components/Bids/HighestBidCard"
 import {
   deleteListing,
   deleteListingImages,
@@ -150,13 +151,16 @@ const ListingsPage = () => {
               <div style={{ whiteSpace: "pre-line" }}>{description}</div>
             </Col>
             <Col>
+              <ListingProfileCard profile={profile} />
+              <br/>
               {deadline && (
                 <Countdown
                   date={stringToDate(deadline)}
                   renderer={countdownRenderer}
                 />
               )}
-              <ListingProfileCard profile={profile} />
+              <br/>
+              <HighestBidCard listingInfo={listing}/>
             </Col>
           </Row>
           <hr/>

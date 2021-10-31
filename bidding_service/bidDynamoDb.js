@@ -24,6 +24,23 @@ const addBidding = async (bid) => {
     return bid;
 }
 
+// GET WINNING BID BY LISTING ID
+const getWinningBid = async (listingId) => {
+    const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        FilterExpression: 'contains(#listingId, :listingId)',
+        ExpressionAttributeNames: {
+            '#listingId' : 'listingId'
+        },
+        ExpressionAttributeValues: {
+            ':listingId' : listingId
+        },
+        Limit: 1
+        // ScanIndexFoward: "true"
+    }
+    return dynamoClient.scan(params).promise();
+}
+
 // GET BID BY LISTING ID
 const getListingBids = async (listingId) => {
     const params = {
@@ -73,5 +90,6 @@ module.exports = {
     addBidding,
     getListingBids,
     deleteBid,
-    getAccountBids
+    getAccountBids,
+    getWinningBid
 };

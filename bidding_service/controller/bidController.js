@@ -3,7 +3,8 @@ const {
     addBidding,
     getListingBids,
     deleteBid,
-    getAccountBids
+    getAccountBids,
+    getWinningBid
 } = require("../bidDynamoDb");
 
 exports.addBid = async function (req, res) {
@@ -18,11 +19,22 @@ exports.addBid = async function (req, res) {
     }
 }
 
+exports.getWinningBid = async function (req, res) {
+    const listingId = req.params.listingId;
+    try {
+        const winningBid = await getWinningBid(listingId);
+        console.log(winningBid);
+        res.json(winningBid);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: "Cannot retrieve listing's bid."});
+    }
+}
+
 exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
-        listBids.Items = listBids.Items.reverse();
         res.json(listBids);
     } catch (err) {
         console.log(err);

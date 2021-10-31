@@ -51,7 +51,6 @@ const UserBidTable = () => {
         <tr> 
             <td> <a href={listingLink}> Visit Listing </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
-            <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
@@ -97,7 +96,6 @@ const UserBidTable = () => {
                     <tr>
                         <th> Listing </th>
                         <th> Date of Bid </th>
-                        <th> Bid Expiry </th>
                         <th> Price </th>
                         <th> Status </th>
                         <th> Action </th>
@@ -108,7 +106,6 @@ const UserBidTable = () => {
                     <BidRow key = {bid.bidId}
                         bidOwner = {bid.bidOwner}
                         bidCreationDate = {bid.createdAt}
-                        bidExpiry = {bid.bidDeadline}
                         bidPrice = {bid.bidPrice}
                         bidStatus = {bid.status}
                         bidId = {bid.bidId}
