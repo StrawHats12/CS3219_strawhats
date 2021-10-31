@@ -1,0 +1,17 @@
+.hero {
+  height: 450px;
+  background-color: rgba(33, 37, 41, 1);
+}
+
+.hero-img {
+  height: 250px;
+}
+
+.pl-7 {
+  padding-left: 7rem;
+}
+
+.heading {
+  margin-top: 20px;
+  text-align:center;
+}
