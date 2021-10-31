@@ -19,7 +19,7 @@ import { ProfilePage } from "./pages/Profile";
 import Livestream from "./pages/Livestream";
 import ErrorBoundary from "./utils/ErrorBoundary";
 import MyListingsPage from "./pages/Listings/MyListingsPage";
-import UserBids from "./pages/Bids/UserBids"
+import UserBids from "./pages/Bids/UserBids";
 
 function App() {
   return (
@@ -27,9 +27,9 @@ function App() {
       <div className="min-vh-100 d-flex flex-column">
         <NavBar />
         <ErrorBoundary>
-          <Container>
-            <Switch>
-              <Route path="/" component={Home} exact />
+          <Switch>
+            <Route path="/" component={Home} exact />
+            <Container>
               <Route path="/profile/:username" component={ProfilePage} exact />
               <Route path="/listings" component={ListingsPage} exact />
               <ProtectedRoute
@@ -57,8 +57,8 @@ function App() {
               <ProtectedRoute path="/messenger" component={Messenger} exact />
               <ProtectedRoute path="/UserBids" component={UserBids} exact />
               <Route component={NotFound} />
-            </Switch>
-          </Container>
+            </Container>
+          </Switch>
         </ErrorBoundary>
         <Footer />
       </div>
