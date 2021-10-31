@@ -1,23 +1,22 @@
 .message-container {
-    margin: 5px 0;
-    display: flex;
-    align-items: flex-start;
+  margin: 5px 0;
+  display: flex;
+  align-items: flex-start;
 }
 
 .message-container-own {
-    align-self: flex-end;
-    align-items: flex-end;
-    direction: rtl;
+  align-self: flex-end;
+  align-items: flex-end;
 }
 
 .message-text-container {
-    border-radius: 5px;
-    padding: 5px 10px;
-    background-color: #006fbe;
-    color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: #006fbe;
+  color: white;
 }
 
 .message-text-container-own {
-    background-color: #2d8fd5;
-    color: white;
+  background-color: #2d8fd5;
+  color: white;
 }
