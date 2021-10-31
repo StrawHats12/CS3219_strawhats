@@ -1,9 +1,9 @@
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const LISTINGS_ENDPOINT = BACKEND_URL || "http://localhost:8080";
 const ACCOUNTS_ENDPOINT = BACKEND_URL || "http://localhost:8090";
-const MESSAGING_ENDPOINT = "http://localhost:8081";
-const MESSAGING_SOCKET_ENDPOINT = "http://localhost:5000";
-const LIVESTREAM_SOCKET_ENDPOINT = "http://localhost:7070";
+const MESSAGING_ENDPOINT = BACKEND_URL || "http://localhost:8081";
+const MESSAGING_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:5050";
+const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:7070";
 
 const LISTING = {
   ID: "id",
@@ -17,9 +17,9 @@ const LISTING = {
 
 const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
-  CREATE_STREAM_URL: "http://localhost:9000/create",
-  FETCH_STREAM_PRIVATE_DETAILS_URL: "http://localhost:9000/fetchStream/",
-  DESTORY_STREAM_BASE_URL: "http://localhost:9000/destroy/",
+  CREATE_STREAM_URL: `${BACKEND_URL}/create` || "http://localhost:9000/create",
+  FETCH_STREAM_PRIVATE_DETAILS_URL: `${BACKEND_URL}/fetchStream/` || "http://localhost:9000/fetchStream/",
+  DESTORY_STREAM_BASE_URL: `${BACKEND_URL}/destroy/` || "http://localhost:9000/destroy/",
   STREAM_PRODUCER_ENDPOINT: "rtmp://global-live.mux.com:5222/app",
 };
 
