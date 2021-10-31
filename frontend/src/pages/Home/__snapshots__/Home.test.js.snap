@@ -67,7 +67,7 @@ exports[`Home page renders correctly 1`] = `
       className="d-flex justify-content-around align-items-center flex-wrap"
     >
       <div
-        className="mx-auto text-center container"
+        className="mx-auto text-center my-5 container"
       >
         <div
           className="spinner-border"

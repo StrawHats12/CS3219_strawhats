@@ -27,38 +27,48 @@ function App() {
       <div className="min-vh-100 d-flex flex-column">
         <NavBar />
         <ErrorBoundary>
-          <Route path="/" component={Home} exact />
-          <Container>
-            <Switch>
-              <Route path="/profile/:username" component={ProfilePage} exact />
-              <Route path="/listings" component={ListingsPage} exact />
-              <ProtectedRoute
-                path="/listings/self"
-                component={MyListingsPage}
-                exact
-              />
-              <ProtectedRoute
-                path="/listings/create"
-                component={CreateListingPage}
-                exact
-              />
-              <ProtectedRoute
-                path="/listings/edit/:id"
-                component={EditListingPage}
-                exact
-              />
-              <Route path="/listings/:id" component={ListingPage} exact />
-              <ProtectedRoute
-                path="/tv/:streamerId"
-                component={Livestream}
-                exact
-              />
-              <Route path="/authentication" component={Authentication} exact />
-              <ProtectedRoute path="/messenger" component={Messenger} exact />
-              <ProtectedRoute path="/UserBids" component={UserBids} exact />
-              <Route component={NotFound} />
-            </Switch>
-          </Container>
+          <Switch>
+            <Route path="/" component={Home} exact />
+            <Container>
+              <Switch>
+                <Route
+                  path="/profile/:username"
+                  component={ProfilePage}
+                  exact
+                />
+                <Route path="/listings" component={ListingsPage} exact />
+                <ProtectedRoute
+                  path="/listings/self"
+                  component={MyListingsPage}
+                  exact
+                />
+                <ProtectedRoute
+                  path="/listings/create"
+                  component={CreateListingPage}
+                  exact
+                />
+                <ProtectedRoute
+                  path="/listings/edit/:id"
+                  component={EditListingPage}
+                  exact
+                />
+                <Route path="/listings/:id" component={ListingPage} exact />
+                <ProtectedRoute
+                  path="/tv/:streamerId"
+                  component={Livestream}
+                  exact
+                />
+                <Route
+                  path="/authentication"
+                  component={Authentication}
+                  exact
+                />
+                <ProtectedRoute path="/messenger" component={Messenger} exact />
+                <ProtectedRoute path="/UserBids" component={UserBids} exact />
+                <Route component={NotFound} />
+              </Switch>
+            </Container>
+          </Switch>
         </ErrorBoundary>
         <Footer />
       </div>
