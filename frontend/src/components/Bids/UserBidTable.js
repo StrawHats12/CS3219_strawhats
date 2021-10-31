@@ -66,18 +66,19 @@ const UserBidTable = () => {
                     isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname === bidOwner 
-                        ? ( <div>
-                                <Alert
-                                    onConfirmOrDismiss={() => handleDeclarative()}
-                                    show={showDeclarative}
-                                    showCancelButton={true}
-                                    onConfirm={() => handleDeleteClick(bidId, bidPrice)}
-                                    text={'Do you really want to delete?'}
-                                    title={'Confirm Deletion'}
-                                    type={'info'}
-                                />
-                                <button onClick={ () => handleDeclarative()} className="btn btn-danger" > Delete </button> 
-                            </div>
+                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button>
+                            // <div>
+                            //     <Alert
+                            //         onConfirmOrDismiss={() => handleDeclarative()}
+                            //         show={showDeclarative}
+                            //         showCancelButton={true}
+                            //         onConfirm={() => handleDeleteClick(bidId, bidPrice)}
+                            //         text={'Do you really want to delete?'}
+                            //         title={'Confirm Deletion'}
+                            //         type={'info'}
+                            //     />
+                            //     <button onClick={ () => handleDeclarative()} className="btn btn-danger" > Delete </button> 
+                            // </div>
                         )
                         : <button type="button" className="btn btn-secondary" disabled> - </button>
                 }
