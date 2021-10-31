@@ -1,6 +1,6 @@
 import Storage from "@aws-amplify/storage";
 import { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import placeholder from "./placeholder-image.jpg";
 

@@ -27,9 +27,9 @@ function App() {
       <div className="min-vh-100 d-flex flex-column">
         <NavBar />
         <ErrorBoundary>
-          <Switch>
-            <Route path="/" component={Home} exact />
-            <Container>
+          <Route path="/" component={Home} exact />
+          <Container>
+            <Switch>
               <Route path="/profile/:username" component={ProfilePage} exact />
               <Route path="/listings" component={ListingsPage} exact />
               <ProtectedRoute
@@ -57,8 +57,8 @@ function App() {
               <ProtectedRoute path="/messenger" component={Messenger} exact />
               <ProtectedRoute path="/UserBids" component={UserBids} exact />
               <Route component={NotFound} />
-            </Container>
-          </Switch>
+            </Switch>
+          </Container>
         </ErrorBoundary>
         <Footer />
       </div>

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Modal, Row } from "react-bootstrap";
 import { useHistory, useParams } from "react-router";
-import { ListingsCarousel } from "../../components/Listings";
+import {
+  ListingProfileCard,
+  ListingsCarousel,
+} from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import PopUp from "../../components/Bids/BidPopUp";
@@ -14,7 +17,6 @@ import {
 import { getAccountById } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
-import { ConsoleLogger } from "@aws-amplify/core";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -22,6 +24,7 @@ const ListingsPage = () => {
   const [listing, setListing] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
+  const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { listing_name, description, images, seller_uid, deadline } = listing;
 
@@ -45,8 +48,11 @@ const ListingsPage = () => {
   };
 
   const redirectToChat = async () => {
-    const user = await getAccountById(seller_uid);
-    history.push(`/messenger/?user=${user.username}`);
+    if (profile) {
+      history.push(`/messenger/?user=${profile.username}`);
+    } else {
+      alert("User profile not found.");
+    }
   };
 
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
@@ -81,10 +87,19 @@ const ListingsPage = () => {
 
       checkOwner(res.seller_sub);
       setListing(res);
-      setIsLoading(false);
+      getAccountById(seller_uid)
+        .then((account) => {
+          setProfile(account);
+        })
+        .catch(() => {
+          console.error("Unable to find profile");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     });
-  }, [id]);
-  console.log(listing);
+  }, [id, seller_uid]);
+
   return (
     <>
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
@@ -141,6 +156,7 @@ const ListingsPage = () => {
                   renderer={countdownRenderer}
                 />
               )}
+              <ListingProfileCard profile={profile} />
             </Col>
           </Row>
           <br />
