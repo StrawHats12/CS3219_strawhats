@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from "react";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { getListingBids } from "../../services/bidding-service";
+import { getAccountBids } from "../../services/bidding-service";
 import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
 import { deleteBid } from "../../services/bidding-service";
 import Alert from './Alert';
 
-
-const BidTable = ({value}) => {
-    const listingId = value.id;
+const UserBidTable = () => {
     const [bids, setBids] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
@@ -27,15 +25,18 @@ const BidTable = ({value}) => {
             }
             setUname(res.username);
             setIsUnameLoading(false);
-        });
-        getListingBids(listingId).then((res) => {
-            if (!res) {
+            return res.username;
+        }).then((uname) => {
+            getAccountBids(uname).then((res) => {
+                if (!res) {
+                    setIsLoading(false);
+                    return;
+                }
+                setBids(res);
                 setIsLoading(false);
-                return;
-            }
-            setBids(res);
-            setIsLoading(false);
+            });
         });
+
     }, []);
 
     
@@ -43,11 +44,12 @@ const BidTable = ({value}) => {
         return deleteBid(bidId, bidPrice);
     }    
 
-    const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
-        var profileLink = "http://localhost:3000/profile/" + bidOwner;
+    const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId, listingId}) => {
+        console.log(listingId);
+        var listingLink = "http://localhost:3000/listings/" + listingId;
         return (
         <tr> 
-            <td> <a href={profileLink}> {bidOwner} </a> </td>
+            <td> <a href={listingLink}> Visit Listing </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
             <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
@@ -93,7 +95,7 @@ const BidTable = ({value}) => {
             <table className="styled-table">
                 <thead>
                     <tr>
-                        <th> Bid Owner </th>
+                        <th> Listing </th>
                         <th> Date of Bid </th>
                         <th> Bid Expiry </th>
                         <th> Price </th>
@@ -110,6 +112,7 @@ const BidTable = ({value}) => {
                         bidPrice = {bid.bidPrice}
                         bidStatus = {bid.status}
                         bidId = {bid.bidId}
+                        listingId = {bid.auctionId}
                         /> 
                     )}
                 </tbody>
@@ -120,34 +123,4 @@ const BidTable = ({value}) => {
     );
 }
 
-export default BidTable;
-
-// const columns = ([
-//     {
-//         Header: "Bid Id",
-//         accessor: ""
-//     },
-//     {
-//         Header: "Status",
-//         accessor: "Status"
-//     },
-//     {
-//         Header: "Date",
-//         accessor: "createdAt"
-//     },
-//     {
-//         Header: "Bid Owner",
-//         accessor: "auctionId"
-//     },
-//     {
-//         Header: "Price",
-//         accessor: "bidPrice"
-//     },
-//     {
-//         Header: "Bid Owner",
-//         accessor: "bidOwner"
-//     },
-//     {
-//         Header: "Bid Id",
-//         accessor: "bidId"
-//     }]);
+export default UserBidTable;

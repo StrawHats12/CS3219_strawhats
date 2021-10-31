@@ -2,19 +2,29 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
+const http = require("http");
 
-const io = require("socket.io")(process.env.SOCKET_PORT);
-const redis = require("socket.io-redis");
+const { Server } = require("socket.io");
 
-const PORT = process.env.PORT;
+// const redis = require("socket.io-redis");
+
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const { auth, roles } = require("./auth");
+const { PORT, SOCKET_PORT } = require("./const");
 
 const app = express();
+const server = http.createServer(app);
 
 app.use(express.json());
 app.use(cors());
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
 
 app.get("/", (req, res) => {
   res.send("Server is up and running!");
@@ -53,4 +63,8 @@ io.on("connection", (socket) => {
       });
     });
   });
+});
+
+server.listen(SOCKET_PORT, () => {
+  console.log("Messaging socket running!");
 });

@@ -1,12 +1,12 @@
 import Storage from "@aws-amplify/storage";
 import { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import placeholder from "./placeholder-image.jpg";
 
-const ListingsCard = (props) => {
+const ListingsCardVertical = (props) => {
   const listing = props.listing;
-  const { id, listing_name, description, images, seller_uid } = listing || {};
+  const { id, listing_name, images, seller_uid } = listing || {};
   const [image, setImage] = useState(placeholder);
 
   useEffect(() => {
@@ -24,25 +24,14 @@ const ListingsCard = (props) => {
 
   return (
     <Link to={"/listings/" + id} className="text-decoration-none text-reset">
-      <Card className="mb-4">
-        <Row>
-          <Col className="col-3">
-            <Card.Img variant="top" src={image} />
-          </Col>
-          <Col>
-            <Card.Body>
-              <Card.Title>{listing_name}</Card.Title>
-              <Card.Text>
-                {description.length > 350
-                  ? description.slice(0, 350) + "..."
-                  : description}
-              </Card.Text>
-            </Card.Body>
-          </Col>
-        </Row>
+      <Card className="m-4" style={{width: "300px"}}>
+        <Card.Img variant="top" src={image} />
+        <Card.Body>
+          <Card.Title>{listing_name}</Card.Title>
+        </Card.Body>
       </Card>
     </Link>
   );
 };
 
-export default ListingsCard;
+export default ListingsCardVertical;
