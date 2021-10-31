@@ -79,11 +79,11 @@ const deleteBid = async (bidId, bidPrice) => {
   }
 };
 
-const setWinningBid = async (bidId) => {
+const updateWinnerBid = async (bidId, bidPrice) => {
     try {
         const userSession = await getCurrentSession();
         const token = userSession?.accessToken.jwtToken;
-        await axios.delete(`${BIDDING_ENDPOINT}/setWinning/${bidId}`, {
+        await axios.put(`${BIDDING_ENDPOINT}/updateWinnerBid/${bidId}/${bidPrice}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -172,4 +172,4 @@ const AddBidForm = ({listingInfo}) => {
     )
 };
 
-export { AddBidForm, getListingBids, deleteBid, getAccountBids, getWinningBid, setWinningBid };
+export { AddBidForm, getListingBids, deleteBid, getAccountBids, getWinningBid, updateWinnerBid };

@@ -40,11 +40,11 @@ const BidTable = ({value}) => {
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    new Date(value.deadline).getTime() < Date.now() 
+                    bidStatus === "WINNER"
+                    ? <button type="button" className="btn btn-success" disabled> Winner </button>
+                    : new Date(value.deadline).getTime() < Date.now() 
                         ? <button type="button" className="btn btn-secondary" disabled> expired </button>
-                        : bidStatus === "ONGOING"
-                            ? <button type="button" className="btn btn-success" disabled> ongoing </button>
-                            : <button type="button" className="btn btn-success" disabled> nothing </button>
+                        : <button type="button" className="btn btn-success" disabled> ongoing </button>
                 }
             </td>
             <td>

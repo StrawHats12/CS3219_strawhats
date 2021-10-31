@@ -4,7 +4,7 @@ import StrawhatSpinner from "../StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import { BIDDING_ENDPOINT } from "../../const";
 import Alert from './Alert';
-import {setWinningBid} from "../../services/bidding-service"
+import {updateWinnerBid} from "../../services/bidding-service"
 
 const HighestBidCard = ({listingInfo}) => {
     const listingId = listingInfo.id;
@@ -37,8 +37,8 @@ const HighestBidCard = ({listingInfo}) => {
         })
     }, []);
 
-    async function handleClick(bidId) {
-        return setWinningBid(bidId);
+    async function handleClick(bidId, bidPrice) {
+        return updateWinnerBid(bidId, bidPrice);
     }
 
     return (
@@ -56,7 +56,7 @@ const HighestBidCard = ({listingInfo}) => {
                                     onConfirmOrDismiss={() => handleDeclarative()}
                                     show={showDeclarative}
                                     showCancelButton={true}
-                                    onConfirm={() => handleClick(bid[0].bidId)}
+                                    onConfirm={() => handleClick(bid[0].bidId, bid[0].bidPrice)}
                                     title={"Set the winner?"}
                                     text={"Do remember to contact your winner!"}
                                     type={'info'}

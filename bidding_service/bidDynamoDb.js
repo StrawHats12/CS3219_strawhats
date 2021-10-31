@@ -84,6 +84,24 @@ const getAccountBids = async (uname) => {
     return dynamoClient.scan(params).promise();
 }
 
+// UPDATE WINNER BID
+const updateWinnerBid = async (bidId, bidPrice) => {
+     const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        Key: { 
+            bidId: bidId, 
+            bidPrice: bidPrice 
+        },
+        UpdateExpression: 'set #status = :status',
+        ExpressionAttributeNames: {
+            '#status' : 'status'
+        },
+        ExpressionAttributeValues: {
+            ':status' : "WINNER"
+        },
+    };
+    return dynamoClient.update(params).promise();
+}
 
 module.exports = {
     dynamoClient,
@@ -91,5 +109,6 @@ module.exports = {
     getListingBids,
     deleteBid,
     getAccountBids,
-    getWinningBid
+    getWinningBid,
+    updateWinnerBid
 };
