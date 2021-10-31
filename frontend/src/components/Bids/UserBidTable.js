@@ -42,7 +42,7 @@ const UserBidTable = () => {
         var listingLink = "http://localhost:3000/listings/" + listingId;
         return (
         <tr> 
-            <td> <a href={listingLink}> Visit Listing </a> </td>
+            <td> <a href={listingLink}> <button className="btn btn-success">Visit Listing </button> </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
             <td> ${bidPrice} </td> 
             <td> 
