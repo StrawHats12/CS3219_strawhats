@@ -11,7 +11,7 @@ const useSocket = ({ id, isLivestreamChat }) => {
   useEffect(() => {
     const newSocket = io.connect(
       isLivestreamChat ? LIVESTREAM_SOCKET_ENDPOINT : MESSAGING_SOCKET_ENDPOINT,
-      { query: { id } }
+      { query: { id }, upgrade: false }
     );
     setSocket(newSocket);
 
