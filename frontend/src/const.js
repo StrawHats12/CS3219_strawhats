@@ -18,23 +18,23 @@ const LISTING = {
 
 const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
-  CREATE_STREAM_URL: `${BACKEND_URL}/create` || "http://localhost:9000/create",
+  CREATE_STREAM_URL: "http://localhost:9000/create",
   FETCH_STREAM_PRIVATE_DETAILS_URL:
-    `${BACKEND_URL}/fetchStream/` || "http://localhost:9000/fetchStream/",
+      "http://localhost:9000/fetchStream/",
   DESTORY_STREAM_BASE_URL:
-    `${BACKEND_URL}/destroy/` || "http://localhost:9000/destroy/",
+      "http://localhost:9000/destroy/",
   STREAM_PRODUCER_ENDPOINT: "rtmp://global-live.mux.com:5222/app",
 };
 
 const MESSAGES = {
   STREAMING_INSTRUCTIONS:
-    "Streaming requires a stream key and the use of streaming " +
-    "software. We recommend using OBS Studio for your streaming. \n" +
-    "OBS Studio is free and open source and can be downloaded here: \n" +
-    "To be able to stream, follow the instructions on streaming here: https://obsproject.com/wiki/OBS-Studio-Overview" +
-    `The Server URL to Stream to would be ${LIVESTREAM.STREAM_PRODUCER_ENDPOINT}` +
-    " and you'd have to input your stream key into Stream Key field." +
-    "Select your video and audio input sources and start streaming to stream to the world!",
+      "Streaming requires a stream key and the use of streaming " +
+      "software. We recommend using OBS Studio for your streaming. \n" +
+      "OBS Studio is free and open source and can be downloaded here: \n" +
+      "To be able to stream, follow the instructions on streaming here: https://obsproject.com/wiki/OBS-Studio-Overview" +
+      `The Server URL to Stream to would be ${LIVESTREAM.STREAM_PRODUCER_ENDPOINT}` +
+      " and you'd have to input your stream key into Stream Key field." +
+      "Select your video and audio input sources and start streaming to stream to the world!",
 };
 
 export {
