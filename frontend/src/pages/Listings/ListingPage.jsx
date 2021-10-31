@@ -11,6 +11,7 @@ import {
   deleteListingImages,
   getListing,
 } from "../../services/listings-service";
+import { getAccountById } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 import { ConsoleLogger } from "@aws-amplify/core";
@@ -22,7 +23,7 @@ const ListingsPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOwner, setIsOwner] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline} = listing;
+  const { listing_name, description, images, seller_uid, deadline } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -43,6 +44,11 @@ const ListingsPage = () => {
     history.push(`/listings/edit/${id}`);
   };
 
+  const redirectToChat = async () => {
+    const user = await getAccountById(seller_uid);
+    history.push(`/messenger/?user=${user.username}`);
+  };
+
   const countdownRenderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       return <p>Bidding has ended! ({formatDate(deadline)})</p>;
@@ -54,10 +60,10 @@ const ListingsPage = () => {
       );
     }
   };
-  
+
   const hasExpired = (deadline) => {
     return Date.parse(deadline) > Date.now();
-  }
+  };
 
   useEffect(() => {
     async function checkOwner(id) {
@@ -116,6 +122,11 @@ const ListingsPage = () => {
               </Button>
             </>
           )}
+          {!isOwner && (
+            <Button className="m-1" onClick={redirectToChat}>
+              Chat with seller!
+            </Button>
+          )}
           <Row>
             <Col>
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
@@ -132,42 +143,38 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          <br/>
+          <br />
           <Row>
-            <Col xs={2}> 
-              { 
-                isOwner
-                  ?
-                    <div>
-                      <h3> Unable to Bid </h3>
-                      <p> You cannot bid for your own items.</p>
-                    </div>
-                  : hasExpired(deadline) 
-                    ?  
-                    <div>
-                      <h3> Place Your Bid! </h3>
-                      <PopUp listingInfo = {listing}/>
-                    </div>
-                    :
-                    <div>
-                        <h3> Bid has ended. </h3>
-                        <p> You can no longer bid for this item. </p>
-                    </div> 
-              }
-            </Col>
-            <Col xs={9}> 
-              { hasExpired(deadline) 
-                ?
+            <Col xs={2}>
+              {isOwner ? (
                 <div>
-                  <h3> Ongoing Bids </h3> 
+                  <h3> Unable to Bid </h3>
+                  <p> You cannot bid for your own items.</p>
+                </div>
+              ) : hasExpired(deadline) ? (
+                <div>
+                  <h3> Place Your Bid! </h3>
+                  <PopUp listingInfo={listing} />
+                </div>
+              ) : (
+                <div>
+                  <h3> Bid has ended. </h3>
+                  <p> You can no longer bid for this item. </p>
+                </div>
+              )}
+            </Col>
+            <Col xs={9}>
+              {hasExpired(deadline) ? (
+                <div>
+                  <h3> Ongoing Bids </h3>
                   <p> Sorted by price </p>
                 </div>
-                :
+              ) : (
                 <div>
-                  <h3> Past Bids </h3> 
+                  <h3> Past Bids </h3>
                 </div>
-              }  
-              <BidTable value = {listing}/> 
+              )}
+              <BidTable value={listing} />
             </Col>
           </Row>
         </Container>
@@ -177,7 +184,6 @@ const ListingsPage = () => {
           correct.
         </Container>
       )}
-      
     </>
   );
 };
