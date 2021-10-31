@@ -231,5 +231,6 @@ dist
 
 .vscode
 .idea/
+livestream_service/livestream.pem
 frontend/package-lock.json
 *.pem
