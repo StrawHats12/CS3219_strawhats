@@ -7,12 +7,12 @@ router.route('/addBid')
     .post(auth(roles.USER), bidController.addBid);
 
 router.route('/getListingBids/:listingId')
-    .get(auth(roles.USER), bidController.getListingBids);
+    .get(bidController.getListingBids);
 
 router.route('/deleteBid/:bidId/:bidPrice')
     .delete(auth(roles.USER), bidController.deleteBid);
 
 router.route('/getAccountBids/:uname')
-    .get(auth(roles.USER), bidController.getAccountBids);
+    .get(bidController.getAccountBids);
 
 module.exports = router;
