@@ -67,7 +67,7 @@ const AddBidForm = ({listingInfo}) => {
                 onConfirmOrDismiss={() => handleDeclarative()}
                 show={showDeclarative}
                 showCancelButton={true}
-                onConfirm={() => handleClick()}
+                onConfirm={input.bidPrice ? () => handleClick() : () => ()}
                 text={input.bidPrice ?  'Do you really want to add bid?' : "Bid price cannot be empty "}
                 title={input.bidPrice ? 'Confirm Bidding' : "Go back to listing."}
                 type={'info'}
