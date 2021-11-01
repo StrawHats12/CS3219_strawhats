@@ -9,6 +9,7 @@ const MESSAGES_TABLE_NAME = "strawhats_messages";
 
 const PORT = process.env.PORT || 8081;
 const SOCKET_PORT = process.env.SOCKET_PORT || 5050;
+const ORIGIN = process.env.ORIGIN || "http://localhost:3000";
 
 module.exports = {
   AWS_REGION,
@@ -17,5 +18,6 @@ module.exports = {
   CONVERSATIONS_TABLE_NAME,
   MESSAGES_TABLE_NAME,
   PORT,
-  SOCKET_PORT
+  SOCKET_PORT,
+  ORIGIN,
 };

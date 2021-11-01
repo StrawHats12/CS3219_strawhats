@@ -11,7 +11,7 @@ const { Server } = require("socket.io");
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const { auth, roles } = require("./auth");
-const { PORT, SOCKET_PORT } = require("./const");
+const { PORT, SOCKET_PORT, ORIGIN } = require("./const");
 
 const app = express();
 const server = http.createServer(app);
@@ -21,7 +21,7 @@ app.use(cors());
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: ORIGIN,
     methods: ["GET", "POST"],
   },
 });
