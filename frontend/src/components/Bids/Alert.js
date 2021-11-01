@@ -7,14 +7,11 @@ class Alert extends React.Component {
 		allowEnterKey : PropTypes.bool,
 		allowEscapeKey : PropTypes.bool,
 		allowOutsideClick : PropTypes.bool,
-		animation : PropTypes.bool,
 		backdrop : PropTypes.bool,
 		background : PropTypes.string,
 		buttonsStyling : PropTypes.bool,
-		cancelButtonClass : PropTypes.string,
 		cancelButtonColor : PropTypes.string,
 		cancelButtonText : PropTypes.string,
-		confirmButtonClass : PropTypes.string,
 		confirmButtonColor : PropTypes.string,
 		confirmButtonText : PropTypes.string,
 		customClass : PropTypes.string,
@@ -41,12 +38,10 @@ class Alert extends React.Component {
 		),
 		inputAttributes : PropTypes.object,
 		inputAutoTrim : PropTypes.bool,
-		inputClass : PropTypes.string,
 		inputOptions : PropTypes.object,
 		inputPlaceholder : PropTypes.string,
 		inputValidator : PropTypes.func,
 		inputValue : PropTypes.string,
-		onBeforeOpen : PropTypes.func,
 		onCancel : PropTypes.func,
 		onClose : PropTypes.func,
 		onConfirm : PropTypes.func,
@@ -95,14 +90,11 @@ class Alert extends React.Component {
 		allowEnterKey : true,
 		allowEscapeKey : true,
 		allowOutsideClick : true,
-		animation : true,
 		backdrop : true,
 		background : null,
 		buttonsStyling : true,
-		cancelButtonClass : null,
 		cancelButtonColor : '#999999',
 		cancelButtonText : 'Cancel',
-		confirmButtonClass : null,
 		confirmButtonColor : '#5B6ABF',
 		confirmButtonText : 'OK',
 		customClass : null,
@@ -114,12 +106,10 @@ class Alert extends React.Component {
 		input : null,
 		inputAttributes : {},
 		inputAutoTrim : true,
-		inputClass : null,
 		inputOptions : {},
 		inputPlaceholder : '',
 		inputValidator : null,
 		inputValue : '',
-		onBeforeOpen : null,
 		onCancel : null,
 		onClose : null,
 		onConfirm : null,
@@ -163,7 +153,6 @@ class Alert extends React.Component {
 		delete props.onOutsideClick;
 		delete props.show;
 		if (this.props.onOpen) { props.onOpen = this.props.onOpen; }
-		if (this.props.onBeforeOpen) { this.props.onBeforeOpen(); }
 		new SweetAlert(
 			{...props}
 		).then(result => {

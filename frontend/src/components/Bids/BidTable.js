@@ -3,9 +3,6 @@ import { getCurrentUser } from "../../hooks/useAuth";
 import { getListingBids } from "../../services/bidding-service";
 import { formatDate, formatTime } from "../../utils/DateTime";
 import StrawhatSpinner from "../StrawhatSpinner";
-import { deleteBid } from "../../services/bidding-service";
-import Alert from './Alert';
-
 
 const BidTable = ({value}) => {
     const listingId = value.id;
@@ -13,11 +10,6 @@ const BidTable = ({value}) => {
     const [isLoading, setIsLoading] = useState(true);
     const [isUnameLoad, setIsUnameLoading] = useState(true);
     const [uname, setUname] = useState(null);
-    const [showDeclarative, setShowDeclarative] = useState(false);
-
-    const handleDeclarative = () => {
-        setShowDeclarative(!showDeclarative);
-    }
 
     useEffect( () => {
         getCurrentUser().then((res) => {
@@ -38,10 +30,6 @@ const BidTable = ({value}) => {
         });
     }, []);
 
-    
-    const handleDeleteClick = (bidId, bidPrice) => {
-        return deleteBid(bidId, bidPrice);
-    }    
 
     const BidRow = ({bidOwner, bidCreationDate, bidExpiry, bidPrice, bidStatus, bidId}) => {
         var profileLink = "http://localhost:3000/profile/" + bidOwner;
@@ -49,15 +37,14 @@ const BidTable = ({value}) => {
         <tr> 
             <td> <a href={profileLink}> {bidOwner} </a> </td>
             <td> {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)} </td>
-            <td> {formatDate(bidExpiry)} @ {formatTime(bidExpiry)} </td>
             <td> ${bidPrice} </td> 
             <td> 
                 {
-                    new Date(bidExpiry).getTime() < Date.now() 
+                    bidStatus === "WINNER"
+                    ? <button type="button" className="btn btn-success" disabled> Winner </button>
+                    : new Date(value.deadline).getTime() < Date.now() 
                         ? <button type="button" className="btn btn-secondary" disabled> expired </button>
-                        : bidStatus === "ONGOING"
-                            ? <button type="button" className="btn btn-success" disabled> ongoing </button>
-                            : <button type="button" className="btn btn-success" disabled> nothing </button>
+                        : <button type="button" className="btn btn-success" disabled> ongoing </button>
                 }
             </td>
             <td>
@@ -65,19 +52,7 @@ const BidTable = ({value}) => {
                     isUnameLoad 
                     ? <StrawhatSpinner/> 
                     : uname === bidOwner 
-                        ? ( <div>
-                                <Alert
-                                    onConfirmOrDismiss={() => handleDeclarative()}
-                                    show={showDeclarative}
-                                    showCancelButton={true}
-                                    onConfirm={() => handleDeleteClick(bidId, bidPrice)}
-                                    text={'Do you really want to delete?'}
-                                    title={'Confirm Deletion'}
-                                    type={'info'}
-                                />
-                                <button onClick={ () => handleDeclarative()} className="btn btn-danger" > Delete </button> 
-                            </div>
-                        )
+                        ? ( <button type="button" className="btn btn-secondary" disabled> - </button> )
                         : <button type="button" className="btn btn-secondary" disabled> - </button>
                 }
             </td>
@@ -95,7 +70,6 @@ const BidTable = ({value}) => {
                     <tr>
                         <th> Bid Owner </th>
                         <th> Date of Bid </th>
-                        <th> Bid Expiry </th>
                         <th> Price </th>
                         <th> Status </th>
                         <th> Action </th>
@@ -106,7 +80,6 @@ const BidTable = ({value}) => {
                     <BidRow key = {bid.bidId}
                         bidOwner = {bid.bidOwner}
                         bidCreationDate = {bid.createdAt}
-                        bidExpiry = {bid.bidDeadline}
                         bidPrice = {bid.bidPrice}
                         bidStatus = {bid.status}
                         bidId = {bid.bidId}

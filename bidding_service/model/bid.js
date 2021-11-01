@@ -14,11 +14,10 @@ class Bid {
         this.bidPrice = body.bidPrice
         this.createdAt = Date.now();
         this.bidOwner = body.userIdentifier;
-        this.bidDeadline = body.bidDeadline;
     }
 
-    setDelete() {
-        this.status = "DELETED";
+    setWinner() {
+        this.status = "WINNER";
         return this;
     }
 

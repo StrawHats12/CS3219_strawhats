@@ -7,8 +7,9 @@ import {
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import PopUp from "../../components/Bids/BidPopUp";
+import { AddBidForm } from "../../services/bidding-service";
 import BidTable from "../../components/Bids/BidTable";
+import HighestBidCard from "../../components/Bids/HighestBidCard"
 import {
   deleteListing,
   deleteListingImages,
@@ -147,21 +148,43 @@ const ListingsPage = () => {
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
             </Col>
             <Col>
-              <div style={{ whiteSpace: "pre-line" }}>{description}</div>
+              <>
+                <div className="descriptionCard">
+                  <div className="winningBid-card-header"> 
+                    Description 
+                  </div>
+                  <div className="winning-card-main">
+                      <p> {description} </p>
+                  </div>
+                </div>
+              </>
             </Col>
             <Col>
-              {deadline && (
-                <Countdown
-                  date={stringToDate(deadline)}
-                  renderer={countdownRenderer}
-                />
-              )}
               <ListingProfileCard profile={profile} />
+              <br/>
+              <>
+                <div className="deadlineCard">
+                    <div className="deadline-card-header"> 
+                      Deadline 
+                    </div>
+                    <div className="deadline-card-main">
+                      <p>{deadline 
+                        && 
+                        ( <Countdown
+                          date={stringToDate(deadline)}
+                          renderer={countdownRenderer}/>
+                      )}
+                      </p>
+                    </div>
+                </div>
+              </>
+              <br/>
+              <HighestBidCard listingInfo={listing}/>
             </Col>
           </Row>
-          <br />
+          <hr/>
           <Row>
-            <Col xs={2}>
+            <Col>
               {isOwner ? (
                 <div>
                   <h3> Unable to Bid </h3>
@@ -170,7 +193,7 @@ const ListingsPage = () => {
               ) : hasExpired(deadline) ? (
                 <div>
                   <h3> Place Your Bid! </h3>
-                  <PopUp listingInfo={listing} />
+                  <AddBidForm listingInfo={listing}/>
                 </div>
               ) : (
                 <div>
@@ -179,7 +202,10 @@ const ListingsPage = () => {
                 </div>
               )}
             </Col>
-            <Col xs={9}>
+          </Row>
+          <hr/>
+          <Row>
+            <Col>
               {hasExpired(deadline) ? (
                 <div>
                   <h3> Ongoing Bids </h3>
