@@ -11,12 +11,13 @@ const useSocket = ({ id, isLivestreamChat }) => {
   useEffect(() => {
     const newSocket = io.connect(
       isLivestreamChat ? LIVESTREAM_SOCKET_ENDPOINT : MESSAGING_SOCKET_ENDPOINT,
-      { query: { id }, upgrade: false }
+      { path: "/messaging/socket.io", query: { id }, upgrade: false }
     );
+
     setSocket(newSocket);
 
     return () => newSocket.close();
-  }, [id]);
+  }, [id, isLivestreamChat]);
 
   return { socket };
 };
