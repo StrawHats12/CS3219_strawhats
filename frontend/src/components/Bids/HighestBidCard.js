@@ -42,7 +42,7 @@ const HighestBidCard = ({listingInfo}) => {
     }
 
     return (
-        <div>
+        <>
             {
             isLoading || isUnameLoad
             ? <StrawhatSpinner/>
@@ -111,7 +111,7 @@ const HighestBidCard = ({listingInfo}) => {
                 )
                 
             }
-        </div>
+        </>
     );
 }
 
