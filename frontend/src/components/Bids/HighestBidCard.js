@@ -81,7 +81,7 @@ const HighestBidCard = ({listingInfo}) => {
                                         <i className="material-icons"> lens_blur </i>
                                         <a> {bid[0].bidOwner} </a>
                                         <p> Bid Price: ${bid[0].bidPrice} </p>
-                                        <p> Please wait for your seller to contact if you are the winner! </p>
+                                        <a> Please wait for your seller to contact if you are the winner! </a>
                                     </div>
                                 </div>
                                 </>

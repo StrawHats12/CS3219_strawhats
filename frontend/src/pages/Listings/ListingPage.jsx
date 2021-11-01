@@ -150,10 +150,10 @@ const ListingsPage = () => {
             <Col>
               <>
                 <div className="descriptionCard">
-                  <div className="winningBid-card-header"> 
+                  <div className="description-card-header"> 
                     Description 
                   </div>
-                  <div className="winning-card-main">
+                  <div className="description-card-main">
                       <p> {description} </p>
                   </div>
                 </div>
