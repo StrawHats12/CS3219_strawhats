@@ -116,7 +116,7 @@ export default function Conversation({ convo, user }) {
                   isYourMessage={m.sender_id === user.username}
                   sender={m.sender_id === user.username ? user : otherUser}
                   setRef={setRef}
-                  key={m.id}
+                  key={index}
                 />
               );
             })}

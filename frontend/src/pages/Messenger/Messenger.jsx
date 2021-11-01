@@ -62,10 +62,10 @@ export default function Messages() {
           setOpenConvo(newConvo);
         }
       }
-      setIsLoading(false);
     };
-    if (!user) return;
+    if (!user || !isLoading) return;
     fetchConvos();
+    setIsLoading(false);
   }, [user]);
 
   return (
