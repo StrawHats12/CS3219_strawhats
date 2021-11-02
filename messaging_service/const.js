@@ -8,8 +8,7 @@ const CONVERSATIONS_TABLE_NAME = "strawhats_conversations";
 const MESSAGES_TABLE_NAME = "strawhats_messages";
 
 const PORT = process.env.PORT || 8081;
-const SOCKET_PORT = process.env.SOCKET_PORT || 5050;
-const ORIGIN = process.env.ORIGIN || "http://localhost:3000";
+const REDIS_HOST = process.env.REDIS_HOST || "localhost";
 
 module.exports = {
   AWS_REGION,
@@ -19,5 +18,5 @@ module.exports = {
   MESSAGES_TABLE_NAME,
   PORT,
   SOCKET_PORT,
-  ORIGIN,
+  REDIS_HOST,
 };

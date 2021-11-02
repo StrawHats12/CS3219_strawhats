@@ -1,10 +1,12 @@
 const express = require("express");
 const cors = require("cors");
+const { createAdapter } = require("@socket.io/redis-adapter");
+const { createClient } = require("redis");
 
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const { auth, roles } = require("./auth");
-const { PORT } = require("./const");
+const { PORT, REDIS_HOST } = require("./const");
 
 const app = express();
 
@@ -22,6 +24,10 @@ var io = require("socket.io")(server, {
   },
 });
 
+const pubClient = createClient({ host: REDIS_HOST, port: 6379 });
+const subClient = pubClient.duplicate();
+io.adapter(createAdapter(pubClient, subClient));
+
 app.set("socketio", io);
 
 app.get("/", (req, res) => {
@@ -31,30 +37,17 @@ app.get("/", (req, res) => {
 app.use("/conversation", auth(roles.USER), conversationRoute);
 app.use("/message", auth(roles.USER), messageRoute);
 
-// For redis elasticache in the future
-// io.adapter(
-//   redis({
-//     host: "localhost",
-//     port: 6379,
-//   })
-// );
-
 io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
   console.log("Connection with: " + id);
   socket.join(id);
 
   socket.on("send-message", ({ conversation_id, recipients, text }) => {
-    recipients.forEach((recipient) => {
-      // Remove current recipient from list of recipients
-      const newRecipients = recipients.filter((r) => r !== recipient);
-      newRecipients.push(id);
-      socket.broadcast.to(recipient).emit("receive-message", {
-        recipients: newRecipients,
-        sender: id,
-        text,
-        conversation_id,
-      });
+    socket.broadcast.to(conversation_id).emit("receive-message", {
+      recipients,
+      sender: id,
+      text,
+      conversation_id,
     });
   });
 });
