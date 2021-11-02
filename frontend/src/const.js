@@ -22,6 +22,7 @@ const LISTING = {
   DEADLINE: "deadline",
   SELLER_ID: "seller_uid",
   SELLER_SUB: "seller_sub",
+  SELLER_USERNAME: "seller_username",
   IMAGES: "images",
 };
 
