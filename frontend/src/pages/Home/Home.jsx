@@ -1,6 +1,5 @@
 import { Container } from "react-bootstrap";
 import "./Home.css";
-import logo from "./logo192.png";
 import hero from "./hero.png";
 import { useEffect, useState } from "react";
 import { getAllListings } from "../../services/listings-service";
@@ -17,34 +16,34 @@ const Home = () => {
         setIsLoading(false);
         return;
       }
-      
-      setListings(res.slice(0,9));
+
+      setListings(res.slice(0, 9));
       setIsLoading(false);
     });
   }, []);
 
   return (
     <div>
-      <div className="d-flex justify-content-around align-items-center text-white hero">
-        <div>
+      <div className="d-flex justify-content-around align-items-center flex-wrap text-white hero">
+        <div className="d-flex justify-content-center">
+          <img src="/logo192.png" alt="" className="pr"/>
           <div className="d-flex justify-content-left align-items-center">
-            <img src={logo} alt="" style={{ width: "80px" }}></img>
             <div className="mx-2">
               <h1>Strawhats</h1>
               <h3>Auctions made easy.</h3>
+              <ul className="pl-3 mt-3">
+                <li>
+                  <h5>Live Video Streaming</h5>
+                </li>
+                <li>
+                  <h5>Easy to use</h5>
+                </li>
+                <li>
+                  <h5>Free forever</h5>
+                </li>
+              </ul>
             </div>
           </div>
-          <ul className="pl-7 mt-3">
-            <li>
-              <h5>Live Video Streaming</h5>
-            </li>
-            <li>
-              <h5>Easy to use</h5>
-            </li>
-            <li>
-              <h5>Free forever</h5>
-            </li>
-          </ul>
         </div>
         <img src={hero} alt="" className="hero-img" />
       </div>
