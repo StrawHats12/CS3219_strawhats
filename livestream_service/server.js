@@ -261,7 +261,6 @@ app.delete("/destroy/:id", /*auth(roles.USER),*/ async (req, res) => {
   const streamerId = req.params.id;
   let existing_item = await getKeysByStreamerId(streamerId);
   const livestreamId = existing_item.Item.live_stream_id
-  // const livestreamId = streamIds[streamerId].id;
   console.log(`streamerId ${streamerId}'s livestream id ${livestreamId} needs to be deleted`);
 
   // if (req.user.username !== streamerId) {

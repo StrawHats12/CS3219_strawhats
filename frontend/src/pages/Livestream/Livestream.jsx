@@ -2,9 +2,14 @@ import {useParams} from "react-router";
 import {StreamerControlPanel, ViewerControlPanel} from "../../components/Livestream";
 import useAuth from "../../hooks/useAuth";
 
-const Livestream = () => {
+const Livestream = (props) => {
   const pageTitle = "Livestream";
-  const {streamerId} = useParams();
+  // const {streamerId} = useParams();
+
+  let params = useParams();
+  let streamerId = props.streamerId || params.streamerId;
+  console.log("XXX streamerID:", streamerId);
+
   const {currentUser} = useAuth();
 
   return currentUser?.username === streamerId ? (
