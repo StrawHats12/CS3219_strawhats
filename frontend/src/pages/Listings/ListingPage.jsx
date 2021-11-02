@@ -6,7 +6,7 @@ import {
   ListingsCarousel,
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
-import { getCurrentUser } from "../../hooks/useAuth";
+import useAuth, { getCurrentUser } from "../../hooks/useAuth";
 import BidTable from "../../components/Bids/BidTable";
 import HighestBidCard from "../../components/Bids/HighestBidCard";
 import {
@@ -18,6 +18,7 @@ import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 import AddBidForm from "../../components/Bids/AddBidForm";
+import Livestream from "../Livestream";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -27,6 +28,9 @@ const ListingsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showStreamModal, setShowStreamModal] = useState(false);
+  const [isStreamActive, setIsStreamActive] = useState(false);
+
   const {
     listing_name,
     description,
@@ -38,6 +42,8 @@ const ListingsPage = () => {
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseStreamModal = () => setShowStreamModal(false);
+  const handleShowStreamModal = () => setShowStreamModal(true);
   const handleDelete = async () => {
     setIsLoading(true);
     try {
@@ -93,6 +99,7 @@ const ListingsPage = () => {
         return;
       }
 
+
       checkOwner(res.seller_sub);
       setListing(res);
       getAccount(seller_username)
@@ -108,8 +115,31 @@ const ListingsPage = () => {
     });
   }, [id, seller_username]);
 
+
+  let streamEntry = seller_username && <>
+    <Button onClick={handleShowStreamModal}>Click to Watch {seller_username}'s Stream
+    </Button>
+  </>
+
+  let streamViewModal = seller_username && <>
+    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>{seller_username}'s Stream</Modal.Title>
+      </Modal.Header>
+      <Livestream streamerId={seller_username}/>
+
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseStreamModal}>
+          Back
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  </>
+
+
   return (
     <>
+      {streamViewModal}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Listing</Modal.Title>
@@ -193,6 +223,7 @@ const ListingsPage = () => {
               <div>
                 <HighestBidCard listingInfo={listing} />
               </div>
+              { streamEntry}
             </Col>
           </Row>
           <hr />

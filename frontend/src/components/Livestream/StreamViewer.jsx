@@ -11,7 +11,7 @@ const StreamViewer = (props) => {
       ? playbackIds[0].id
       : null
   const playbackUrl = isTestingFlag
-    ? "https://www.youtube.com/watch?v=qmN1Gf8rRc8"
+    ? "https://www.youtube.com/watch?v=dEBwXKx0Hbk&t=4079s"
     : LIVESTREAM.PLAYBACK_BASE_URL + playbackId + ".m3u8";
   const videoPlayer = (
     <div className="stream-viewer-wrapper">

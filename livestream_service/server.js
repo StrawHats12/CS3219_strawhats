@@ -156,9 +156,29 @@ app.get("/fetchStream/:id", async (req, res) => {
   console.log("trying to fetch stream details for id:", id);
   console.log("streams id is now:", streamIds);
   const item = await getKeysByStreamerId(id)
+  console.log("item.Item:", item.Item)
   return res.json(item.Item);
   // return res.json(getPrivateStreamDetails(id));
 });
+
+// function getPublicStreamDetails(Item) {
+//   const publicItem = {
+//     streamer_id:
+//   }
+// }
+
+app.get("/fetchPublicStream/:id", async (req, res) => {
+  const id = req.params.id.toString();
+  console.log("trying to fetch stream details for id:", id);
+  console.log("streams id is now:", streamIds);
+  const item = await getKeysByStreamerId(id)
+  const publicInfo = {
+    streamer_id:item.Item.streamer_id,
+    playback_ids:item.Item.playback_ids
+  }
+  return res.json(publicInfo);
+});
+
 
 // API which Listens for callbacks from Mux
 // app.post("/mux-hook", auth, function (req, res) {
@@ -241,7 +261,6 @@ app.delete("/destroy/:id", /*auth(roles.USER),*/ async (req, res) => {
   const streamerId = req.params.id;
   let existing_item = await getKeysByStreamerId(streamerId);
   const livestreamId = existing_item.Item.live_stream_id
-  // const livestreamId = streamIds[streamerId].id;
   console.log(`streamerId ${streamerId}'s livestream id ${livestreamId} needs to be deleted`);
 
   // if (req.user.username !== streamerId) {

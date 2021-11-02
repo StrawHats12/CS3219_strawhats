@@ -3,6 +3,7 @@ import { Container } from "react-bootstrap";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getOwnListings } from "../../services/listings-service";
 import { ListingsCard } from "../../components/Listings";
+import Livestream from "../Livestream";
 
 const MyListingsPage = () => {
   const pageTitle = "My Listings";
@@ -15,7 +16,6 @@ const MyListingsPage = () => {
         setIsLoading(false);
         return;
       }
-
       setListings(res);
       setIsLoading(false);
     });
@@ -23,6 +23,7 @@ const MyListingsPage = () => {
 
   return (
     <>
+      <Livestream/>
       <h1>{pageTitle} Page</h1>
       <Container className="mx-0 px-0">
         {isLoading ? (
