@@ -129,14 +129,16 @@ const ListingsPage = () => {
         <Container fluid>
           <h1>{listing_name}</h1>
           {isOwner && (
-            <>
-              <Button className="m-1" onClick={handleEdit}>
-                Edit
-              </Button>
-              <Button className="m-1" onClick={handleShowDeleteModal}>
-                Delete
-              </Button>
-            </>
+            hasExpired(deadline) ? (
+              <>
+                <Button className="m-1" onClick={handleEdit}>
+                  Edit
+                </Button>
+                <Button className="m-1" onClick={handleShowDeleteModal}>
+                  Delete
+                </Button>
+              </>
+            ) : <p> Listing cannot be edited after expiry. </p>
           )}
           {!isOwner && (
             <Button className="m-1" onClick={redirectToChat}>
