@@ -9,7 +9,7 @@ import { StreamViewer } from "./index";
 import { MESSAGES } from "../../const";
 
 // todo: change to stream controls element which can create, delete streams
-const StreamControlPanel = (props) => {
+const StreamerControlPanel = (props) => {
   const { streamerId } = props;
   const [livestreamId, setLivestreamId] = useState(undefined);
   const [playbackIds, setPlaybackIds] = useState([]);
@@ -120,4 +120,4 @@ const StreamControlPanel = (props) => {
     </>
   );
 };
-export default StreamControlPanel;
+export default StreamerControlPanel;
