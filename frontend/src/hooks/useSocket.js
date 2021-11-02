@@ -3,14 +3,24 @@ import io from "socket.io-client";
 import {
   MESSAGING_SOCKET_ENDPOINT,
   LIVESTREAM_SOCKET_ENDPOINT,
+  BIDDING_ENDPOINT
 } from "../const";
 
-const useSocket = ({ id, isLivestreamChat }) => {
+const useSocket = ({ id, serviceDeterminant }) => {
   const [socket, setSocket] = useState();
 
   useEffect(() => {
-    const newSocket = io.connect(
-      isLivestreamChat ? LIVESTREAM_SOCKET_ENDPOINT : MESSAGING_SOCKET_ENDPOINT,
+    var serviceEndpoint = "";
+
+    if (serviceDeterminant === "LIVESTREAM") {
+      serviceEndpoint = LIVESTREAM_SOCKET_ENDPOINT;
+    } else if (serviceDeterminant === "MESSAGE") {
+      serviceEndpoint = MESSAGING_SOCKET_ENDPOINT;
+    } else if (serviceDeterminant === "BIDDING") {
+      serviceEndpoint = BIDDING_ENDPOINT
+    }
+
+    const newSocket = io.connect(serviceEndpoint,
       { query: { id } }
     );
     setSocket(newSocket);

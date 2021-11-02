@@ -2,9 +2,9 @@ import React, {useEffect, useState} from "react";
 import { getWinningBid } from "../../services/bidding-service";
 import StrawhatSpinner from "../StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { BIDDING_ENDPOINT } from "../../const";
 import Alert from './Alert';
 import {updateWinnerBid} from "../../services/bidding-service"
+import useSocket from "../../hooks/useSocket";
 
 const HighestBidCard = ({listingInfo}) => {
     const listingId = listingInfo.id;
@@ -37,8 +37,8 @@ const HighestBidCard = ({listingInfo}) => {
         })
     }, []);
 
-    async function handleClick(bidId, bidPrice) {
-        return updateWinnerBid(bidId, bidPrice);
+    async function handleClick(listingId, bidPrice) {
+        return updateWinnerBid(listingId, bidPrice);
     }
 
     return (
@@ -46,7 +46,7 @@ const HighestBidCard = ({listingInfo}) => {
             {
             isLoading || isUnameLoad
             ? <StrawhatSpinner/>
-            : bid[0] != undefined 
+            :  bid === null || bid[0] !== undefined 
                 ? new Date(listingInfo.deadline).getTime() < Date.now() 
                     ? listingInfo.seller_sub === uname
                         ?
@@ -56,12 +56,13 @@ const HighestBidCard = ({listingInfo}) => {
                                     onConfirmOrDismiss={() => handleDeclarative()}
                                     show={showDeclarative}
                                     showCancelButton={true}
-                                    onConfirm={() => handleClick(bid[0].bidId, bid[0].bidPrice)}
+                                    onConfirm={() => handleClick(bid[0].listingId, bid[0].bidPrice)}
                                     title={"Set the winner?"}
                                     text={"Do remember to contact your winner!"}
                                     type={'info'}
                                 />
-                                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
+                                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+                                <div className="winningBidCard">
                                 <div className="winningBid-card-header"> Winning Bid </div>
                                     <div className="winning-card-main">
                                         <i className="material-icons"> lens_blur </i>
@@ -75,7 +76,8 @@ const HighestBidCard = ({listingInfo}) => {
                             :
                             ( // Winner is available and not owner of listing
                                 <>
-                                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
+                                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+                                <div className="winningBidCard">
                                 <div className="winningBid-card-header"> Winning Bid </div>
                                     <div className="winning-card-main">
                                         <i className="material-icons"> lens_blur </i>
@@ -88,7 +90,8 @@ const HighestBidCard = ({listingInfo}) => {
                             ) 
                     : ( // Winner is available and unexpired listing
                         <>
-                        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
+                        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+                        <div className="winningBidCard">
                         <div className="winningBid-card-header"> Leading Bid </div>
                             <div className="winning-card-main">
                                 <i className="material-icons"> lens_blur </i>
@@ -100,7 +103,8 @@ const HighestBidCard = ({listingInfo}) => {
                     )
                 : ( // No winner is available and expired listing
                     <>
-                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" /><div className="winningBidCard">
+                    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+                    <div className="winningBidCard">
                     <div className="winningBid-card-header"> Winning Bid </div>
                         <div className="winning-card-main">
                             <i className="material-icons"> lens_blur </i>

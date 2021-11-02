@@ -64,11 +64,11 @@ const getAccountBids = async (uname) => {
   }
 };
 
-const deleteBid = async (bidId, bidPrice) => {
+const deleteBid = async (listingId, bidPrice) => {
   try {
     const userSession = await getCurrentSession();
     const token = userSession?.accessToken.jwtToken;
-    await axios.delete(`${BIDDING_ENDPOINT}/deleteBid/${bidId}/${bidPrice}`, {
+    await axios.delete(`${BIDDING_ENDPOINT}/deleteBid/${listingId}/${bidPrice}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -79,11 +79,11 @@ const deleteBid = async (bidId, bidPrice) => {
   }
 };
 
-const updateWinnerBid = async (bidId, bidPrice) => {
+const updateWinnerBid = async (listingId, bidPrice) => {
     try {
         const userSession = await getCurrentSession();
         const token = userSession?.accessToken.jwtToken;
-        await axios.put(`${BIDDING_ENDPOINT}/updateWinnerBid/${bidId}/${bidPrice}`, {
+        await axios.put(`${BIDDING_ENDPOINT}/updateWinnerBid/${listingId}/${bidPrice}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -114,7 +114,7 @@ const AddBidForm = ({listingInfo}) => {
         };
     });
     }
-    console.log(BIDDING_ENDPOINT);
+
     async function handleClick() {
         try {
           const userSession = await getCurrentSession();
@@ -125,7 +125,6 @@ const AddBidForm = ({listingInfo}) => {
             userIdentifier: currentUser.username,
             bidPrice: input.bidPrice,
             auctionId: listingInfo.bidding_id,
-            // bidDeadline: input.bidDeadline,
             status: "ONGOING",
           };
           await axios.post(`${BIDDING_ENDPOINT}/addBid`, newBid, {

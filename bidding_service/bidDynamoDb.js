@@ -28,41 +28,41 @@ const addBidding = async (bid) => {
 const getWinningBid = async (listingId) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
-        FilterExpression: 'contains(#listingId, :listingId)',
+        KeyConditionExpression: '#listingId = :listingId',
         ExpressionAttributeNames: {
             '#listingId' : 'listingId'
         },
         ExpressionAttributeValues: {
             ':listingId' : listingId
         },
-        Limit: 1
-        // ScanIndexFoward: "true"
+        Limit: 1,
+        ScanIndexForward: false
     }
-    return dynamoClient.scan(params).promise();
+    return dynamoClient.query(params).promise();
 }
 
 // GET BID BY LISTING ID
 const getListingBids = async (listingId) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
-        FilterExpression: 'contains(#listingId, :listingId)',
+        KeyConditionExpression: '#listingId = :listingId',
         ExpressionAttributeNames: {
             '#listingId' : 'listingId'
         },
         ExpressionAttributeValues: {
             ':listingId' : listingId
         },
-        // ScanIndexFoward: "true"
+        ScanIndexForward: false
     }
-    return dynamoClient.scan(params).promise();
+    return dynamoClient.query(params).promise();
 }
 
 // DELETE BID BY BIDDING ID
-const deleteBid = async (bidId, bidPrice) => {
+const deleteBid = async (listingId, bidPrice) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
         Key: {
-           "bidId": bidId,
+           "listingId": listingId,
            "bidPrice": bidPrice
         }
     };
@@ -85,11 +85,11 @@ const getAccountBids = async (uname) => {
 }
 
 // UPDATE WINNER BID
-const updateWinnerBid = async (bidId, bidPrice) => {
+const updateWinnerBid = async (listingId, bidPrice) => {
      const params = {
         TableName: BIDDINGS_TABLE_NAME,
         Key: { 
-            bidId: bidId, 
+            listingId: listingId, 
             bidPrice: bidPrice 
         },
         UpdateExpression: 'set #status = :status',
