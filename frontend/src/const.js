@@ -1,11 +1,18 @@
+const DEPLOYED = !!process.env.REACT_APP_DEPLOYED;
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const MESSAGING_URL = BACKEND_URL && `${BACKEND_URL}/messaging`;
-const LISTINGS_ENDPOINT = BACKEND_URL || "http://localhost:8080";
-const ACCOUNTS_ENDPOINT = BACKEND_URL || "http://localhost:8090";
-const MESSAGING_ENDPOINT = MESSAGING_URL || "http://localhost:8081";
-const MESSAGING_SOCKET_ENDPOINT = MESSAGING_URL || "http://localhost:8081";
-const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:7070";
-const BIDDING_ENDPOINT = `${BACKEND_URL}/bid` || "http://localhost:2001/bid";
+const LISTINGS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8080";
+const ACCOUNTS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8090";
+const MESSAGING_ENDPOINT = DEPLOYED ? MESSAGING_URL : "http://localhost:8081";
+const MESSAGING_SOCKET_ENDPOINT = DEPLOYED
+  ? BACKEND_URL
+  : "http://localhost:8081";
+const LIVESTREAM_SOCKET_ENDPOINT = DEPLOYED
+  ? BACKEND_URL
+  : "http://localhost:7070";
+const BIDDING_ENDPOINT = DEPLOYED
+  ? `${BACKEND_URL}/bid`
+  : "http://localhost:2001/bid";
 
 const LISTING = {
   ID: "id",
@@ -37,6 +44,7 @@ const MESSAGES = {
 };
 
 export {
+  DEPLOYED,
   ACCOUNTS_ENDPOINT,
   LISTING,
   LIVESTREAM,
