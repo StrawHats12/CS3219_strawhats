@@ -42,6 +42,15 @@
   }
 }
 
+.sign-out-container {
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+
 /* BID TABLE STYLING */
 .styled-table {
   border-collapse: collapse;
@@ -174,7 +183,7 @@
 
 .material-icons {
   font-size: 52px;
-  color: green;
+  color: black;
   margin-bottom: 5px;
 }
 
