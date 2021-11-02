@@ -75,8 +75,7 @@ export default function Conversation({ convo, user }) {
 
   const addMessageToConversation = useCallback(
     (msg) => {
-      if (msg.conversation_id !== convo.id || msg.sender_id === user.username)
-        return;
+      if (msg.conversation_id !== convo.id) return;
       setMessages([...messages, msg]);
     },
     [convo.id, messages]

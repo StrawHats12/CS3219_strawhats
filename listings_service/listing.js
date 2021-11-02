@@ -3,6 +3,8 @@ const STATUS_ENUM = ["AVAILABLE", "SOLD"];
 class Listing {
   id;
   seller_uid;
+  seller_sub;
+  seller_username;
   listing_name;
   description;
   images;
@@ -15,6 +17,7 @@ class Listing {
   constructor(body) {
     this.seller_uid = body.seller_uid; // Cognito identity pool "identityID"
     this.seller_sub = body.seller_sub; // Cognito identity pool "sub" attribute
+    this.seller_username = body.seller_username;
     this.listing_name = body.listing_name;
     this.description = body.description;
     this.images = body.images || [];

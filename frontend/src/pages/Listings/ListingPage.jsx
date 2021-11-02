@@ -7,7 +7,6 @@ import {
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import { AddBidForm } from "../../services/bidding-service";
 import BidTable from "../../components/Bids/BidTable";
 import HighestBidCard from "../../components/Bids/HighestBidCard"
 import {
@@ -18,6 +17,7 @@ import {
 import { getAccountById } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
+import AddBidForm from "../../components/Bids/AddBidForm";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -129,14 +129,16 @@ const ListingsPage = () => {
         <Container fluid>
           <h1>{listing_name}</h1>
           {isOwner && (
-            <>
-              <Button className="m-1" onClick={handleEdit}>
-                Edit
-              </Button>
-              <Button className="m-1" onClick={handleShowDeleteModal}>
-                Delete
-              </Button>
-            </>
+            hasExpired(deadline) ? (
+              <>
+                <Button className="m-1" onClick={handleEdit}>
+                  Edit
+                </Button>
+                <Button className="m-1" onClick={handleShowDeleteModal}>
+                  Delete
+                </Button>
+              </>
+            ) : <p> Listing cannot be edited after expiry. </p>
           )}
           {!isOwner && (
             <Button className="m-1" onClick={redirectToChat}>
