@@ -76,25 +76,110 @@
   border-bottom: 2px solid #009879;
 }
 
-/* Pop up */
-
-.popup {
-  position: fixed;
-  width: 100%;
+.descriptionCard {
+  border: 1px solid #009879;    /* Set up Border */
+  border-radius: 6px;           /* Slightly Curve edges */
+  overflow: hidden;             /* Fixes the corners */
+  display: flex;                /* Children use Flexbox */
+  flex-direction: column;       /* Rotate Axis */
   height: 100%;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  background-color: rgba(0,0,0, 0.5);
 }
-.popup_inner {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
-  margin: auto;
-  background: white;
+
+.card-header {
+  width: 100%;
+}
+.description-card-header {
+  color: white;
+  text-align: center;
+  /* font-size: 12px; */
+  font-weight: 600;
+  border-bottom: 1px solid #009879;
+  background-color:#009879;
+  padding: 5px 10px;
+}
+
+.row-no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.description-card-main {
+  display: flex;              /* Children use Flexbox */
+  flex-direction: column;     /* Rotate Axis to Vertical */
+  justify-content: center;    /* Group Children in Center */
+  align-items: center;        /* Group Children in Center (+axis) */
+  padding: 15px 0;            /* Add padding to the top/bottom */
+}
+
+.row {
+  padding: 0 0;
+  margin: 0 0;
+}
+
+.deadlineCard {
+  border: 1px solid #CC3333;    /* Set up Border */
+  border-radius: 6px;           /* Slightly Curve edges */
+  overflow: hidden;             /* Fixes the corners */
+  display: flex;                /* Children use Flexbox */
+  flex-direction: column;       /* Rotate Axis */
+  height: 100%;
+}
+
+.deadline-card-header {
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid #CC3333;
+  background-color:#CC3333;
+  padding: 5px 10px;
+  margin: 0;
+  width: 100%;
+  
+}
+
+.deadline-card-main {
+  display: flex;              /* Children use Flexbox */
+  flex-direction: column;     /* Rotate Axis to Vertical */
+  justify-content: center;    /* Group Children in Center */
+  align-items: center;        /* Group Children in Center (+axis) */
+  padding: 15px 0;            /* Add padding to the top/bottom */
+  font-size: 15px;
+}
+
+/* Bid Card */
+.winningBidCard {
+  border: 1px solid #009879;    /* Set up Border */
+  border-radius: 6px;           /* Slightly Curve edges */
+  overflow: hidden;             /* Fixes the corners */
+  display: flex;                /* Children use Flexbox */
+  flex-direction: column;       /* Rotate Axis */
+}
+
+.winningBid-card-header {
+  color: white;
+  text-align: center;
+  font-weight: 600;
+  border-bottom: 1px solid #009879;
+  background-color:#009879;
+  padding: 5px 10px;
+}
+
+.winning-card-main {
+  display: flex;              /* Children use Flexbox */
+  flex-direction: column;     /* Rotate Axis to Vertical */
+  justify-content: center;    /* Group Children in Center */
+  align-items: center;        /* Group Children in Center (+axis) */
+  padding: 15px 0;            /* Add padding to the top/bottom */
+}
+
+.material-icons {
+  font-size: 52px;
+  color: green;
+  margin-bottom: 5px;
+}
+
+.main-description {
+  color: black;
+  font-size: 12px;
+  text-align: center;
 }

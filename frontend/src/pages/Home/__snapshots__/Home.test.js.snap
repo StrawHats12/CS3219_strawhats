@@ -3,21 +3,19 @@
 exports[`Home page renders correctly 1`] = `
 <div>
   <div
-    className="d-flex justify-content-around align-items-center text-white hero"
+    className="d-flex justify-content-around align-items-center flex-wrap text-white hero"
   >
-    <div>
+    <div
+      className="d-flex justify-content-center"
+    >
+      <img
+        alt=""
+        className="pr"
+        src="/logo192.png"
+      />
       <div
         className="d-flex justify-content-left align-items-center"
       >
-        <img
-          alt=""
-          src="logo192.png"
-          style={
-            Object {
-              "width": "80px",
-            }
-          }
-        />
         <div
           className="mx-2"
         >
@@ -27,27 +25,27 @@ exports[`Home page renders correctly 1`] = `
           <h3>
             Auctions made easy.
           </h3>
+          <ul
+            className="pl-3 mt-3"
+          >
+            <li>
+              <h5>
+                Live Video Streaming
+              </h5>
+            </li>
+            <li>
+              <h5>
+                Easy to use
+              </h5>
+            </li>
+            <li>
+              <h5>
+                Free forever
+              </h5>
+            </li>
+          </ul>
         </div>
       </div>
-      <ul
-        className="pl-7 mt-3"
-      >
-        <li>
-          <h5>
-            Live Video Streaming
-          </h5>
-        </li>
-        <li>
-          <h5>
-            Easy to use
-          </h5>
-        </li>
-        <li>
-          <h5>
-            Free forever
-          </h5>
-        </li>
-      </ul>
     </div>
     <img
       alt=""

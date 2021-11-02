@@ -3,11 +3,12 @@ const {
     addBidding,
     getListingBids,
     deleteBid,
-    getAccountBids
+    getAccountBids,
+    getWinningBid,
+    updateWinnerBid
 } = require("../bidDynamoDb");
 
 exports.addBid = async function (req, res) {
-    console.log(req.body);
     const newBid = new Bid(req.body);
     try {
         const addNewBidding = await addBidding(newBid);
@@ -19,11 +20,22 @@ exports.addBid = async function (req, res) {
     }
 }
 
+exports.getWinningBid = async function (req, res) {
+    const listingId = req.params.listingId;
+    try {
+        const winningBid = await getWinningBid(listingId);
+        res.json(winningBid);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: "Cannot retrieve listing's bid."});
+    }
+}
+
 exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
-        listBids.Items = listBids.Items.reverse();
+        console.log(listBids);
         res.json(listBids);
     } catch (err) {
         console.log(err);
@@ -51,5 +63,18 @@ exports.getAccountBids = async function (req, res) {
     } catch (err) {
         console.log(err);
         res.status(500).json({ err: "Cannot retrieve account's bid."});
+    }
+}
+
+exports.updateWinnerBid = async function (req, res) {
+    const bidId = req.params.bidId;
+    const bidPrice = req.params.bidPrice
+    try {
+        const winningBid = await updateWinnerBid(bidId, bidPrice);
+        console.log(winningBid);
+        res.json(winningBid);
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ err: "Cannot update winner bid"});
     }
 }

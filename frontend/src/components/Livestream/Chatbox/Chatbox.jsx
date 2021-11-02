@@ -7,7 +7,7 @@ import ChatboxMessage from "./ChatboxMessage";
 import "./Chatbox.css";
 
 export default function Chatbox({ livestreamId }) {
-  const { socket } = useSocket({ id: livestreamId, isLivestreamChat: true });
+  const { socket } = useSocket({ id: livestreamId, serviceDeterminant: "LIVESTREAM" });
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
   const [curUsername, setCurUsername] = useState("");

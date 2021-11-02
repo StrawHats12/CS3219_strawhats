@@ -24,28 +24,45 @@ const addBidding = async (bid) => {
     return bid;
 }
 
-// GET BID BY LISTING ID
-const getListingBids = async (listingId) => {
+// GET WINNING BID BY LISTING ID
+const getWinningBid = async (listingId) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
-        FilterExpression: 'contains(#listingId, :listingId)',
+        KeyConditionExpression: '#listingId = :listingId',
         ExpressionAttributeNames: {
             '#listingId' : 'listingId'
         },
         ExpressionAttributeValues: {
             ':listingId' : listingId
         },
-        // ScanIndexFoward: "true"
+        Limit: 1,
+        ScanIndexForward: false
     }
-    return dynamoClient.scan(params).promise();
+    return dynamoClient.query(params).promise();
+}
+
+// GET BID BY LISTING ID
+const getListingBids = async (listingId) => {
+    const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        KeyConditionExpression: '#listingId = :listingId',
+        ExpressionAttributeNames: {
+            '#listingId' : 'listingId'
+        },
+        ExpressionAttributeValues: {
+            ':listingId' : listingId
+        },
+        ScanIndexForward: false
+    }
+    return dynamoClient.query(params).promise();
 }
 
 // DELETE BID BY BIDDING ID
-const deleteBid = async (bidId, bidPrice) => {
+const deleteBid = async (listingId, bidPrice) => {
     const params = {
         TableName: BIDDINGS_TABLE_NAME,
         Key: {
-           "bidId": bidId,
+           "listingId": listingId,
            "bidPrice": bidPrice
         }
     };
@@ -67,11 +84,31 @@ const getAccountBids = async (uname) => {
     return dynamoClient.scan(params).promise();
 }
 
+// UPDATE WINNER BID
+const updateWinnerBid = async (listingId, bidPrice) => {
+     const params = {
+        TableName: BIDDINGS_TABLE_NAME,
+        Key: { 
+            listingId: listingId, 
+            bidPrice: bidPrice 
+        },
+        UpdateExpression: 'set #status = :status',
+        ExpressionAttributeNames: {
+            '#status' : 'status'
+        },
+        ExpressionAttributeValues: {
+            ':status' : "WINNER"
+        },
+    };
+    return dynamoClient.update(params).promise();
+}
 
 module.exports = {
     dynamoClient,
     addBidding,
     getListingBids,
     deleteBid,
-    getAccountBids
+    getAccountBids,
+    getWinningBid,
+    updateWinnerBid
 };

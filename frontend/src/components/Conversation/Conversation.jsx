@@ -16,7 +16,7 @@ import Message from "./Message";
 import "./Conversation.css";
 
 export default function Conversation({ convo, user }) {
-  const { socket } = useSocket({ id: user.username });
+  const { socket } = useSocket({ id: convo.id, serviceDeterminant: "MESSAGE" });
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -75,7 +75,8 @@ export default function Conversation({ convo, user }) {
 
   const addMessageToConversation = useCallback(
     (msg) => {
-      if (msg.conversation_id !== convo.id) return;
+      if (msg.conversation_id !== convo.id || msg.sender_id === user.username)
+        return;
       setMessages([...messages, msg]);
     },
     [convo.id, messages]
@@ -116,7 +117,7 @@ export default function Conversation({ convo, user }) {
                   isYourMessage={m.sender_id === user.username}
                   sender={m.sender_id === user.username ? user : otherUser}
                   setRef={setRef}
-                  key={m.id}
+                  key={index}
                 />
               );
             })}
