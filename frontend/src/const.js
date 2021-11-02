@@ -30,6 +30,7 @@ const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
   CREATE_STREAM_URL: "http://localhost:9000/create",
   FETCH_STREAM_PRIVATE_DETAILS_URL: "http://localhost:9000/fetchStream/",
+  FETCH_STREAM_PUBLIC_DETAILS_URL: "http://localhost:9000/fetchPublicStream/",
   DESTORY_STREAM_BASE_URL: "http://localhost:9000/destroy/",
   STREAM_PRODUCER_ENDPOINT: "rtmp://global-live.mux.com:5222/app",
 };

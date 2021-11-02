@@ -75,15 +75,11 @@ const fetchPrivateStreamDetails = async (streamerId) => {
 
 const fetchPublicStreamDetails = async (streamerId) => {
   console.log("fetch public stream details for", streamerId);
-  const fetchUrl = LIVESTREAM.FETCH_STREAM_PRIVATE_DETAILS_URL + streamerId;
+  const fetchUrl = LIVESTREAM.FETCH_STREAM_PUBLIC_DETAILS_URL + streamerId;
   let response = await axios
       .get(fetchUrl)
       .then((r) => {
-        const publicData = {
-          streamer_id:r.data.streamer_id,
-          playback_ids:r.data.playback_ids
-        }
-        r.data = publicData
+        console.log("PUBLIC DATA: ", r.data)
         return r;
       })
       .catch((e) => {
