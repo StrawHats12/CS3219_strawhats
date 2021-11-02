@@ -42,12 +42,15 @@ io.on("connection", (socket) => {
   console.log("Connection with: " + id);
   socket.join(id);
 
-  socket.on("send-message", ({ conversation_id, recipients, text }) => {
-    socket.broadcast.to(conversation_id).emit("receive-message", {
-      recipients,
-      sender: id,
-      text,
-      conversation_id,
-    });
-  });
+  socket.on(
+    "send-message",
+    ({ conversation_id, recipients, text, sender_id }) => {
+      socket.broadcast.to(conversation_id).emit("receive-message", {
+        recipients,
+        sender_id,
+        text,
+        conversation_id,
+      });
+    }
+  );
 });
