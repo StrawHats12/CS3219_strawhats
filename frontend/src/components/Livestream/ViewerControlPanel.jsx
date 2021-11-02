@@ -1,4 +1,4 @@
-import {destroyStream, fetchPrivateStreamDetails, generateStream,} from "../../services/livestream-service";
+import {destroyStream, fetchPrivateStreamDetails, fetchPublicStreamDetails, generateStream,} from "../../services/livestream-service";
 import {Container} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {StreamViewer} from "./index";
@@ -21,12 +21,11 @@ const ViewerControlPanel = (props) => {
 
   // attempt to fetch private stream details from the backend:
   useEffect(() => {
-    // todo: lift state up to the livestream page itself
-    fetchPrivateStreamDetails(streamerId).then((response) => {
+    fetchPublicStreamDetails(streamerId).then((response) => {
       if (response) {
         const {playback_ids} = response;
         setPlaybackIds(playback_ids);
-        console.log("synced w backend, playback ids: ", playback_ids);
+        console.log("synced public data w backend, playback ids: ", playback_ids);
       }
     });
   }, [streamerId]);

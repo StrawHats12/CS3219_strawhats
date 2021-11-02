@@ -56,9 +56,6 @@ const destroyStream = async (streamerId) => {
 
 const fetchPrivateStreamDetails = async (streamerId) => {
   console.log("fetch Private stream details for", streamerId);
-  // const payload = {
-  // id: streamerId.toString(),
-  // };
   const fetchUrl = LIVESTREAM.FETCH_STREAM_PRIVATE_DETAILS_URL + streamerId;
   let response = await axios
       .get(fetchUrl)
@@ -76,4 +73,26 @@ const fetchPrivateStreamDetails = async (streamerId) => {
   return response?.data;
 };
 
-export {generateStream, destroyStream, fetchPrivateStreamDetails};
+const fetchPublicStreamDetails = async (streamerId) => {
+  console.log("fetch public stream details for", streamerId);
+  const fetchUrl = LIVESTREAM.FETCH_STREAM_PRIVATE_DETAILS_URL + streamerId;
+  let response = await axios
+      .get(fetchUrl)
+      .then((r) => {
+        const publicData = {
+          streamer_id:r.data.streamer_id,
+          playback_ids:r.data.playback_ids
+        }
+        r.data = publicData
+        return r;
+      })
+      .catch((e) => {
+        console.error("some error trying to fetch public stream details:", e);
+      });
+  console.log("fetched these details from backend:", response);
+  return response?.data;
+};
+
+
+
+export {generateStream, destroyStream, fetchPrivateStreamDetails, fetchPublicStreamDetails};

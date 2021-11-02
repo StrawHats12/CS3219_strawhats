@@ -4,7 +4,6 @@ import useAuth from "../../hooks/useAuth";
 
 const Livestream = () => {
   const pageTitle = "Livestream";
-  // todo: streamerId shall be passed as props instead
   const {streamerId} = useParams();
   const {currentUser} = useAuth();
 
