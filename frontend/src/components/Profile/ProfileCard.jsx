@@ -30,10 +30,6 @@ const ProfileCard = (props) => {
       newErrors.name = "cannot be blank!";
     }
 
-    if (!profile.about) {
-      newErrors.about = "cannot be blank!";
-    }
-
     return newErrors;
   };
 
