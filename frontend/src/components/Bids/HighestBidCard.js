@@ -4,10 +4,11 @@ import StrawhatSpinner from "../StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import Alert from './Alert';
 import {updateWinnerBid} from "../../services/bidding-service"
-import useSocket from "../../hooks/useSocket";
+import { useHistory } from "react-router";
 
 const HighestBidCard = ({listingInfo}) => {
     const listingId = listingInfo.id;
+    const history = useHistory();
     const [bid, setBid] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [uname, setUname] = useState(null);
@@ -17,6 +18,14 @@ const HighestBidCard = ({listingInfo}) => {
     const handleDeclarative = () => {
         setShowDeclarative(!showDeclarative);
     }
+
+    const redirectToChat = async (bidOwner) => {
+        if (bidOwner) {
+          history.push(`/messenger/?user=${bidOwner}`);
+        } else {
+          alert("User profile not found.");
+        }
+      };
 
     useEffect( () => {
         getCurrentUser().then((res) => {
@@ -68,7 +77,10 @@ const HighestBidCard = ({listingInfo}) => {
                                         <i className="material-icons"> lens_blur </i>
                                         <a> {bid[0].bidOwner} </a>
                                         <p> Bid Price: ${bid[0].bidPrice} </p>
-                                        <button onClick={ () => handleDeclarative()} className="btn btn-success"> Set Winner </button>
+                                        <div style={{display: 'flex'}}>
+                                            <button onClick={ () => handleDeclarative()} className="btn btn-success" style={{marginRight: 10}}> Set Winner </button>
+                                            <button onClick={ () => redirectToChat(bid[0].bidOwner)} className="btn btn-primary" style={{marginLeft: 10}}> Talk to Winner </button>
+                                        </div>
                                     </div>
                                 </div>
                                 </>
