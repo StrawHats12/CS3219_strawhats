@@ -8,13 +8,13 @@ import {
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import BidTable from "../../components/Bids/BidTable";
-import HighestBidCard from "../../components/Bids/HighestBidCard"
+import HighestBidCard from "../../components/Bids/HighestBidCard";
 import {
   deleteListing,
   deleteListingImages,
   getListing,
 } from "../../services/listings-service";
-import { getAccountById } from "../../services/account-service";
+import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 import AddBidForm from "../../components/Bids/AddBidForm";
@@ -27,7 +27,14 @@ const ListingsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline } = listing;
+  const {
+    listing_name,
+    description,
+    images,
+    seller_uid,
+    seller_username,
+    deadline,
+  } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
@@ -88,7 +95,7 @@ const ListingsPage = () => {
 
       checkOwner(res.seller_sub);
       setListing(res);
-      getAccountById(seller_uid)
+      getAccount(seller_username)
         .then((account) => {
           setProfile(account);
         })
@@ -99,7 +106,7 @@ const ListingsPage = () => {
           setIsLoading(false);
         });
     });
-  }, [id, seller_uid]);
+  }, [id, seller_username]);
 
   return (
     <>
@@ -128,8 +135,8 @@ const ListingsPage = () => {
       ) : listing ? (
         <Container fluid>
           <h1>{listing_name}</h1>
-          {isOwner && (
-            hasExpired(deadline) ? (
+          {isOwner &&
+            (hasExpired(deadline) ? (
               <>
                 <Button className="m-1" onClick={handleEdit}>
                   Edit
@@ -138,8 +145,9 @@ const ListingsPage = () => {
                   Delete
                 </Button>
               </>
-            ) : <p> Listing cannot be edited after expiry. </p>
-          )}
+            ) : (
+              <p> Listing cannot be edited after expiry. </p>
+            ))}
           {!isOwner && (
             <Button className="m-1" onClick={redirectToChat}>
               Chat with seller!
@@ -152,11 +160,9 @@ const ListingsPage = () => {
             <Col>
               <>
                 <div className="descriptionCard">
-                  <div className="description-card-header"> 
-                    Description 
-                  </div>
+                  <div className="description-card-header">Description</div>
                   <div className="description-card-main">
-                      <p> {description} </p>
+                    <p> {description} </p>
                   </div>
                 </div>
               </>
@@ -165,32 +171,31 @@ const ListingsPage = () => {
               <div>
                 <ListingProfileCard profile={profile} />
               </div>
-              <br/>
+              <br />
               <div>
                 <>
                   <div className="deadlineCard">
-                      <div className="deadline-card-header"> 
-                        Deadline 
-                      </div>
-                      <div className="deadline-card-main">
-                        <p>{deadline 
-                          && 
-                          ( <Countdown
+                    <div className="deadline-card-header">Deadline</div>
+                    <div className="deadline-card-main">
+                      <p>
+                        {deadline && (
+                          <Countdown
                             date={stringToDate(deadline)}
-                            renderer={countdownRenderer}/>
+                            renderer={countdownRenderer}
+                          />
                         )}
-                        </p>
-                      </div>
+                      </p>
+                    </div>
                   </div>
                 </>
               </div>
-              <br/>
+              <br />
               <div>
-                <HighestBidCard listingInfo={listing}/>
+                <HighestBidCard listingInfo={listing} />
               </div>
             </Col>
           </Row>
-          <hr/>
+          <hr />
           <Row>
             <Col>
               {isOwner ? (
@@ -201,7 +206,7 @@ const ListingsPage = () => {
               ) : hasExpired(deadline) ? (
                 <div>
                   <h3> Place Your Bid! </h3>
-                  <AddBidForm listingInfo={listing}/>
+                  <AddBidForm listingInfo={listing} />
                 </div>
               ) : (
                 <div>
@@ -211,7 +216,7 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          <hr/>
+          <hr />
           <Row>
             <Col>
               {hasExpired(deadline) ? (
