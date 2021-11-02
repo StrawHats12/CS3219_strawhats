@@ -4,7 +4,6 @@ import StrawhatSpinner from "../StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
 import Alert from './Alert';
 import {updateWinnerBid} from "../../services/bidding-service"
-import useSocket from "../../hooks/useSocket";
 
 const HighestBidCard = ({listingInfo}) => {
     const listingId = listingInfo.id;
