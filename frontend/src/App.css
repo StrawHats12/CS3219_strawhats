@@ -77,7 +77,7 @@
 }
 
 .descriptionCard {
-  border: 1px solid green;    /* Set up Border */
+  border: 1px solid #009879;    /* Set up Border */
   border-radius: 6px;           /* Slightly Curve edges */
   overflow: hidden;             /* Fixes the corners */
   display: flex;                /* Children use Flexbox */
@@ -85,22 +85,56 @@
   height: 100%;
 }
 
+.card-header {
+  width: 100%;
+}
+.description-card-header {
+  color: white;
+  text-align: center;
+  /* font-size: 12px; */
+  font-weight: 600;
+  border-bottom: 1px solid #009879;
+  background-color:#009879;
+  padding: 5px 10px;
+}
+
+.row-no-padding {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.description-card-main {
+  display: flex;              /* Children use Flexbox */
+  flex-direction: column;     /* Rotate Axis to Vertical */
+  justify-content: center;    /* Group Children in Center */
+  align-items: center;        /* Group Children in Center (+axis) */
+  padding: 15px 0;            /* Add padding to the top/bottom */
+}
+
+.row {
+  padding: 0 0;
+  margin: 0 0;
+}
+
 .deadlineCard {
-  border: 1px solid red;    /* Set up Border */
+  border: 1px solid #CC3333;    /* Set up Border */
   border-radius: 6px;           /* Slightly Curve edges */
   overflow: hidden;             /* Fixes the corners */
   display: flex;                /* Children use Flexbox */
   flex-direction: column;       /* Rotate Axis */
+  height: 100%;
 }
 
 .deadline-card-header {
   color: white;
   text-align: center;
-  font-size: 12px;
   font-weight: 600;
-  border-bottom: 1px solid red;
-  background-color:red;
+  border-bottom: 1px solid #CC3333;
+  background-color:#CC3333;
   padding: 5px 10px;
+  margin: 0;
+  width: 100%;
+  
 }
 
 .deadline-card-main {
@@ -109,11 +143,12 @@
   justify-content: center;    /* Group Children in Center */
   align-items: center;        /* Group Children in Center (+axis) */
   padding: 15px 0;            /* Add padding to the top/bottom */
+  font-size: 15px;
 }
 
 /* Bid Card */
 .winningBidCard {
-  border: 1px solid green;    /* Set up Border */
+  border: 1px solid #009879;    /* Set up Border */
   border-radius: 6px;           /* Slightly Curve edges */
   overflow: hidden;             /* Fixes the corners */
   display: flex;                /* Children use Flexbox */
@@ -123,10 +158,9 @@
 .winningBid-card-header {
   color: white;
   text-align: center;
-  font-size: 12px;
   font-weight: 600;
-  border-bottom: 1px solid green;
-  background-color:green;
+  border-bottom: 1px solid #009879;
+  background-color:#009879;
   padding: 5px 10px;
 }
 

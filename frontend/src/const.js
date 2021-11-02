@@ -1,5 +1,6 @@
 const DEPLOYED = !!process.env.REACT_APP_DEPLOYED;
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 const MESSAGING_URL = BACKEND_URL && `${BACKEND_URL}/messaging`;
 const LISTINGS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8080";
 const ACCOUNTS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8090";

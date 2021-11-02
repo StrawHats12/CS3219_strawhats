@@ -24,7 +24,6 @@ exports.getWinningBid = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const winningBid = await getWinningBid(listingId);
-        console.log(winningBid);
         res.json(winningBid);
     } catch (err) {
         console.log(err);
@@ -36,6 +35,7 @@ exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
+        console.log(listBids);
         res.json(listBids);
     } catch (err) {
         console.log(err);

@@ -150,36 +150,42 @@ const ListingsPage = () => {
             <Col>
               <>
                 <div className="descriptionCard">
-                  <div className="winningBid-card-header"> 
+                  <div className="description-card-header"> 
                     Description 
                   </div>
-                  <div className="winning-card-main">
+                  <div className="description-card-main">
                       <p> {description} </p>
                   </div>
                 </div>
               </>
             </Col>
             <Col>
-              <ListingProfileCard profile={profile} />
+              <div>
+                <ListingProfileCard profile={profile} />
+              </div>
               <br/>
-              <>
-                <div className="deadlineCard">
-                    <div className="deadline-card-header"> 
-                      Deadline 
-                    </div>
-                    <div className="deadline-card-main">
-                      <p>{deadline 
-                        && 
-                        ( <Countdown
-                          date={stringToDate(deadline)}
-                          renderer={countdownRenderer}/>
-                      )}
-                      </p>
-                    </div>
-                </div>
-              </>
+              <div>
+                <>
+                  <div className="deadlineCard">
+                      <div className="deadline-card-header"> 
+                        Deadline 
+                      </div>
+                      <div className="deadline-card-main">
+                        <p>{deadline 
+                          && 
+                          ( <Countdown
+                            date={stringToDate(deadline)}
+                            renderer={countdownRenderer}/>
+                        )}
+                        </p>
+                      </div>
+                  </div>
+                </>
+              </div>
               <br/>
-              <HighestBidCard listingInfo={listing}/>
+              <div>
+                <HighestBidCard listingInfo={listing}/>
+              </div>
             </Col>
           </Row>
           <hr/>

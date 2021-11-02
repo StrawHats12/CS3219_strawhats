@@ -3,7 +3,6 @@ import io from "socket.io-client";
 import {
   MESSAGING_SOCKET_ENDPOINT,
   LIVESTREAM_SOCKET_ENDPOINT,
-  DEPLOYED,
 } from "../const";
 
 const useSocket = ({ id, isLivestreamChat }) => {
