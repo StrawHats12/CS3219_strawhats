@@ -66,7 +66,7 @@ export default function Messages() {
     if (!user || !isLoading) return;
     fetchConvos();
     setIsLoading(false);
-  }, [user]);
+  }, [curConvoMember, isLoading, user]);
 
   return (
     <>
