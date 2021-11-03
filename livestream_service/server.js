@@ -12,10 +12,16 @@ const {
   getKeysByStreamerId
 } = require("./dynamoDb");
 
+
+const webhookUser = {
+  name: 'muxer',
+  pass: 'muxology',
+}
+
 const http = require("http").createServer(app);
 const morgan = require("morgan");
-const io = require("socket.io")(http); //TODO remove socket.io if not needed (from package.json)
-const { Server } = require("socket.io");
+const io = require("socket.io")(http);
+const {Server} = require("socket.io");
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -54,7 +60,7 @@ chatIo.on("connection", (socket) => {
   console.log("Connection with: " + id);
   socket.join(id);
 
-  socket.on("send-message", ({ livestream_id, text, sender_id }) => {
+  socket.on("send-message", ({livestream_id, text, sender_id}) => {
     socket.broadcast.to(livestream_id).emit("receive-message", {
       sender_id: sender_id,
       text,
@@ -173,33 +179,12 @@ app.get("/fetchPublicStream/:id", async (req, res) => {
   console.log("streams id is now:", streamIds);
   const item = await getKeysByStreamerId(id)
   const publicInfo = {
-    streamer_id:item.Item.streamer_id,
-    playback_ids:item.Item.playback_ids
+    streamer_id: item.Item.streamer_id,
+    playback_ids: item.Item.playback_ids
   }
   return res.json(publicInfo);
 });
 
-
-// API which Listens for callbacks from Mux
-// app.post("/mux-hook", auth, function (req, res) {
-//   STREAM.status = req.body.data.status;
-
-//   switch (req.body.type) {
-//     // When a stream goes idle, we want to capture the automatically created
-//     // asset IDs, so we can let people watch the on-demand copies of our live streams
-//     case "video.live_stream.idle":
-//       STREAM["recent_asset_ids"] = req.body.data["recent_asset_ids"];
-//     // We deliberately don't break; here
-
-//     // When a Live Stream is active or idle, we want to push a new event down our
-//     // web socket connection to our frontend, so that it update and display or hide
-//     // the live stream.
-//     case "video.live_stream.active":
-//       io.emit("stream_update", publicStreamDetails(STREAM));
-//       break;
-//     default:
-//     // Relaxing.
-//   }
 
 const addNewStreamToDB = async (stream, streamer_id) => {
   let item = {
@@ -281,6 +266,20 @@ app.delete("/destroy/:id", /*auth(roles.USER),*/ async (req, res) => {
           `deleted ${streamerId}'s stream. previous livestream id: ${livestreamId}`
       );
 });
+
+app.post('/mux-hook', (req, res) => {
+  STREAM.status = req.body.data.status; // probably need to poll mux?
+
+  switch(req.body.type) {
+    case 'video.live_stream.active':
+      io.emit('stream_update', publicStreamDetails(STREAM));
+      break;
+    default:
+      // Relaxing.
+  }
+  res.status(200).send("Got stream status update from mux!")
+})
+
 
 app.listen(process.env.SERVER_PORT, function () {
   console.log("Your app is listening on port " + process.env.SERVER_PORT);
