@@ -3,18 +3,22 @@ import StrawhatSpinner from "../StrawhatSpinner";
 import Alert from './Alert';
 import { addBid, getWinningBid } from "../../services/bidding-service";
 import { getCurrentUser } from "../../hooks/useAuth";
+import useBidSocket from "../../hooks/useBidSocket";
+import socket from "socket.io-client/lib/socket";
 
 const AddBidForm = ({listingInfo}) => {
     const [input, setInput] = useState({
         bidPrice: "",
     });
 
+    const { bidSocket } = useBidSocket({ id: listingInfo.id });
     const [winningBidPrice, setWinningBidPrice] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showDeclarative, setShowDeclarative] = useState(false);
     const [showIncorrectDeclarative, setShowIncorrectDeclarative] = useState(false);
     
     var numbersVerifierRegex = /^[0-9]+$/;
+
     const handleDeclarative = () => {
       setShowDeclarative(!showDeclarative);
     }
@@ -39,12 +43,12 @@ const AddBidForm = ({listingInfo}) => {
     }, []);
     
     function handleChange(event) {
-    setInput((prevInput) => {
-        return {
-        ...prevInput,
-        [event.target.name]: event.target.value,
-        };
-    });
+      setInput((prevInput) => {
+          return {
+          ...prevInput,
+          [event.target.name]: event.target.value,
+          };
+      });
     }
 
     async function handleClick() {
@@ -57,8 +61,8 @@ const AddBidForm = ({listingInfo}) => {
               auctionId: listingInfo.bidding_id,
               status: "ONGOING",
             };
-            addBid(newBid);
-            setTimeout(function(){window.location.reload(false)}, 1000);
+            socket.emit("add-bid", newBid);
+            // addBid(newBid);
         } catch (err) {
             console.log(err);
             return null;

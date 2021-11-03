@@ -16,7 +16,7 @@ import Message from "./Message";
 import "./Conversation.css";
 
 export default function Conversation({ convo, user }) {
-  const { socket } = useSocket({ id: convo.id, serviceDeterminant: "MESSAGE" });
+  const { socket } = useSocket({ id: convo.id, isLivestreamChat: false });
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState([]);

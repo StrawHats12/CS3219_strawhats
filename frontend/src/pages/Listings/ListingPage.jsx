@@ -17,7 +17,7 @@ import {
 import { getAccountById } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
-import AddBidForm from "../../components/Bids/AddBidForm";
+import BidInfo from "../../components/Bids/BidInfo"
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -191,7 +191,8 @@ const ListingsPage = () => {
             </Col>
           </Row>
           <hr/>
-          <Row>
+          <BidInfo isOwner={isOwner} deadline={deadline} listingInfo={listing}/>
+          {/* <Row>
             <Col>
               {isOwner ? (
                 <div>
@@ -226,7 +227,7 @@ const ListingsPage = () => {
               )}
               <BidTable value={listing} />
             </Col>
-          </Row>
+          </Row> */}
         </Container>
       ) : (
         <Container>
