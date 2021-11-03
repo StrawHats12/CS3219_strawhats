@@ -16,6 +16,7 @@ const {
   addOrUpdateKeys,
   deleteKeys,
   getKeysByStreamerId,
+  getItemByStreamId,
 } = require("./dynamoDb");
 
 const { auth, roles } = require("./auth");
@@ -65,6 +66,31 @@ io.on("connection", (socket) => {
       livestream_id,
     });
   });
+});
+
+const getUsernameFromStreamId = async (streamId) => {
+  const item = await getItemByStreamId(streamId);
+  const username = item?.Items[0]?.streamer_id;
+  return username;
+};
+
+// MUX Callback when state changes
+app.post("/mux-hook", auth, function (req, res) {
+  const status = req.body.type;
+  const streamId = req.body.id;
+
+  switch (status) {
+    case "video.live_stream.active":
+      const username = getUsernameFromStreamId(streamId);
+      socket.broadcast
+        .to(username)
+        .io.emit("stream_update", publicStreamDetails(STREAM));
+      break;
+    default:
+    // Ignore
+  }
+
+  res.status(200).send("Thanks, Mux!");
 });
 
 const createLiveStream = async () => {

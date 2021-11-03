@@ -25,6 +25,21 @@ const getKeysByStreamerId = async (streamer_id) => {
   return await dynamoClient.get(params).promise();
 };
 
+const getItemByStreamId = async (live_stream_id) => {
+  const params = {
+    TableName: TABLE_NAME,
+    IndexName: "live_stream_id-index",
+    ExpressionAttributeValues: {
+      ":live_stream_id": live_stream_id,
+    },
+    ExpressionAttributeNames: {
+      "#live_stream_id": "live_stream_id",
+    },
+    KeyConditionExpression: "#live_stream_id = :live_stream_id",
+  };
+  return await dynamoClient.query(params).promise();
+};
+
 /**
  * Item line = {
  *   uid = xxx,
@@ -54,5 +69,6 @@ const deleteKeys = async (streamer_id) => {
 module.exports = {
   getKeysByStreamerId,
   addOrUpdateKeys,
-  deleteKeys
+  deleteKeys,
+  getItemByStreamId,
 };
