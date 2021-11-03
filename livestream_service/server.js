@@ -5,10 +5,7 @@ const express = require("express");
 const app = express();
 const http = require("http").createServer(app);
 const morgan = require("morgan");
-// const io = require("socket.io")(http);
-const { Server } = require("socket.io");
 const Mux = require("@mux/mux-node");
-const stream = require("stream");
 
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID,
@@ -39,18 +36,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 
+const server = app.listen(process.env.SERVER_PORT, function () {
+  console.log("Your app is listening on port " + process.env.SERVER_PORT);
+});
+
 //Chat IO
-const chatIo = new Server(http, {
+const io = require("socket.io")(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
   },
-});
-
-chatIo.on("connection", (socket) => {
-  const id = socket.handshake.query.id;
-  console.log("Connection with: " + id);
-  socket.join(id);
 });
 
 http.listen(7070, () => {
@@ -58,7 +53,7 @@ http.listen(7070, () => {
 });
 
 // Livestream messages
-chatIo.on("connection", (socket) => {
+io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
   console.log("Connection with: " + id);
   socket.join(id);
@@ -224,8 +219,4 @@ app.delete("/livestream/:id", auth(roles.USER), async (req, res) => {
     .send(
       `${streamerId}'s stream deleted. previous livestream id: ${livestreamId}`
     );
-});
-
-app.listen(process.env.SERVER_PORT, function () {
-  console.log("Your app is listening on port " + process.env.SERVER_PORT);
 });

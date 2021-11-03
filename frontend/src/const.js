@@ -8,7 +8,7 @@ const MESSAGING_ENDPOINT = DEPLOYED ? MESSAGING_URL : "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = DEPLOYED
   ? BACKEND_URL
   : "http://localhost:8081";
-const LIVESTREAM_SOCKET_ENDPOINT = "http://localhost:7070";
+const LIVESTREAM_SOCKET_ENDPOINT = "http://localhost:9000";
 const BIDDING_ENDPOINT = DEPLOYED
   ? `${BACKEND_URL}/bid`
   : "http://localhost:2001/bid";
