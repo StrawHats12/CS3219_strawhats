@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 var server = app.listen(PORT, () => {
-    console.log(`Bidding Service Listening on port ${PORT}`);
+  console.log(`Bidding Service Listening on port ${PORT}`);
 });
 
 var io = require("socket.io")(server, {
@@ -20,13 +20,12 @@ var io = require("socket.io")(server, {
 app.set("socketio", io);
 
 app.get("/", (req, res) => {
-    res.send("Server up. Time to start Bidding!");
+  res.send("Server up. Time to start Bidding!");
 });
 
 app.use("/bid", require("./routes/biddingRoute"));
 
 io.on("connection", (socket) => {
-
   const listingId = socket.handshake.query.listingId;
   console.log("Connection with: " + listingId);
   socket.join(listingId);
@@ -35,5 +34,4 @@ io.on("connection", (socket) => {
     console.log(newBid);
     socket.broadcast.to(listingId).emit("receive-new-bid", newBid);
   });
-  
 });
