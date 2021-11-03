@@ -75,16 +75,14 @@ const getUsernameFromStreamId = async (streamId) => {
 };
 
 // MUX Callback when state changes
-app.post("/mux-hook", auth, function (req, res) {
+app.post("/mux-hook", function (req, res) {
   const status = req.body.type;
   const streamId = req.body.id;
 
   switch (status) {
     case "video.live_stream.active":
       const username = getUsernameFromStreamId(streamId);
-      socket.broadcast
-        .to(username)
-        .io.emit("stream_update", publicStreamDetails(STREAM));
+      io.to(username).emit("stream_update");
       break;
     default:
     // Ignore
