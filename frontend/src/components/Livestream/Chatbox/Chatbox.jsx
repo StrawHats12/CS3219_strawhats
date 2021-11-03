@@ -5,10 +5,10 @@ import useSocket from "../../../hooks/useSocket";
 
 import ChatboxMessage from "./ChatboxMessage";
 import "./Chatbox.css";
-import { MESSAGING_SOCKET_ENDPOINT } from "../../../const";
+import { LIVESTREAM_SOCKET_ENDPOINT } from "../../../const";
 
 export default function Chatbox({ livestreamId }) {
-  const { socket } = useSocket(livestreamId, "/messaging/socket.io", MESSAGING_SOCKET_ENDPOINT);
+  const { socket } = useSocket(livestreamId, "/socket.io", LIVESTREAM_SOCKET_ENDPOINT);
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
   const [curUsername, setCurUsername] = useState("");
