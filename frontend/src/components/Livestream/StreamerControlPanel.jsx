@@ -23,10 +23,6 @@ const StreamerControlPanel = (props) => {
     e.preventDefault();
     generateStream(streamerId)
       .then((streamData) => {
-        console.log(
-          "Registered for a stream, here's the stream data",
-          streamData
-        );
         setPlaybackIds(streamData.playback_ids); // to deprecate
         setStreamKey(streamData.stream_key);
         setLivestreamId(streamData.live_stream_id);
@@ -56,7 +52,6 @@ const StreamerControlPanel = (props) => {
         const { live_stream_id, playback_ids, stream_key } = response;
         setLivestreamId(live_stream_id);
         setPlaybackIds(playback_ids);
-        console.log("synced w backend, playback ids: ", playback_ids);
         setStreamKey(stream_key);
       }
     });
