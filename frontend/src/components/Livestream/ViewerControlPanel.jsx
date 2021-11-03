@@ -11,13 +11,12 @@ const ViewerControlPanel = (props) => {
   const [playbackIds, setPlaybackIds] = useState([]);
   const { socket } = useSocket(
     streamerId,
-    "/socket.io",
+    "/livestream/socket.io",
     LIVESTREAM_SOCKET_ENDPOINT
   );
 
   useEffect(() => {
     const run = async () => {
-      console.log("CALLED");
       const response = await fetchPublicStreamDetails(streamerId).catch((e) => {
         console.error(e.toString());
         return;

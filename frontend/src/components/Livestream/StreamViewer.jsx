@@ -7,7 +7,7 @@ import "./StreamViewer.css";
 const StreamViewer = (props) => {
   const isTestingFlag = true; // just for testing, can't have livestream all the time
   const { playbackIds } = props;
-  const playbackId = playbackIds.length > 0 ? playbackIds[0].id : null;
+  const playbackId = playbackIds && playbackIds.length && playbackIds[0].id;
   const playbackUrl = isTestingFlag
     ? "https://www.youtube.com/watch?v=dEBwXKx0Hbk&t=4079s"
     : LIVESTREAM.PLAYBACK_BASE_URL + playbackId + ".m3u8";

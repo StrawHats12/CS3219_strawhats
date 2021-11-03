@@ -3,7 +3,6 @@ require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
 const app = express();
-const http = require("http").createServer(app);
 const morgan = require("morgan");
 const Mux = require("@mux/mux-node");
 
@@ -43,14 +42,11 @@ const server = app.listen(process.env.SERVER_PORT, function () {
 
 //Chat IO
 const io = require("socket.io")(server, {
+  path: "/livestream/socket.io",
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
   },
-});
-
-http.listen(7070, () => {
-  console.log("Messaging socket running!");
 });
 
 // Livestream messages
@@ -115,14 +111,16 @@ const createStreamObject = (stream, streamer_id) => {
 };
 
 const getPrivateInfo = (item) => {
-  return item.Item;
+  return item?.Item;
 };
 
 const getPublicInfo = (item) => {
-  return {
-    streamer_id: item.Item.streamer_id,
-    playback_ids: item.Item.playback_ids,
-  };
+  return item
+    ? {
+        streamer_id: item.Item.streamer_id,
+        playback_ids: item.Item.playback_ids,
+      }
+    : {};
 };
 
 app.get("/", (req, res) => {
@@ -139,9 +137,9 @@ app.get("/livestream/public/:id", async (req, res) => {
 
   try {
     const item = await getKeysByStreamerId(id);
-    return res.json(getPrivateInfo(item));
+    return res.json(getPublicInfo(item));
   } catch (error) {
-    res.status(500).json({ err: "Error when fetching from dynamoDb" });
+    res.json({});
   }
 });
 
@@ -160,9 +158,9 @@ app.get("/livestream/private/:id", auth(roles.USER), async (req, res) => {
 
   try {
     const item = await getKeysByStreamerId(id);
-    return res.json(getPublicInfo(item));
+    return res.json(getPrivateInfo(item));
   } catch (error) {
-    res.status(500).json({ err: "Error when fetching from dynamoDb" });
+    res.json({});
   }
 });
 
