@@ -2,15 +2,15 @@ const DEPLOYED = !!process.env.REACT_APP_DEPLOYED;
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const MESSAGING_URL = BACKEND_URL && `${BACKEND_URL}/messaging`;
+const LIVESTREAM_URL = BACKEND_URL && `${BACKEND_URL}/livestream`;
+
 const LISTINGS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8080";
 const ACCOUNTS_ENDPOINT = DEPLOYED ? BACKEND_URL : "http://localhost:8090";
 const MESSAGING_ENDPOINT = DEPLOYED ? MESSAGING_URL : "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = DEPLOYED
   ? BACKEND_URL
   : "http://localhost:8081";
-const LIVESTREAM_SOCKET_ENDPOINT = DEPLOYED
-  ? BACKEND_URL
-  : "http://localhost:7070";
+const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:9000";
 const BIDDING_ENDPOINT = DEPLOYED
   ? `${BACKEND_URL}/bid`
   : "http://localhost:2001/bid";
@@ -28,10 +28,7 @@ const LISTING = {
 
 const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
-  CREATE_STREAM_URL: "http://localhost:9000/create",
-  FETCH_STREAM_PRIVATE_DETAILS_URL: "http://localhost:9000/fetchStream/",
-  FETCH_STREAM_PUBLIC_DETAILS_URL: "http://localhost:9000/fetchPublicStream/",
-  DESTORY_STREAM_BASE_URL: "http://localhost:9000/destroy/",
+  ENDPOINT: LIVESTREAM_URL || "http://localhost:9000/livestream",
   STREAM_PRODUCER_ENDPOINT: "rtmp://global-live.mux.com:5222/app",
 };
 

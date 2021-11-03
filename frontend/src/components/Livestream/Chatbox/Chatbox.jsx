@@ -5,9 +5,14 @@ import useSocket from "../../../hooks/useSocket";
 
 import ChatboxMessage from "./ChatboxMessage";
 import "./Chatbox.css";
+import { LIVESTREAM_SOCKET_ENDPOINT } from "../../../const";
 
 export default function Chatbox({ livestreamId }) {
-  const { socket } = useSocket({ id: livestreamId, serviceDeterminant: "LIVESTREAM" });
+  const { socket } = useSocket(
+    livestreamId,
+    "/livestream/socket.io",
+    LIVESTREAM_SOCKET_ENDPOINT
+  );
   const [text, setText] = useState("");
   const [messages, setMessages] = useState([]);
   const [curUsername, setCurUsername] = useState("");
