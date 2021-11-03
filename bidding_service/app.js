@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 var server = app.listen(PORT, () => {
-  console.log(`Bidding Service Listening on port ${PORT}`);
+    console.log(`Bidding Service Listening on port ${PORT}`);
 });
 
 var io = require("socket.io")(server, {
@@ -20,7 +20,7 @@ var io = require("socket.io")(server, {
 app.set("socketio", io);
 
 app.get("/", (req, res) => {
-  res.send("Server up. Time to start Bidding!");
+    res.send("Server up. Time to start Bidding!");
 });
 
 app.use("/bid", require("./routes/biddingRoute"));

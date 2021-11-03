@@ -109,7 +109,6 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
       console.log(err);
       return null;
     }
-  }
 
   const handleDeclarative = () => {
     setShowDeclarative(!showDeclarative);
