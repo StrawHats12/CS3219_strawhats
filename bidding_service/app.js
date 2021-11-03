@@ -7,36 +7,39 @@ app.use(express.json());
 app.use(cors());
 
 var server = app.listen(PORT, () => {
-  console.log(`Bidding Service Listening on port ${PORT}`);
+    console.log(`Bidding Service Listening on port ${PORT}`);
 });
 
 var io = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    // credentials: true
-  },
+    cors: {
+        origin: "*",
+        methods: ["GET", "POST", "DELETE", "PUT"],
+        // credentials: true
+    },
 });
 
 app.set("socketio", io);
 
 app.get("/", (req, res) => {
-  res.send("Server up. Time to start Bidding!");
+    res.send("Server up. Time to start Bidding!");
 });
 
 app.use("/bid", require("./routes/biddingRoute"));
 
 // listen to listing id
-// whenever someone add bid successful
+// whenever someone add bid successful 
 // -> everyone who is listening to the socket will receive the new bid
 
-io.on("connection", (socket) => {
-  const listingId = socket.handshake.query.listingId;
-  console.log("Connection with: " + listingId);
-  socket.join(listingId);
+io.on('connection', (socket) => {
+    const listingId = socket.handshake.query.listingId;
+    console.log("Connection with: " + listingId);
+    socket.join(listingId);
 
-  socket.on("add-bid", (newBid) => {
-    console.log(newBid);
-    socket.broadcast.to(listingId).emit("receive-new-bid", newBid);
-  });
-});
+    socket.on('add-bid', ({newBid}) => {
+		socket.broadcast.to(listingId).emit("receive-new-bid", {newbid});
+	});
+})
+
+
+  
+  
