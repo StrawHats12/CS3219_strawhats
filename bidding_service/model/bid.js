@@ -12,8 +12,8 @@ class Bid {
     this.auctionId = body.auctionId;
     this.bidId = body.bidId || this.#generateId();
     this.bidPrice = body.bidPrice;
-    this.createdAt = Date.now();
-    this.bidOwner = body.userIdentifier;
+    this.createdAt = body.createdAt || Date.now();
+    this.bidOwner = body.bidOwner;
   }
 
   setWinner() {

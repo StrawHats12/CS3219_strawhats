@@ -9,6 +9,7 @@ const {
 } = require("../bidDynamoDb");
 
 exports.addBid = async function (req, res) {
+    console.log(req.body);
     const newBid = new Bid(req.body);
     try {
         const addNewBidding = await addBidding(newBid);
@@ -35,7 +36,6 @@ exports.getListingBids = async function (req, res) {
     const listingId = req.params.listingId;
     try {
         const listBids = await getListingBids(listingId);
-        console.log(listBids);
         res.json(listBids);
     } catch (err) {
         console.log(err);

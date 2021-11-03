@@ -7,8 +7,6 @@ import {
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import BidTable from "../../components/Bids/BidTable";
-import HighestBidCard from "../../components/Bids/HighestBidCard"
 import {
   deleteListing,
   deleteListingImages,
@@ -185,49 +183,13 @@ const ListingsPage = () => {
                 </>
               </div>
               <br/>
-              <div>
+              {/* <div>
                 <HighestBidCard listingInfo={listing}/>
-              </div>
+              </div> */}
             </Col>
           </Row>
           <hr/>
           <BidInfo isOwner={isOwner} deadline={deadline} listingInfo={listing}/>
-          {/* <Row>
-            <Col>
-              {isOwner ? (
-                <div>
-                  <h3> Unable to Bid </h3>
-                  <p> You cannot bid for your own items.</p>
-                </div>
-              ) : hasExpired(deadline) ? (
-                <div>
-                  <h3> Place Your Bid! </h3>
-                  <AddBidForm listingInfo={listing}/>
-                </div>
-              ) : (
-                <div>
-                  <h3> Bid has ended. </h3>
-                  <p> You can no longer bid for this item. </p>
-                </div>
-              )}
-            </Col>
-          </Row>
-          <hr/>
-          <Row>
-            <Col>
-              {hasExpired(deadline) ? (
-                <div>
-                  <h3> Ongoing Bids </h3>
-                  <p> Sorted by price </p>
-                </div>
-              ) : (
-                <div>
-                  <h3> Past Bids </h3>
-                </div>
-              )}
-              <BidTable value={listing} />
-            </Col>
-          </Row> */}
         </Container>
       ) : (
         <Container>
