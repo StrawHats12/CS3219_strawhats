@@ -75,7 +75,7 @@ const getUsernameFromStreamId = async (streamId) => {
 };
 
 // MUX Callback when state changes
-app.post("/mux-hook", function (req, res) {
+app.post("/livestream/mux-hook", function (req, res) {
   const status = req.body.type;
   const streamId = req.body.id;
 
