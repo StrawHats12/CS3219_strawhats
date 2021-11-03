@@ -11,7 +11,7 @@ const AddBidForm = ({ listingInfo }) => {
     bidPrice: "",
   });
 
-  const { bidSocket } = useBidSocket({ id: listingInfo.id });
+  const { socket } = useBidSocket({ id: listingInfo.id });
   const [winningBidPrice, setWinningBidPrice] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeclarative, setShowDeclarative] = useState(false);
@@ -63,7 +63,7 @@ const AddBidForm = ({ listingInfo }) => {
         auctionId: listingInfo.bidding_id,
         status: "ONGOING",
       };
-      bidSocket.emit("add-bid", newBid);
+      socket.emit("add-bid", newBid);
       // addBid(newBid);
     } catch (err) {
       console.log("yo");
@@ -94,7 +94,7 @@ const AddBidForm = ({ listingInfo }) => {
             />
           )}
           <Alert
-            onConfirmOrDismiss={() => handleDeclarative("hi")}
+            onConfirmOrDismiss={() => handleDeclarative()}
             show={showDeclarative}
             showCancelButton={true}
             onConfirm={() => console.log("yes")}

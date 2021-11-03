@@ -1,5 +1,5 @@
 const express = require("express");
-const { PORT, SOCKET_PORT } = require("./const");
+const { PORT } = require("./const");
 const cors = require("cors");
 const app = express();
 
@@ -14,7 +14,6 @@ var io = require("socket.io")(server, {
   cors: {
     origin: "*",
     methods: ["GET", "POST", "DELETE", "PUT"],
-    // credentials: true
   },
 });
 
@@ -26,11 +25,8 @@ app.get("/", (req, res) => {
 
 app.use("/bid", require("./routes/biddingRoute"));
 
-// listen to listing id
-// whenever someone add bid successful
-// -> everyone who is listening to the socket will receive the new bid
-
 io.on("connection", (socket) => {
+
   const listingId = socket.handshake.query.listingId;
   console.log("Connection with: " + listingId);
   socket.join(listingId);
@@ -39,4 +35,5 @@ io.on("connection", (socket) => {
     console.log(newBid);
     socket.broadcast.to(listingId).emit("receive-new-bid", newBid);
   });
+  
 });
