@@ -8,9 +8,7 @@ const MESSAGING_ENDPOINT = DEPLOYED ? MESSAGING_URL : "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = DEPLOYED
   ? BACKEND_URL
   : "http://localhost:8081";
-const LIVESTREAM_SOCKET_ENDPOINT = DEPLOYED
-  ? BACKEND_URL
-  : "http://localhost:7070";
+const LIVESTREAM_SOCKET_ENDPOINT = "http://localhost:7070";
 const BIDDING_ENDPOINT = DEPLOYED
   ? `${BACKEND_URL}/bid`
   : "http://localhost:2001/bid";
@@ -29,8 +27,6 @@ const LISTING = {
 const LIVESTREAM = {
   PLAYBACK_BASE_URL: "https://stream.mux.com/",
   ENDPOINT: "http://localhost:9000/livestream",
-  FETCH_STREAM_PRIVATE_DETAILS_URL: "http://localhost:9000/fetchStream/",
-  FETCH_STREAM_PUBLIC_DETAILS_URL: "http://localhost:9000/fetchPublicStream/",
   STREAM_PRODUCER_ENDPOINT: "rtmp://global-live.mux.com:5222/app",
 };
 
