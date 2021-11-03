@@ -6,7 +6,7 @@ import {
   ListingsCarousel,
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
-import useAuth, { getCurrentUser } from "../../hooks/useAuth";
+import { getCurrentUser } from "../../hooks/useAuth";
 import BidTable from "../../components/Bids/BidTable";
 import HighestBidCard from "../../components/Bids/HighestBidCard";
 import {
