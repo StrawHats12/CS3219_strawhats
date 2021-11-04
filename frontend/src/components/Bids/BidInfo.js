@@ -27,9 +27,13 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
   const [uname, setUname] = useState(null);
   const [isUnameLoad, setIsUnameLoading] = useState(true);
 
-  // for alert
-  const [showDeclarative, setShowDeclarative] = useState(false);
+  // for input bid alert
+  const [showAddBidDeclarative, setShowAddBidDeclarative] = useState(false);
   const [showIncorrectDeclarative, setShowIncorrectDeclarative] = useState(false);
+
+  // for Winning Bid card alert
+  const [showSetWinDeclarative, setShowSetWinDeclarative] = useState(false);
+
 
    // to render in the table
    const [runningBids, setRunningBids] = useState(null);
@@ -55,8 +59,8 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
         return;
       }
       setRunningBids(res);
-      setWinningBidPrice(res[0].bidPrice);
-      setWinningBidOwner(res[0].bidOwner)
+      setWinningBidPrice(res[0] !== undefined ? res[0].bidPrice : "0");
+      setWinningBidOwner(res[0] !== undefined ? res[0].bidOwner :"No bidders" );
       setIsLoadRunningBids(false);
     });
   }, []);
@@ -67,10 +71,9 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
       if (newBid.listingId != listingInfo.id) 
         return
       setRunningBids([...runningBids, newBid]);
-      input.bidPrice = "";
-      runningBids.sort((bidOne, bidTwo) => bidOne.bidPrice - bidTwo.bidPrice);
-      setWinningBidPrice(runningBids[0].bidPrice);
-      setWinningBidOwner(runningBids[0].bidOwner)
+      runningBids.sort((bidOne, bidTwo) => bidOne.bidPrice + bidTwo.bidPrice);
+      setWinningBidPrice(newBid.bidPrice);
+      setWinningBidOwner(newBid.bidOwner)
     }, [runningBids]
   );
 
@@ -92,6 +95,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
 
   async function handleClick() {
     try {
+        handleCloseAddBidAlert();
         const newBid = {
           bidOwner: uname,
           listingId: listingInfo.id,
@@ -101,6 +105,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
           createdAt:  Date.now(),
         };
         socket.emit("add-bid", newBid); // convey to socket
+        addNewBidToRunningBids(newBid);
         addBid(newBid); // add to back end
     } catch (err) {
       console.log(err);
@@ -108,13 +113,21 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
     }
   }
 
-  const handleDeclarative = () => {
-    setShowDeclarative(!showDeclarative);
-  };
+  const handleOpenAddBidAlert = () => {
+    setShowAddBidDeclarative(true);
+  }
+
+  const handleCloseAddBidAlert = () => {
+    setShowAddBidDeclarative(false);
+  }
 
   const handleIncorrectDeclarative = () => {
     setShowIncorrectDeclarative(!showIncorrectDeclarative);
   };
+
+  const handleSetWinDeclarative = () => {
+    setShowSetWinDeclarative(!showSetWinDeclarative);
+  }
 
   const hasExpired = (deadline) => {
     return Date.parse(deadline) > Date.now();
@@ -199,8 +212,8 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                         required
                       />
                       <Alert
-                        onConfirmOrDismiss={() => handleDeclarative("hi")}
-                        show={showDeclarative}
+                        onDismiss={() => handleCloseAddBidAlert()}
+                        show={showAddBidDeclarative}
                         showCancelButton={true}
                         onConfirm={() => handleClick()}
                         text={"Do you really want to add bid?"}
@@ -208,7 +221,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                         type={"info"}
                       />
                       <Alert
-                        onConfirmOrDismiss={() => handleIncorrectDeclarative()}
+                        onConfirmOrDismiss={handleIncorrectDeclarative}
                         show={showIncorrectDeclarative}
                         title={"Incorrect input."}
                         text={`Ensure that your bid price is no lower than $${winningBidPrice}`}
@@ -218,9 +231,9 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                       <button
                         onClick={
                           input.bidPrice.match(numbersVerifierRegex) !== null &&
-                          input.bidPrice > winningBidPrice 
-                            ? () => handleDeclarative()
-                            : () => handleIncorrectDeclarative()
+                          parseInt(input.bidPrice) > parseInt(winningBidPrice) 
+                            ? () => handleOpenAddBidAlert()
+                            : handleIncorrectDeclarative
                         }
                         className="btn btn-success"
                       >
@@ -251,8 +264,8 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                             ( // Winner is available and owner of listing
                               <>
                               <Alert
-                                  onConfirmOrDismiss={() => handleDeclarative()}
-                                  show={showDeclarative}
+                                  onConfirmOrDismiss={() => handleSetWinDeclarative()}
+                                  show={showSetWinDeclarative}
                                   showCancelButton={true}
                                   onConfirm={() => handleWinnerClick(listingInfo.id, winningBidPrice)}
                                   title={"Set the winner?"}
@@ -267,7 +280,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                                       <p> {winningBidOwner} </p>
                                       <p> Bid Price: ${winningBidPrice} </p>
                                       <div style={{display: 'flex'}}>
-                                          <button onClick={ () => handleDeclarative()} className="btn btn-success" style={{marginRight: 10}}> 
+                                          <button onClick={ () => handleSetWinDeclarative() } className="btn btn-success" style={{marginRight: 10}}> 
                                             Set Winner 
                                           </button>
                                           <button onClick={ () => redirectToMessageChat(winningBidOwner)} className="btn btn-primary" style={{marginLeft: 10}}> 
