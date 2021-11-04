@@ -7,16 +7,18 @@ import {
 } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
 import { getCurrentUser } from "../../hooks/useAuth";
-import HighestBidCard from "../../components/Bids/HighestBidCard"
+import BidTable from "../../components/Bids/BidTable";
+import HighestBidCard from "../../components/Bids/HighestBidCard";
 import {
   deleteListing,
   deleteListingImages,
   getListing,
 } from "../../services/listings-service";
-import { getAccountById } from "../../services/account-service";
+import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
-// import BidInfo from "../../components/Bids/BidInfo"
+import AddBidForm from "../../components/Bids/AddBidForm";
+import Livestream from "../Livestream";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -26,10 +28,22 @@ const ListingsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { listing_name, description, images, seller_uid, deadline } = listing;
+  const [showStreamModal, setShowStreamModal] = useState(false);
+  const [isStreamActive, setIsStreamActive] = useState(false);
+
+  const {
+    listing_name,
+    description,
+    images,
+    seller_uid,
+    seller_username,
+    deadline,
+  } = listing;
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
+  const handleCloseStreamModal = () => setShowStreamModal(false);
+  const handleShowStreamModal = () => setShowStreamModal(true);
   const handleDelete = async () => {
     setIsLoading(true);
     try {
@@ -85,9 +99,10 @@ const ListingsPage = () => {
         return;
       }
 
+
       checkOwner(res.seller_sub);
       setListing(res);
-      getAccountById(seller_uid)
+      getAccount(seller_username)
         .then((account) => {
           setProfile(account);
         })
@@ -98,10 +113,33 @@ const ListingsPage = () => {
           setIsLoading(false);
         });
     });
-  }, [id, seller_uid]);
+  }, [id, seller_username]);
+
+
+  let streamEntry = seller_username && <>
+    <Button onClick={handleShowStreamModal}>Click to Watch {seller_username}'s Stream
+    </Button>
+  </>
+
+  let streamViewModal = seller_username && <>
+    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>{seller_username}'s Stream</Modal.Title>
+      </Modal.Header>
+      <Livestream streamerId={seller_username}/>
+
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseStreamModal}>
+          Back
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  </>
+
 
   return (
     <>
+      {streamViewModal}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>
           <Modal.Title>Delete Listing</Modal.Title>
@@ -127,8 +165,8 @@ const ListingsPage = () => {
       ) : listing ? (
         <Container fluid>
           <h1>{listing_name}</h1>
-          {isOwner && (
-            hasExpired(deadline) ? (
+          {isOwner &&
+            (hasExpired(deadline) ? (
               <>
                 <Button className="m-1" onClick={handleEdit}>
                   Edit
@@ -137,8 +175,9 @@ const ListingsPage = () => {
                   Delete
                 </Button>
               </>
-            ) : <p> Listing cannot be edited after expiry. </p>
-          )}
+            ) : (
+              <p> Listing cannot be edited after expiry. </p>
+            ))}
           {!isOwner && (
             <Button className="m-1" onClick={redirectToChat}>
               Chat with seller!
@@ -151,11 +190,9 @@ const ListingsPage = () => {
             <Col>
               <>
                 <div className="descriptionCard">
-                  <div className="description-card-header"> 
-                    Description 
-                  </div>
+                  <div className="description-card-header">Description</div>
                   <div className="description-card-main">
-                      <p> {description} </p>
+                    <p> {description} </p>
                   </div>
                 </div>
               </>
@@ -164,34 +201,33 @@ const ListingsPage = () => {
               <div>
                 <ListingProfileCard profile={profile} />
               </div>
-              <br/>
+              <br />
               <div>
                 <>
                   <div className="deadlineCard">
-                      <div className="deadline-card-header"> 
-                        Deadline 
-                      </div>
-                      <div className="deadline-card-main">
-                        <p>{deadline 
-                          && 
-                          ( <Countdown
+                    <div className="deadline-card-header">Deadline</div>
+                    <div className="deadline-card-main">
+                      <p>
+                        {deadline && (
+                          <Countdown
                             date={stringToDate(deadline)}
-                            renderer={countdownRenderer}/>
+                            renderer={countdownRenderer}
+                          />
                         )}
-                        </p>
-                      </div>
+                      </p>
+                    </div>
                   </div>
                 </>
               </div>
-              <br/>
+              <br />
               <div>
-                <HighestBidCard listingInfo={listing}/>
+                <HighestBidCard listingInfo={listing} />
               </div>
+              { streamEntry}
             </Col>
           </Row>
-          <hr/>
-          {/* <BidInfo isOwner={isOwner} deadline={deadline} listingInfo={listing}/> */}
-          {/* <Row>
+          <hr />
+          <Row>
             <Col>
               {isOwner ? (
                 <div>
@@ -201,7 +237,7 @@ const ListingsPage = () => {
               ) : hasExpired(deadline) ? (
                 <div>
                   <h3> Place Your Bid! </h3>
-                  <AddBidForm listingInfo={listing}/>
+                  <AddBidForm listingInfo={listing} />
                 </div>
               ) : (
                 <div>
@@ -211,7 +247,7 @@ const ListingsPage = () => {
               )}
             </Col>
           </Row>
-          <hr/>
+          <hr />
           <Row>
             <Col>
               {hasExpired(deadline) ? (
@@ -226,7 +262,7 @@ const ListingsPage = () => {
               )}
               <BidTable value={listing} />
             </Col>
-          </Row> */}
+          </Row>
         </Container>
       ) : (
         <Container>
