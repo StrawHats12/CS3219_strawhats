@@ -10,6 +10,9 @@ const MESSAGING_ENDPOINT = DEPLOYED ? MESSAGING_URL : "http://localhost:8081";
 const MESSAGING_SOCKET_ENDPOINT = DEPLOYED
   ? BACKEND_URL
   : "http://localhost:8081";
+const BIDDING_SOCKET_ENDPOINT = DEPLOYED
+  ? `http://localhost:2001`
+  : "http://localhost:2001";
 const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:9000";
 const BIDDING_ENDPOINT = DEPLOYED
   ? `${BACKEND_URL}/bid`
@@ -54,4 +57,5 @@ export {
   LIVESTREAM_SOCKET_ENDPOINT,
   MESSAGES,
   BIDDING_ENDPOINT,
+  BIDDING_SOCKET_ENDPOINT,
 };
