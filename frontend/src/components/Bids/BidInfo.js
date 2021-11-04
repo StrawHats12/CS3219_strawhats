@@ -61,19 +61,19 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
       setWinningBidPrice(res[0] !== undefined ? res[0].bidPrice : "0");
       setWinningBidOwner(res[0] !== undefined ? res[0].bidOwner :"No bidders" );
       setIsLoadRunningBids(false);
-    });
-  }, []);
+    }, [listingInfo.id]);
+  });
 
   // retrieve bids real time from socket for the listing
   const addNewBidToRunningBids = useCallback(
     (newBid) => {
-      if (newBid.listingId != listingInfo.id) 
+      if (newBid.listingId !== listingInfo.id) 
         return
       setRunningBids([...runningBids, newBid]);
       runningBids.sort((bidOne, bidTwo) => bidOne.bidPrice + bidTwo.bidPrice);
       setWinningBidPrice(newBid.bidPrice);
       setWinningBidOwner(newBid.bidOwner)
-    }, [runningBids]
+    }, [runningBids, listingInfo.id]
   );
 
   useEffect(() => {
@@ -325,7 +325,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                     <div className="winningBid-card-header"> Winning Bid </div>
                         <div className="winning-card-main">
                             <i className="material-icons"> lens_blur </i>
-                            <a> No Bidders </a>
+                            <p> No Bidders </p>
                         </div>
                     </div>
                     </>
