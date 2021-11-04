@@ -77,6 +77,7 @@ const ListingForm = (props) => {
         listing[LISTING.ID] = generateListingId();
         listing[LISTING.SELLER_ID] = sellerCredentials?.identityId;
         listing[LISTING.SELLER_SUB] = seller?.attributes?.sub;
+        listing[LISTING.SELLER_USERNAME] = seller?.username;
       }
 
       if (props.create) {

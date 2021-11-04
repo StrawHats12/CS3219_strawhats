@@ -8,8 +8,7 @@ import { useEffect, useState } from "react";
 import { StreamViewer } from "./index";
 import { MESSAGES } from "../../const";
 
-// todo: change to stream controls element which can create, delete streams
-const StreamControlPanel = (props) => {
+const StreamerControlPanel = (props) => {
   const { streamerId } = props;
   const [livestreamId, setLivestreamId] = useState(undefined);
   const [playbackIds, setPlaybackIds] = useState([]);
@@ -22,15 +21,15 @@ const StreamControlPanel = (props) => {
 
   const handleStreamCreation = async (e) => {
     e.preventDefault();
-    generateStream(streamerId).then((streamData) => {
-      console.log(
-        "Registered for a stream, here's the stream data",
-        streamData
-      );
-      setPlaybackIds(streamData.playback_ids); // to deprecate
-      setStreamKey(streamData.stream_key);
-      setLivestreamId(streamData.live_stream_id);
-    });
+    generateStream(streamerId)
+      .then((streamData) => {
+        setPlaybackIds(streamData.playback_ids); // to deprecate
+        setStreamKey(streamData.stream_key);
+        setLivestreamId(streamData.live_stream_id);
+      })
+      .catch((err) => {
+        alert(err.toString());
+      });
   };
 
   const toggleDisplayStream = async (e) => {
@@ -40,9 +39,7 @@ const StreamControlPanel = (props) => {
 
   const handleStreamDestroy = async (e) => {
     e.preventDefault();
-    destroyStream(streamerId).then(() => {
-      console.log("deleted livestream for streamer id:", streamerId);
-    });
+    destroyStream(streamerId);
     setLivestreamId(undefined);
     setPlaybackIds([]);
     setStreamKey(undefined);
@@ -55,7 +52,6 @@ const StreamControlPanel = (props) => {
         const { live_stream_id, playback_ids, stream_key } = response;
         setLivestreamId(live_stream_id);
         setPlaybackIds(playback_ids);
-        console.log("synced w backend, playback ids: ", playback_ids);
         setStreamKey(stream_key);
       }
     });
@@ -120,4 +116,4 @@ const StreamControlPanel = (props) => {
     </>
   );
 };
-export default StreamControlPanel;
+export default StreamerControlPanel;

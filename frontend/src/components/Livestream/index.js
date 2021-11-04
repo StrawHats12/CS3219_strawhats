@@ -1,4 +1,5 @@
-import StreamControlPanel from "./StreamControlPanel";
+import StreamerControlPanel from "./StreamerControlPanel";
+import ViewerControlPanel from "./ViewerControlPanel";
 import StreamViewer from "./StreamViewer";
 
-export {StreamControlPanel, StreamViewer};
+export {StreamerControlPanel, ViewerControlPanel, StreamViewer};

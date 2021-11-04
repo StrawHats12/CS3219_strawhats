@@ -14,9 +14,10 @@ import useSocket from "../../hooks/useSocket";
 
 import Message from "./Message";
 import "./Conversation.css";
+import { MESSAGING_SOCKET_ENDPOINT } from "../../const";
 
 export default function Conversation({ convo, user }) {
-  const { socket } = useSocket({ id: convo.id, isLivestreamChat: false });
+  const { socket } = useSocket(convo.id, "/messaging/socket.io", MESSAGING_SOCKET_ENDPOINT);
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState([]);
@@ -75,8 +76,7 @@ export default function Conversation({ convo, user }) {
 
   const addMessageToConversation = useCallback(
     (msg) => {
-      if (msg.conversation_id !== convo.id || msg.sender_id === user.username)
-        return;
+      if (msg.conversation_id !== convo.id) return;
       setMessages([...messages, msg]);
     },
     [convo.id, messages]

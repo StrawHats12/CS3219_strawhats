@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect } from "react";
 import StrawhatSpinner from "../StrawhatSpinner";
 import Alert from "./Alert";
-import { addBid, getWinningBid, getListingBids, updateWinnerBid } from "../../services/bidding-service";
+import { addBid, getListingBids, updateWinnerBid } from "../../services/bidding-service";
 import { getCurrentUser } from "../../hooks/useAuth";
 import useBidSocket from "../../hooks/useBidSocket";
 import { Col, Row } from "react-bootstrap";
 import { formatDate, formatTime } from "../../utils/DateTime";
-import HighestBidCard from "./HighestBidCard"
 import { useHistory } from "react-router";
 
 const BidInfo = ({ isOwner, deadline, listingInfo }) => {

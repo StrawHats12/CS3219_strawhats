@@ -1,55 +1,56 @@
 require("dotenv").config();
-var cors = require("cors");
-const express = require("express");
-// const basicAuth = require("basic-auth");
-const app = express();
-app.use(cors());
 
+const cors = require("cors");
+const express = require("express");
+const app = express();
+const morgan = require("morgan");
+const Mux = require("@mux/mux-node");
+
+const { Video } = new Mux(
+  process.env.MUX_TOKEN_ID,
+  process.env.MUX_TOKEN_SECRET
+);
 
 const {
   addOrUpdateKeys,
   deleteKeys,
-  getKeysByStreamerId
+  getKeysByStreamerId,
+  getItemByStreamId,
 } = require("./dynamoDb");
 
-const http = require("http").createServer(app);
-const morgan = require("morgan");
-const io = require("socket.io")(http); //TODO remove socket.io if not needed (from package.json)
-const { Server } = require("socket.io");
+const { auth, roles } = require("./auth");
 
+// Sanity Checks
+if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
+  console.error("No MUX token in the .env file yet.");
+  return;
+}
+
+if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
+  console.error("No AWS token in the .env file yet.");
+  return;
+}
+
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
-app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 
-const chatIo = new Server(http, {
+const server = app.listen(process.env.SERVER_PORT, function () {
+  console.log("Your app is listening on port " + process.env.SERVER_PORT);
+});
+
+//Chat IO
+const io = require("socket.io")(server, {
+  path: "/livestream/socket.io",
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
 
-chatIo.on("connection", (socket) => {
-  const id = socket.handshake.query.id;
-  console.log("Connection with: " + id);
-  socket.join(id);
-});
-
-http.listen(7070, () => {
-  console.log("Messaging socket running!");
-});
-
-const Mux = require("@mux/mux-node");
-const stream = require("stream");
-const {Video} = new Mux(
-    process.env.MUX_TOKEN_ID,
-    process.env.MUX_TOKEN_SECRET
-);
-
-const {auth, roles} = require("./auth");
-
 // Livestream messages
-chatIo.on("connection", (socket) => {
+io.on("connection", (socket) => {
   const id = socket.handshake.query.id;
   console.log("Connection with: " + id);
   socket.join(id);
@@ -63,227 +64,181 @@ chatIo.on("connection", (socket) => {
   });
 });
 
-let STREAM;
+const getUsernameFromStreamId = async (streamId) => {
+  const item = await getItemByStreamId(streamId);
+  const username = item?.Items[0]?.streamer_id;
+  return username;
+};
 
-// Authentication Configuration
-// const webhookUser = {
-//   name: "muxer",
-//   pass: "muxology",
-// };
+// MUX Callback when state changes
+app.post("/livestream/mux-hook", function (req, res) {
+  const status = req.body.type;
+  const streamId = req.body.id;
 
-const streamIds = {};
-
-// ========= todo: add auth,  middleware would be necessary ==========
-// Authentication Middleware
-// const auth = (req, res, next) => {
-// function unauthorized(res) {
-//     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-//     return res.send(401);
-// };
-// const user = basicAuth(req);
-// if (!user || !user.name || !user.pass) {
-//     return unauthorized(res);
-// };
-// if (user.name === webhookUser.name && user.pass === webhookUser.pass) {
-//     return next();
-// } else {
-//     return unauthorized(res);
-// };
-// };
-
-// Creates a new Live Stream so we can get a Stream Key
-const createLiveStream = async () => {
-  if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
-    console.error(
-        "It looks like you haven't set up your Mux token in the .env file yet."
-    );
-    return;
+  switch (status) {
+    case "video.live_stream.active":
+      const username = getUsernameFromStreamId(streamId);
+      io.to(username).emit("stream_update");
+      break;
+    default:
+    // Ignore
   }
 
-  // Create a new Live Stream!
+  res.status(200).send("Thanks, Mux!");
+});
+
+const createLiveStream = async () => {
   return await Video.LiveStreams.create({
     playback_policy: "public",
     reconnect_window: 10,
-    new_asset_settings: {playback_policy: "public"},
+    new_asset_settings: { playback_policy: "public" },
   });
 };
 
 const initStream = async () => {
-  STREAM = await createLiveStream();
-  return STREAM;
+  return await createLiveStream();
 };
 
-// Lazy way to find a public playback ID (Just returns the first...)
-const getPlaybackId = (stream) => stream["playback_ids"][0].id;
-
-// Gets a trimmed public stream details from a stream for use on the client side
-const publicStreamDetails = (stream) => ({
-  status: stream.status,
-  playbackId: getPlaybackId(stream),
-  recentAssets: stream["recent_asset_ids"],
-});
-
-const getPrivateStreamDetails = (streamerId) => {
-  const stream = streamIds[streamerId];
-  return stream
-      ? {
-        streamer_id: streamerId,
-        stream_key: stream.stream_key,
-        playback_ids: stream.playback_ids,
-        live_stream_id: stream.id,
-      }
-      : {};
-};
-
-
-// const showPrivateStreamDetails = (item) => {
-//
-//   return item.Item;
-// };
-
-const showPublicStreamDetails = (item) => {
-  return item.Item;
-  return {
-    streamer_id: item.streamer_id,
-    playback_ids: item.playback_ids,
-  }
-};
-
-
-// API for getting the current live stream and its state for bootstrapping the app
-app.get("/fetchStream/:id", async (req, res) => {
-  const id = req.params.id.toString();
-  console.log("trying to fetch stream details for id:", id);
-  console.log("streams id is now:", streamIds);
-  const item = await getKeysByStreamerId(id)
-  return res.json(item.Item);
-  // return res.json(getPrivateStreamDetails(id));
-});
-
-// API which Listens for callbacks from Mux
-// app.post("/mux-hook", auth, function (req, res) {
-//   STREAM.status = req.body.data.status;
-
-//   switch (req.body.type) {
-//     // When a stream goes idle, we want to capture the automatically created
-//     // asset IDs, so we can let people watch the on-demand copies of our live streams
-//     case "video.live_stream.idle":
-//       STREAM["recent_asset_ids"] = req.body.data["recent_asset_ids"];
-//     // We deliberately don't break; here
-
-//     // When a Live Stream is active or idle, we want to push a new event down our
-//     // web socket connection to our frontend, so that it update and display or hide
-//     // the live stream.
-//     case "video.live_stream.active":
-//       io.emit("stream_update", publicStreamDetails(STREAM));
-//       break;
-//     default:
-//     // Relaxing.
-//   }
-
-const addNewStreamToDB = async (stream, streamer_id) => {
-  let item = {
+const createStreamObject = (stream, streamer_id) => {
+  const item = {
     streamer_id: streamer_id,
     stream_key: stream.stream_key,
     playback_ids: stream.playback_ids,
-    live_stream_id: stream.id
-  }
-  await addOrUpdateKeys(item);
-}
+    live_stream_id: stream.id,
+  };
+
+  return item;
+};
+
+const getPrivateInfo = (item) => {
+  return item?.Item;
+};
+
+const getPublicInfo = (item) => {
+  return item
+    ? {
+        streamer_id: item.Item.streamer_id,
+        playback_ids: item.Item.playback_ids,
+      }
+    : {};
+};
 
 app.get("/", (req, res) => {
-  return res.status(200).send("things working");
+  return res.status(200).send("Server is up!");
 });
 
-app.post("/create"/*, auth(roles.USER)*/, (req, res) => {
+// API for getting the current live stream and its state for bootstrapping the app
+app.get("/livestream/public/:id", async (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(500).send(`Unknown ID}`);
+  }
+
+  try {
+    const item = await getKeysByStreamerId(id);
+    return res.json(getPublicInfo(item));
+  } catch (error) {
+    res.json({});
+  }
+});
+
+app.get("/livestream/private/:id", auth(roles.USER), async (req, res) => {
+  const id = req.params.id;
+
+  if (!id) {
+    res.status(500).send(`Unknown ID}`);
+  }
+
+  if (req.user.username !== id) {
+    res
+      .status(403)
+      .json({ err: "User is not authorised to update this account" });
+  }
+
+  try {
+    const item = await getKeysByStreamerId(id);
+    return res.json(getPrivateInfo(item));
+  } catch (error) {
+    res.json({});
+  }
+});
+
+app.post("/livestream", auth(roles.USER), (req, res) => {
   const streamerId = req.body.id;
 
   if (!streamerId) {
-    res.status(500).send(`Unknown ID}`); // Change status code
+    res.status(500).send(`Unknown ID}`);
   }
 
-  // if (req.user.username !== streamerId) {
-  //   res
-  //       .status(403)
-  //       .json({err: "User is not authorised to update this account"});
-  // }
+  if (req.user.username !== streamerId) {
+    res
+      .status(403)
+      .json({ err: "User is not authorised to update this account" });
+  }
 
-  console.log("req:", req);
   initStream()
-      .then((stream) => {
-        console.log("HERE ARE YOUR STREAM DETAILS, KEEP THEM SECRET!");
-        const streamKey = stream.stream_key;
-        console.log(`Stream Key: ${streamKey}`);
-        console.log(`Live stream id: ${streamIds}`);
-        streamIds[streamerId] = stream;
-        addNewStreamToDB(stream, streamerId)
-            .then(() => console.log("yay added to dynamodb"))
-            .catch(e => {
-              console.error(e)
-            });
-        console.log(streamIds);
-        // res.status(200).send(showPrivateStreamDetails(streamerId));
-        const payload = getPrivateStreamDetails(streamerId);
-        console.log("payload", payload)
-        res.status(200).send(payload);
-      })
-      .catch((err) => {
-        res
+    .then((stream) => {
+      const item = createStreamObject(stream, streamerId);
+      addOrUpdateKeys(item)
+        .then(() => {
+          res.status(200).send(item);
+        })
+        .catch((err) => {
+          res
             .status(500)
             .send(
-                `Stream could not be created due to an unknown error. Please try again.\nError: ${err.toString()}`
+              `Stream could not be created due to an unknown error. Please try again.\nError: ${err.toString()}`
             );
-      });
+        });
+    })
+    .catch((err) => {
+      res
+        .status(500)
+        .send(
+          `Stream could not be created due to an unknown error. Please try again.\nError: ${err.toString()}`
+        );
+    });
 });
 
-app.delete("/destroy/:id", /*auth(roles.USER),*/ async (req, res) => {
-  console.log("[destroy api called user livestream id: ", req.params.id);
+app.delete("/livestream/:id", auth(roles.USER), async (req, res) => {
   const streamerId = req.params.id;
-  let existing_item = await getKeysByStreamerId(streamerId);
-  const livestreamId = existing_item.Item.live_stream_id
-  // const livestreamId = streamIds[streamerId].id;
-  console.log(`streamerId ${streamerId}'s livestream id ${livestreamId} needs to be deleted`);
 
-  // if (req.user.username !== streamerId) {
-  //   res .status(403).json({err: "User is not authorised to update this account"});
-  // }
+  if (req.user.username !== streamerId) {
+    res
+      .status(403)
+      .json({ err: "User is not authorised to update this account" });
+  }
+
+  const existing_item = await getKeysByStreamerId(streamerId);
+  const livestreamId = existing_item?.Item?.live_stream_id;
+
+  if (!livestreamId) {
+    res
+      .status(500)
+      .json({ err: "Unknown error fetching livestream details from dynamodb" });
+  }
 
   Video.LiveStreams.del(livestreamId)
-      .then(
-          (r) => deleteKeys(streamerId) // cleanup
-      )
-      .catch((e) => {
+    .then(() =>
+      deleteKeys(streamerId).catch((e) => {
         console.error(
-            "Something wrong happened when livestream backend tried to make api" +
-            " call to delete the livestream via mux", e);
-      });
-  res.status(200)
-      .send(
-          `deleted ${streamerId}'s stream. previous livestream id: ${livestreamId}`
+          `Error deleting from dynamoDb id: ${livestreamId} user: ${streamerId}`,
+          e
+        );
+      })
+    )
+    .catch((e) => {
+      console.error(
+        `Error deleting from mux id: ${livestreamId} user: ${streamerId}`,
+        e
       );
-});
+    });
 
-app.listen(process.env.SERVER_PORT, function () {
-  console.log("Your app is listening on port " + process.env.SERVER_PORT);
+  // Fail Silently
+  res
+    .status(200)
+    .send(
+      `${streamerId}'s stream deleted. previous livestream id: ${livestreamId}`
+    );
 });
-
-app.get("/test", async (req, res) => {
-  console.log("called test")
-  const streamer_id = "rtshkmr"
-  let item = {
-    streamer_id: streamer_id,
-    stream_key: "aabcd",
-    playback_ids: [{
-      policy: 'public',
-      id: 'uCdjYgcSZMu5SrO02lLs6L2hv7KcOB12pXVGNkhfK9Ac'
-    }],
-    live_stream_id: "12312"
-  }
-  let ret_val_put = await addOrUpdateKeys(item)
-  let return_val_get = await getKeysByStreamerId(streamer_id);
-  let del_ret_val = await deleteKeys(streamer_id)
-  console.log(ret_val_put)
-  console.log(return_val_get)
-  console.log(del_ret_val)
-  res.send("done, ")
-})

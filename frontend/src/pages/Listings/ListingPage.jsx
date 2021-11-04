@@ -183,9 +183,6 @@ const ListingsPage = () => {
                 </>
               </div>
               <br/>
-              {/* <div>
-                <HighestBidCard listingInfo={listing}/>
-              </div> */}
             </Col>
           </Row>
           <hr/>
