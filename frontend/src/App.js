@@ -20,6 +20,7 @@ import Livestream from "./pages/Livestream";
 import ErrorBoundary from "./utils/ErrorBoundary";
 import MyListingsPage from "./pages/Listings/MyListingsPage";
 import UserBids from "./pages/Bids/UserBids";
+import Admin from "./pages/Admin";
 
 function App() {
   return (
@@ -70,6 +71,7 @@ function App() {
                 />
                 <ProtectedRoute path="/messenger" component={Messenger} exact />
                 <ProtectedRoute path="/UserBids" component={UserBids} exact />
+                <ProtectedRoute path="/admin" component={Admin} exact />
                 <Route component={NotFound} />
               </Switch>
             </Container>
