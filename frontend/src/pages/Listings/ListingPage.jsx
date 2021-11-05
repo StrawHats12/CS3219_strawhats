@@ -16,7 +16,7 @@ import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 import Livestream from "../Livestream";
-import BidInfo from "../../components/Bids/BidInfo"
+import BidInfo from "../../components/Bids/BidInfo";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -79,7 +79,7 @@ const ListingsPage = () => {
     }
   };
 
-  const hasExpired = (deadline) => {
+  const hasNotExpired = (deadline) => {
     return Date.parse(deadline) > Date.now();
   };
 
@@ -97,7 +97,6 @@ const ListingsPage = () => {
         return;
       }
 
-
       checkOwner(res.seller_sub);
       setListing(res);
       getAccount(seller_username)
@@ -113,27 +112,30 @@ const ListingsPage = () => {
     });
   }, [id, seller_username]);
 
+  const streamEntry = seller_username && (
+    <>
+      <Button onClick={handleShowStreamModal}>
+        Click to Watch {seller_username}'s Stream
+      </Button>
+    </>
+  );
 
-  let streamEntry = seller_username && <>
-    <Button onClick={handleShowStreamModal}>Click to Watch {seller_username}'s Stream
-    </Button>
-  </>
+  const streamViewModal = seller_username && (
+    <>
+      <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>{seller_username}'s Stream</Modal.Title>
+        </Modal.Header>
+        <Livestream streamerId={seller_username} />
 
-  let streamViewModal = seller_username && <>
-    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>{seller_username}'s Stream</Modal.Title>
-      </Modal.Header>
-      <Livestream streamerId={seller_username}/>
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseStreamModal}>
-          Back
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  </>
-
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseStreamModal}>
+            Back
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 
   return (
     <>
@@ -164,7 +166,7 @@ const ListingsPage = () => {
         <Container fluid>
           <h1>{listing_name}</h1>
           {isOwner &&
-            (hasExpired(deadline) ? (
+            (hasNotExpired(deadline) ? (
               <>
                 <Button className="m-1" onClick={handleEdit}>
                   Edit
@@ -217,13 +219,17 @@ const ListingsPage = () => {
                   </div>
                 </>
               </div>
-              <br/>
-              { streamEntry}
-              <br/>
+              <br />
+              {streamEntry}
+              <br />
             </Col>
           </Row>
-          <hr/>
-          <BidInfo isOwner={isOwner} deadline={deadline} listingInfo={listing}/>
+          <hr />
+          <BidInfo
+            isOwner={isOwner}
+            deadline={deadline}
+            listingInfo={listing}
+          />
         </Container>
       ) : (
         <Container>
