@@ -85,39 +85,13 @@
   border-bottom: 2px solid #009879;
 }
 
-.descriptionCard {
-  border: 1px solid #009879;    /* Set up Border */
-  border-radius: 6px;           /* Slightly Curve edges */
-  overflow: hidden;             /* Fixes the corners */
-  display: flex;                /* Children use Flexbox */
-  flex-direction: column;       /* Rotate Axis */
-  height: 100%;
-}
-
 .card-header {
   width: 100%;
-}
-.description-card-header {
-  color: white;
-  text-align: center;
-  /* font-size: 12px; */
-  font-weight: 600;
-  border-bottom: 1px solid #009879;
-  background-color:#009879;
-  padding: 5px 10px;
 }
 
 .row-no-padding {
   padding-left: 0;
   padding-right: 0;
-}
-
-.description-card-main {
-  display: flex;              /* Children use Flexbox */
-  flex-direction: column;     /* Rotate Axis to Vertical */
-  justify-content: center;    /* Group Children in Center */
-  align-items: center;        /* Group Children in Center (+axis) */
-  padding: 15px 0;            /* Add padding to the top/bottom */
 }
 
 .row {
