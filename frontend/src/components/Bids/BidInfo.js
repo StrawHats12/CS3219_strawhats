@@ -54,22 +54,17 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
 
   // retrieve existing bids of the listing
   useEffect(() => {
-    getListingBids(listingInfo.id).then(
-      (res) => {
-        if (!res) {
-          setIsLoadRunningBids(false);
-          return;
-        }
-        setRunningBids(res);
-        setWinningBidPrice(res[0] !== undefined ? res[0].bidPrice : "0");
-        setWinningBidOwner(
-          res[0] !== undefined ? res[0].bidOwner : "No bidders"
-        );
+    getListingBids(listingInfo.id).then((res) => {
+      if (!res) {
         setIsLoadRunningBids(false);
-      },
-      [listingInfo.id]
-    );
-  });
+        return;
+      }
+      setRunningBids(res);
+      setWinningBidPrice(res[0] !== undefined ? res[0].bidPrice : "0");
+      setWinningBidOwner(res[0] !== undefined ? res[0].bidOwner : "No bidders");
+      setIsLoadRunningBids(false);
+    });
+  }, [listingInfo.id]);
 
   // retrieve bids real time from socket for the listing
   const addNewBidToRunningBids = useCallback(
@@ -239,20 +234,19 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                       required
                     />
                     <Alert
-                      onDismiss={() => handleCloseAddBidAlert()}
+                      onDismiss={handleCloseAddBidAlert}
                       show={showAddBidDeclarative}
                       showCancelButton={true}
-                      onConfirm={() => handleClick()}
+                      onConfirm={handleClick}
                       text={"Do you really want to add bid?"}
                       title={"Confirm Bidding."}
-                      type={"info"}
                     />
                     <Alert
-                      onConfirmOrDismiss={handleIncorrectDeclarative}
+                      onDismiss={handleIncorrectDeclarative}
+                      onConfirm={handleIncorrectDeclarative}
                       show={showIncorrectDeclarative}
                       title={"Incorrect input."}
                       text={`Ensure that your bid price is no lower than $${winningBidPrice}`}
-                      type={"info"}
                     />
                     <br />
                     <button
@@ -288,15 +282,15 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                   // Winner is available and owner of listing
                   <>
                     <Alert
-                      onConfirmOrDismiss={() => handleSetWinDeclarative()}
+                      onConfirmOrDismiss={handleSetWinDeclarative}
                       show={showSetWinDeclarative}
                       showCancelButton={true}
-                      onConfirm={() =>
-                        handleWinnerClick(listingInfo.id, winningBidPrice)
-                      }
+                      onConfirm={() => {
+                        handleSetWinDeclarative();
+                        handleWinnerClick(listingInfo.id, winningBidPrice);
+                      }}
                       title={"Set the winner?"}
                       text={"Do remember to contact your winner!"}
-                      type={"info"}
                     />
                     <link
                       href="https://fonts.googleapis.com/icon?family=Material+Icons"

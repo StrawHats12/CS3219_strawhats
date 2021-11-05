@@ -15,7 +15,7 @@ const BIDDING_SOCKET_ENDPOINT = DEPLOYED
   : "http://localhost:2001";
 const LIVESTREAM_SOCKET_ENDPOINT = BACKEND_URL || "http://localhost:9000";
 const BIDDING_ENDPOINT = DEPLOYED
-  ? `${BACKEND_URL}/bid`
+  ? "http://localhost:2001/bid"
   : "http://localhost:2001/bid";
 
 const LISTING = {
