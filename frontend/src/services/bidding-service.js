@@ -62,24 +62,6 @@ const getAccountBids = async (uname) => {
   }
 };
 
-const deleteBid = async (listingId, bidPrice) => {
-  try {
-    const userSession = await getCurrentSession();
-    const token = userSession?.accessToken.jwtToken;
-    await axios.delete(
-      `${BIDDING_ENDPOINT}/deleteBid/${listingId}/${bidPrice}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-  } catch (error) {
-    console.log(error);
-    return null;
-  }
-};
-
 const updateWinnerBid = async (listingId, bidPrice) => {
   try {
     const userSession = await getCurrentSession();
@@ -100,7 +82,6 @@ const updateWinnerBid = async (listingId, bidPrice) => {
 
 const addBid = async (newBid) => {
   try {
-    // console.log(newBid);
     const userSession = await getCurrentSession();
     const token = userSession?.accessToken.jwtToken;
     await axios.post(`${BIDDING_ENDPOINT}/addBid`, newBid, {
@@ -117,7 +98,6 @@ const addBid = async (newBid) => {
 export {
   addBid,
   getListingBids,
-  deleteBid,
   getAccountBids,
   getWinningBid,
   updateWinnerBid,

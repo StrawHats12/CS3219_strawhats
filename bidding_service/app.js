@@ -2,15 +2,18 @@ const express = require("express");
 const { PORT } = require("./const");
 const cors = require("cors");
 const app = express();
+const morgan = require("morgan");
 
 app.use(express.json());
 app.use(cors());
+app.use(morgan("tiny"));
 
-var server = app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Bidding Service Listening on port ${PORT}`);
 });
 
-var io = require("socket.io")(server, {
+const io = require("socket.io")(server, {
+  path: "/bid/socket.io",
   cors: {
     origin: "*",
     methods: ["GET", "POST", "DELETE", "PUT"],
