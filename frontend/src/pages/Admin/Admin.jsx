@@ -1,18 +1,36 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container, Table } from "react-bootstrap";
 import useAuth from "../../hooks/useAuth";
+import { deleteListing, getAllListings } from "../../services/listings-service";
 
 const Admin = () => {
   const auth = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); // set to false
+  const [listings, setListings] = useState(null);
 
   useEffect(() => {
     const groups =
       auth?.currentUser?.signInUserSession?.idToken?.payload["cognito:groups"];
-    if (groups && "strawhats-admin" in groups) {
+    if (groups && groups.includes("strawhats-admin")) {
       setIsAdmin(true);
     }
   }, [auth]);
+
+  useEffect(() => {
+    if (isAdmin) {
+      getAllListings()
+        .then((listings) => {
+          setListings(listings);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    }
+  }, [isAdmin]);
+
+  const onDeleteListing = (id) => {
+    deleteListing(id);
+  };
 
   if (!isAdmin) {
     return (
@@ -22,7 +40,34 @@ const Admin = () => {
     );
   }
 
-  return <Container></Container>;
+  return (
+    <Container className="mt-2">
+      <h1>Listings</h1>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>id</th>
+            <th>title</th>
+            <th>username</th>
+            <th>actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {listings &&
+            listings.map(({ id, listing_name, seller_username }) => (
+              <tr key={id}>
+                <td>{id}</td>
+                <td>{listing_name}</td>
+                <td>{seller_username}</td>
+                <td>
+                  <Button onClick={() => onDeleteListing(id)}>delete</Button>
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+    </Container>
+  );
 };
 
 export default Admin;
