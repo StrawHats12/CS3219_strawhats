@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Modal,
+  OverlayTrigger,
+  Row,
+  Tooltip,
+} from "react-bootstrap";
 import { useHistory, useParams } from "react-router";
 import {
   ListingProfileCard,
@@ -137,52 +145,89 @@ const ListingsPage = () => {
     </>
   );
 
+  const deleteListingModal = (
+    <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Delete Listing</Modal.Title>
+      </Modal.Header>
+      {isLoading ? (
+        <StrawhatSpinner />
+      ) : (
+        <Modal.Body>
+          Are you sure you want to delete <strong>{listing_name}</strong>?
+        </Modal.Body>
+      )}
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseDeleteModal}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleDelete}>
+          Delete
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+
   return (
     <>
       {streamViewModal}
-      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Listing</Modal.Title>
-        </Modal.Header>
-        {isLoading ? (
-          <StrawhatSpinner />
-        ) : (
-          <Modal.Body>
-            Are you sure you want to delete <strong>{listing_name}</strong>?
-          </Modal.Body>
-        )}
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseDeleteModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {deleteListingModal}
       {isLoading ? (
         <StrawhatSpinner />
       ) : listing ? (
         <Container fluid>
-          <h1>{listing_name}</h1>
-          {isOwner &&
-            (hasNotExpired(deadline) ? (
-              <>
-                <Button className="m-1" onClick={handleEdit}>
-                  Edit
+          <div className="d-flex justify-content-between align-items-center">
+            <h1>{listing_name}</h1>
+            <div>
+              {isOwner &&
+                (hasNotExpired(deadline) ? (
+                  <>
+                    <Button className="m-1" onClick={handleEdit}>
+                      Edit
+                    </Button>
+                    <Button className="m-1" onClick={handleShowDeleteModal}>
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip>
+                          Listing cannot be edited after the deadline. Contact
+                          support for assistance.
+                        </Tooltip>
+                      }
+                    >
+                      <Button className="m-1" variant="secondary">
+                        Edit
+                      </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip>
+                          Listing cannot be deleted after the deadline. Contact
+                          support for assistance.
+                        </Tooltip>
+                      }
+                    >
+                      <Button className="m-1" variant="secondary">
+                        Delete
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                ))}
+              {!isOwner && (
+                <Button className="m-1" onClick={redirectToChat}>
+                  Chat with seller!
                 </Button>
-                <Button className="m-1" onClick={handleShowDeleteModal}>
-                  Delete
-                </Button>
-              </>
-            ) : (
-              <p> Listing cannot be edited after expiry. </p>
-            ))}
-          {!isOwner && (
-            <Button className="m-1" onClick={redirectToChat}>
-              Chat with seller!
-            </Button>
-          )}
+              )}
+            </div>
+          </div>
           <Row>
             <Col>
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
@@ -192,7 +237,7 @@ const ListingsPage = () => {
                 <div className="descriptionCard">
                   <div className="description-card-header">Description</div>
                   <div className="description-card-main">
-                    <p> {description} </p>
+                    <pre>{description}</pre>
                   </div>
                 </div>
               </>
