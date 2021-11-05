@@ -197,6 +197,11 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
               <h3> Unable to Bid </h3>
               <p> You cannot bid for your own items.</p>
             </div>
+          ) : !uname ? (
+            <div>
+              <h3>Please Login</h3>
+              <p>Login to begin bidding!</p>
+            </div>
           ) : hasExpired(deadline) ? (
             <>
               <h3> Place Your Bid! </h3>
