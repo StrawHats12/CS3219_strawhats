@@ -27,7 +27,7 @@ const ListingsPage = () => {
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showStreamModal, setShowStreamModal] = useState(false);
-  const [isStreamActive, setIsStreamActive] = useState(false);
+  // const [isStreamActive, setIsStreamActive] = useState(false); // Unused
 
   const {
     listing_name,
