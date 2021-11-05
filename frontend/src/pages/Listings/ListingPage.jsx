@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Container,
+  Modal,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import { useHistory, useParams } from "react-router";
 import {
   ListingProfileCard,
@@ -73,7 +79,11 @@ const ListingsPage = () => {
     } else {
       return (
         <span>
-          Bidding ends in {hours}:{minutes}:{seconds} ({formatDate(deadline)})
+          Bidding ends in{" "}
+          <b>
+            {hours}:{minutes}:{seconds}
+          </b>{" "}
+          ({formatDate(deadline)})
         </span>
       );
     }
@@ -113,123 +123,158 @@ const ListingsPage = () => {
   }, [id, seller_username]);
 
   const streamEntry = seller_username && (
-    <>
-      <Button onClick={handleShowStreamModal}>
-        Click to Watch {seller_username}'s Stream
+    <OverlayTrigger
+      placement="left"
+      delay={{ show: 250, hide: 300 }}
+      overlay={<Tooltip>Watch {seller_username}'s Stream.</Tooltip>}
+    >
+      <Button onClick={handleShowStreamModal}>Watch Stream</Button>
+    </OverlayTrigger>
+  );
+
+  const chatButton = !isOwner && (
+    <OverlayTrigger
+      placement="left"
+      delay={{ show: 250, hide: 300 }}
+      overlay={<Tooltip>Chat with {seller_username}.</Tooltip>}
+    >
+      <Button className="m-1" onClick={redirectToChat}>
+        Chat with seller!
       </Button>
-    </>
+    </OverlayTrigger>
   );
 
   const streamViewModal = seller_username && (
-    <>
-      <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{seller_username}'s Stream</Modal.Title>
-        </Modal.Header>
-        <Livestream streamerId={seller_username} />
+    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>{seller_username}'s Stream</Modal.Title>
+      </Modal.Header>
+      <Livestream streamerId={seller_username} />
 
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseStreamModal}>
-            Back
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseStreamModal}>
+          Back
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+
+  const deleteListingModal = (
+    <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Delete Listing</Modal.Title>
+      </Modal.Header>
+      {isLoading ? (
+        <StrawhatSpinner />
+      ) : (
+        <Modal.Body>
+          Are you sure you want to delete <strong>{listing_name}</strong>?
+        </Modal.Body>
+      )}
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleCloseDeleteModal}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={handleDelete}>
+          Delete
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 
   return (
     <>
       {streamViewModal}
-      <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Delete Listing</Modal.Title>
-        </Modal.Header>
-        {isLoading ? (
-          <StrawhatSpinner />
-        ) : (
-          <Modal.Body>
-            Are you sure you want to delete <strong>{listing_name}</strong>?
-          </Modal.Body>
-        )}
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseDeleteModal}>
-            Cancel
-          </Button>
-          <Button variant="primary" onClick={handleDelete}>
-            Delete
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      {deleteListingModal}
       {isLoading ? (
         <StrawhatSpinner />
       ) : listing ? (
         <Container fluid>
-          <h1>{listing_name}</h1>
-          {isOwner &&
-            (hasNotExpired(deadline) ? (
-              <>
-                <Button className="m-1" onClick={handleEdit}>
-                  Edit
-                </Button>
-                <Button className="m-1" onClick={handleShowDeleteModal}>
-                  Delete
-                </Button>
-              </>
-            ) : (
-              <p> Listing cannot be edited after expiry. </p>
-            ))}
-          {!isOwner && (
-            <Button className="m-1" onClick={redirectToChat}>
-              Chat with seller!
-            </Button>
-          )}
-          <Row>
-            <Col>
+          <div className="d-flex justify-content-between align-items-center">
+            <h1>{listing_name}</h1>
+            <div>
+              {isOwner &&
+                (hasNotExpired(deadline) ? (
+                  <>
+                    <Button className="m-1" onClick={handleEdit}>
+                      Edit
+                    </Button>
+                    <Button className="m-1" onClick={handleShowDeleteModal}>
+                      Delete
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip>
+                          Listing cannot be edited after the deadline. Contact
+                          support for assistance.
+                        </Tooltip>
+                      }
+                    >
+                      <Button className="m-1" variant="secondary">
+                        Edit
+                      </Button>
+                    </OverlayTrigger>
+                    <OverlayTrigger
+                      placement="left"
+                      delay={{ show: 250, hide: 300 }}
+                      overlay={
+                        <Tooltip>
+                          Listing cannot be deleted after the deadline. Contact
+                          support for assistance.
+                        </Tooltip>
+                      }
+                    >
+                      <Button className="m-1" variant="secondary">
+                        Delete
+                      </Button>
+                    </OverlayTrigger>
+                  </>
+                ))}
+              {chatButton}
+              {streamEntry}
+            </div>
+          </div>
+          <div className="d-flex">
+            <div className="flex-fill" style={{ paddingRight: "0.5em" }}>
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
-            </Col>
-            <Col>
-              <>
-                <div className="descriptionCard">
-                  <div className="description-card-header">Description</div>
-                  <div className="description-card-main">
-                    <p> {description} </p>
-                  </div>
-                </div>
-              </>
-            </Col>
-            <Col>
+              <div className="my-2">
+                <h3 className="py-1">Description</h3>
+                <pre className="p-2">{description}</pre>
+              </div>
+            </div>
+            <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
               <div>
                 <ListingProfileCard profile={profile} />
               </div>
               <br />
               <div>
-                <>
-                  <div className="deadlineCard">
-                    <div className="deadline-card-header">Deadline</div>
-                    <div className="deadline-card-main">
-                      <p>
-                        {deadline && (
-                          <Countdown
-                            date={stringToDate(deadline)}
-                            renderer={countdownRenderer}
-                          />
-                        )}
-                      </p>
-                    </div>
+                <div className="deadlineCard">
+                  <div className="deadline-card-header">Deadline</div>
+                  <div className="deadline-card-main">
+                    <p>
+                      {deadline && (
+                        <Countdown
+                          date={stringToDate(deadline)}
+                          renderer={countdownRenderer}
+                        />
+                      )}
+                    </p>
                   </div>
-                </>
+                </div>
               </div>
               <br />
-              {streamEntry}
-              <br />
-            </Col>
-          </Row>
-          <hr />
-          <BidInfo
-            isOwner={isOwner}
-            deadline={deadline}
-            listingInfo={listing}
-          />
+              <BidInfo
+                isOwner={isOwner}
+                deadline={deadline}
+                listingInfo={listing}
+              />
+            </div>
+          </div>
         </Container>
       ) : (
         <Container>

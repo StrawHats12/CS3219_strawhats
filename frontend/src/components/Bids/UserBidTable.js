@@ -8,18 +8,10 @@ import { getListing } from "../../services/listings-service";
 const UserBidTable = () => {
   const [bids, setBids] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUnameLoad, setIsUnameLoading] = useState(true);
-  const [uname, setUname] = useState(null);
 
   useEffect(() => {
     getCurrentUser()
       .then((res) => {
-        if (!res) {
-          setIsUnameLoading(false);
-          return;
-        }
-        setUname(res.username);
-        setIsUnameLoading(false);
         return res.username;
       })
       .then((uname) => {
@@ -39,16 +31,8 @@ const UserBidTable = () => {
     return new Date(listing.deadline).getTime() < Date.now();
   }
 
-  const BidRow = ({
-    bidOwner,
-    bidCreationDate,
-    bidExpiry,
-    bidPrice,
-    bidStatus,
-    bidId,
-    listingId,
-  }) => {
-    var listingLink = "http://localhost:3000/listings/" + listingId;
+  const BidRow = ({ bidCreationDate, bidPrice, bidStatus, listingId }) => {
+    const listingLink = `/listings/${listingId}`;
     return (
       <tr>
         <td>
@@ -81,21 +65,6 @@ const UserBidTable = () => {
             </button>
           )}
         </td>
-        <td>
-          {isUnameLoad ? (
-            <StrawhatSpinner />
-          ) : uname === bidOwner ? (
-            <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
-            </button>
-          ) : (
-            <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
-            </button>
-          )}
-        </td>
       </tr>
     );
   };
@@ -112,18 +81,15 @@ const UserBidTable = () => {
               <th> Date of Bid </th>
               <th> Price </th>
               <th> Status </th>
-              <th> Action </th>
             </tr>
           </thead>
           <tbody>
             {bids.map((bid) => (
               <BidRow
                 key={bid.bidId}
-                bidOwner={bid.bidOwner}
                 bidCreationDate={bid.createdAt}
                 bidPrice={bid.bidPrice}
                 bidStatus={bid.status}
-                bidId={bid.bidId}
                 listingId={bid.auctionId}
               />
             ))}
