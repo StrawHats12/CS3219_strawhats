@@ -81,21 +81,6 @@ const UserBidTable = () => {
             </button>
           )}
         </td>
-        <td>
-          {isUnameLoad ? (
-            <StrawhatSpinner />
-          ) : uname === bidOwner ? (
-            <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
-            </button>
-          ) : (
-            <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
-            </button>
-          )}
-        </td>
       </tr>
     );
   };
@@ -112,7 +97,6 @@ const UserBidTable = () => {
               <th> Date of Bid </th>
               <th> Price </th>
               <th> Status </th>
-              <th> Action </th>
             </tr>
           </thead>
           <tbody>

@@ -146,7 +146,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
     }
   };
 
-  const BidRow = ({ bidOwner, bidCreationDate, bidPrice, bidStatus }) => {
+  const BidRow = ({ bidOwner, bidCreationDate, bidPrice }) => {
     return (
       <tr>
         <td>
@@ -156,34 +156,6 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
           {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)}
         </td>
         <td> ${bidPrice} </td>
-        <td>
-          {bidStatus === "WINNER" ? (
-            <button type="button" className="btn btn-success" disabled>
-              Winner
-            </button>
-          ) : new Date(deadline).getTime() < Date.now() ? (
-            <button type="button" className="btn btn-secondary" disabled>
-              expired
-            </button>
-          ) : (
-            <button type="button" className="btn btn-success" disabled>
-              ongoing
-            </button>
-          )}
-        </td>
-        <td>
-          {isUnameLoad ? (
-            <StrawhatSpinner />
-          ) : uname === bidOwner ? (
-            <button type="button" className="btn btn-secondary" disabled>
-              -
-            </button>
-          ) : (
-            <button type="button" className="btn btn-secondary" disabled>
-              -
-            </button>
-          )}
-        </td>
       </tr>
     );
   };
@@ -218,7 +190,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                       autoComplete="off"
                       value={input.bidPrice}
                       className="form-control"
-                      placeholder="Enter Your Price Here"
+                      placeholder="Enter Price Here"
                       min={winningBidPrice}
                       required
                     />
@@ -388,8 +360,6 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                   <th> Bid Owner </th>
                   <th> Date of Bid </th>
                   <th> Price </th>
-                  <th> Status </th>
-                  <th> Action </th>
                 </tr>
               </thead>
               <tbody>
@@ -399,8 +369,6 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
                     bidOwner={bid.bidOwner}
                     bidCreationDate={bid.createdAt}
                     bidPrice={bid.bidPrice}
-                    bidStatus={bid.status}
-                    bidId={bid.bidId}
                   />
                 ))}
               </tbody>

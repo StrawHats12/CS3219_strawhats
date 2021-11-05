@@ -36,19 +36,27 @@ const ListingsCarousel = (props) => {
   }, [props.imageUris, props.seller_uid, setImages]);
 
   return (
-    <>
+    <div style={{ maxWidth: "500px" }}>
       {images.length === 1 ? (
-        <img className="d-block w-100" src={images[0]} alt="Product" />
+        <img
+          src={images[0]}
+          alt="Product"
+          style={{ objectFit: "contain", width: "100%" }}
+        />
       ) : (
         <Carousel activeIndex={index} onSelect={handleSelect}>
           {images.map((image, idx) => (
             <Carousel.Item key={idx}>
-              <img className="d-block w-100" src={image} alt="Product" />
+              <img
+                src={image}
+                alt="Product"
+                style={{ objectFit: "contain", width: "100%" }}
+              />
             </Carousel.Item>
           ))}
         </Carousel>
       )}
-    </>
+    </div>
   );
 };
 
