@@ -72,7 +72,7 @@ const auth = (role) => (req, res, next) => {
     return res.status(401).send("Invalid Token");
   }
 
-  if (!role in req.user["cognito:groups"]) {
+  if (!req.user["cognito:groups"].includes(role)) {
     return res.status(403).send("Unauthorised");
   }
 

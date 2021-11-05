@@ -94,7 +94,10 @@ app.delete("/listing/:id", auth(roles.USER), async (req, res) => {
   const id = req.params.id;
   try {
     const listing = await getListingById(id);
-    if (listing?.Item?.seller_sub !== req.user.sub) {
+    if (
+      !req.user["cognito:groups"].includes(roles.ADMIN) &&
+      listing?.Item?.seller_sub !== req.user.sub
+    ) {
       res
         .status(403)
         .json({ err: "User is not authorised to delete this listing" });
