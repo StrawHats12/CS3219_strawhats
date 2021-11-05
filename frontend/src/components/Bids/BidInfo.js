@@ -146,41 +146,28 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
     }
   };
 
-  const redirectToWinnerProfile = async (bidOwner) => {
-    if (bidOwner) {
-      history.push(`/profile/${bidOwner}`);
-    } else {
-      alert("User profile not found.");
-    }
-  };
-
   const BidRow = ({ bidOwner, bidCreationDate, bidPrice, bidStatus }) => {
     return (
       <tr>
         <td>
-          {" "}
-          <a href={redirectToWinnerProfile}> {bidOwner} </a>{" "}
+          <a href={`/profile/${bidOwner}`}>{bidOwner}</a>
         </td>
         <td>
-          {" "}
-          {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)}{" "}
+          {formatDate(bidCreationDate)} @ {formatTime(bidCreationDate)}
         </td>
         <td> ${bidPrice} </td>
         <td>
           {bidStatus === "WINNER" ? (
             <button type="button" className="btn btn-success" disabled>
-              {" "}
-              Winner{" "}
+              Winner
             </button>
           ) : new Date(deadline).getTime() < Date.now() ? (
             <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              expired{" "}
+              expired
             </button>
           ) : (
             <button type="button" className="btn btn-success" disabled>
-              {" "}
-              ongoing{" "}
+              ongoing
             </button>
           )}
         </td>
@@ -189,13 +176,11 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
             <StrawhatSpinner />
           ) : uname === bidOwner ? (
             <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
+              -
             </button>
           ) : (
             <button type="button" className="btn btn-secondary" disabled>
-              {" "}
-              -{" "}
+              -
             </button>
           )}
         </td>
@@ -204,7 +189,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
   };
 
   return (
-    <>
+    <div>
       <Row>
         <Col>
           {isOwner ? (
@@ -214,7 +199,6 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
             </div>
           ) : hasExpired(deadline) ? (
             <>
-              {" "}
               <h3> Place Your Bid! </h3>
               <div>
                 <h5> Bid Price: </h5>
@@ -419,7 +403,7 @@ const BidInfo = ({ isOwner, deadline, listingInfo }) => {
           )}
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
 
