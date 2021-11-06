@@ -1,9 +1,9 @@
 import {destroyStream, fetchPrivateStreamDetails, generateStream,} from "../../services/livestream-service";
-import {Button, Card, Col, Container, Form, Modal, Row} from "react-bootstrap";
+import {Button, Card, Col, Container, Modal, Row} from "react-bootstrap";
 import {useEffect, useState} from "react";
 import {StreamViewer} from "./index";
 import {MESSAGES} from "../../const";
-import {GoMute, GoUnmute} from "react-icons/all";
+import {BiHelpCircle, BiShowAlt, GoMute, GoUnmute, GrFormViewHide, VscSettingsGear} from "react-icons/all";
 
 const StreamerControlPanel = (props) => {
   const {streamerId} = props;
@@ -12,11 +12,12 @@ const StreamerControlPanel = (props) => {
   const [streamKey, setStreamKey] = useState(undefined);
   const [displayStream, setDisplayStream] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [volume, setVolume] = useState(0.6);
   const [muted, setMuted] = useState(false);
 
-  const handleClose = () => setShowModal(false);
-  const handleShow = () => setShowModal(true);
+  const handleCloseHelp = () => setShowModal(false);
+  const handleShowHelp = () => setShowModal(true);
 
   const handleStreamCreation = async (e) => {
     e.preventDefault();
@@ -25,6 +26,7 @@ const StreamerControlPanel = (props) => {
           setPlaybackIds(streamData.playback_ids); // to deprecate
           setStreamKey(streamData.stream_key);
           setLivestreamId(streamData.live_stream_id);
+          handleCloseSettings();
         })
         .catch((err) => {
           alert(err.toString());
@@ -35,6 +37,19 @@ const StreamerControlPanel = (props) => {
     e.preventDefault();
     setDisplayStream(!displayStream);
   };
+
+  const toggleMute = () => {
+    console.log("Togglemute");
+    setMuted(!muted);
+  }
+
+  const toggleShowSettings = () => {
+    console.log("Toggle show settings");
+    setShowSettings(!showSettings);
+  }
+  const handleCloseSettings = () => setShowSettings(false);
+  const handleOpenSettings = () => setShowSettings(true);
+
 
   const handleStreamDestroy = async (e) => {
     e.preventDefault();
@@ -60,55 +75,6 @@ const StreamerControlPanel = (props) => {
       <Card> Your Stream Key: {streamKey}</Card>
   );
 
-  const playbackIdDisplay =
-      playbackIds && playbackIds.length > 0 ? (
-          playbackIds.map((pid, idx) => {
-            return (
-                <div key={idx}>
-                  <Card> Playback id: {pid.id}</Card>
-                  <Button variant="primary" onClick={handleShow}>
-                    Streaming Instructions
-                  </Button>
-                  <Button onClick={handleStreamDestroy}>Destroy Stream</Button>
-                  <Button onClick={toggleDisplayStream}>
-                    {displayStream ? <div>Hide Stream</div> : <div>Show Stream</div>}
-                  </Button>
-
-                  <Modal show={showModal} onHide={handleClose}>
-                    <Modal.Header closeButton>
-                      <Modal.Title>Streaming Instructions</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>{MESSAGES.STREAMING_INSTRUCTIONS}</Modal.Body>
-                    <Modal.Footer>
-                      <Button variant="secondary" onClick={handleClose}>
-                        Close
-                      </Button>
-                      <Button variant="primary" onClick={handleClose}>
-                        Save Changes
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </div>
-            );
-          })
-      ) : (
-          <p>Stream is not live yet.</p>
-      );
-
-  const toggleMute = () => {
-    console.log("Togglemute");
-    setMuted(!muted);
-  }
-
-
-  const generatorForm = (
-      <Form>
-        <Button size={"sm"} variant={"primary"} onClick={handleStreamCreation}>
-          Generate stream key
-        </Button>
-      </Form>
-  );
-
   const muteToggler = <>
     {muted
         ? <GoUnmute
@@ -121,11 +87,71 @@ const StreamerControlPanel = (props) => {
   </>
 
 
+  const helpModal = (pid) => {
+    return (
+        <Modal show={showModal} onHide={handleCloseHelp}>
+          <Modal.Header closeButton>
+            <Modal.Title>Streaming Instructions</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {streamKeyDisplay}
+            <Card> Playback id: {pid.id}</Card>
+            {MESSAGES.STREAMING_INSTRUCTIONS}
+          </Modal.Body>
+        </Modal>
+    )
+  }
+
+  const streamHelp = (pid) => <>
+    <BiHelpCircle onClick={handleShowHelp}/>
+    {helpModal(pid)}
+  </>
+
+
+  const streamViewToggler = displayStream
+      ? <BiShowAlt onClick={toggleDisplayStream}/>
+      : <GrFormViewHide onClick={toggleDisplayStream}/>;
+
+  const streamConfigContent = livestreamId
+      ? <Button onClick={handleStreamDestroy}>Destroy Stream</Button>
+      : <Button size={"sm"} variant={"primary"} onClick={handleStreamCreation}>
+        Generate stream key
+      </Button>
+
+  const streamConfigTool = <>
+    <VscSettingsGear
+        onClick={handleOpenSettings}
+    />
+    <Modal show={showSettings} onHide={handleCloseSettings}>
+      <Modal.Header closeButton>
+        <Modal.Title>Settings</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {streamConfigContent}
+      </Modal.Body>
+    </Modal>
+  </>
+
+  const streamerControls =
+      playbackIds && playbackIds.length > 0 ? (
+          playbackIds.map((pid, idx) => {
+            return (
+                <div key={idx}>
+                  {streamHelp(pid)}
+                  {streamConfigTool}
+                  {displayStream && muteToggler}
+                  {streamViewToggler}
+                </div>
+            )
+          })
+      ) : (<>
+        {streamConfigTool}
+      </>);
+
   return (
       <>
         <Container>
-          {livestreamId ? playbackIdDisplay : generatorForm}
-          {streamKeyDisplay}
+          {streamerControls}
           <Row>
             <Col xs={11}>
               {livestreamId && displayStream && (
@@ -137,10 +163,6 @@ const StreamerControlPanel = (props) => {
               )}
 
             </Col>
-            <Col xs={1}>
-              {muteToggler}
-            </Col>
-
           </Row>
         </Container>
       </>
