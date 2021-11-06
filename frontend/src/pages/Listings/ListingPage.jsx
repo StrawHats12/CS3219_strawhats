@@ -210,6 +210,7 @@ const ListingsPage = () => {
         {description}
       </div>
     </div>
+    {chatButton}
   </div>
 
   return (
@@ -265,8 +266,6 @@ const ListingsPage = () => {
                     </OverlayTrigger>
                   </>
                 ))}
-              {chatButton}
-              {streamEntry}
             </div>
           </div>
           <div className="d-flex">
