@@ -244,7 +244,12 @@ const ListingsPage = () => {
               <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
               <div className="my-2">
                 <h3 className="py-1">Description</h3>
-                <pre className="p-2">{description}</pre>
+                <div
+                  className="p-2 m-0"
+                  style={{ whiteSpace: "pre-wrap", maxWidth: "50vw" }}
+                >
+                  {description}
+                </div>
               </div>
             </div>
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
