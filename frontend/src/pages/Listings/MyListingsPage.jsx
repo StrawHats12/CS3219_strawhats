@@ -23,7 +23,6 @@ const MyListingsPage = () => {
 
   return (
     <>
-      <Livestream/>
       <h1>{pageTitle} Page</h1>
       <Container className="mx-0 px-0">
         {isLoading ? (
