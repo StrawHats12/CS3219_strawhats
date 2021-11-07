@@ -16,7 +16,7 @@ const ProfileReviews = (props) => {
         <ReactStars count={5} value={avgRating} size={24} edit={false} />
       </div>
       {reviews.map((review, idx) => (
-        <Card id={idx} className="mt-2">
+        <Card key={idx} className="mt-2">
           <Card.Body>{review.text}</Card.Body>
           <Card.Footer>
             <div className="d-flex justify-content-between">

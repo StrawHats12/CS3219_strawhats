@@ -14,6 +14,7 @@ import { getCurrentUser } from "../../hooks/useAuth";
 import useQuery from "../../hooks/useQueryParams";
 
 import "./Messenger.css";
+import { Container } from "react-bootstrap";
 
 export default function Messages() {
   const curConvoMember = useQuery().get("user");
@@ -69,7 +70,7 @@ export default function Messages() {
   }, [curConvoMember, isLoading, user]);
 
   return (
-    <>
+    <Container>
       {isLoading ? (
         <StrawhatSpinner />
       ) : (
@@ -90,6 +91,6 @@ export default function Messages() {
           )}
         </div>
       )}
-    </>
+    </Container>
   );
 }

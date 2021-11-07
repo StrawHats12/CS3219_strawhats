@@ -33,26 +33,30 @@ const Admin = () => {
 
   const onDeleteListing = (id) => {
     setIsLoading(true);
-    deleteListing(id).then(() => {
-      getAllListings()
-        .then((listings) => {
-          setListings(listings);
-        })
-        .catch((err) => {
-          alert(err);
-        })
-        .finally(setIsLoading(false));
-    }).catch(err => {
-      alert(err);
-      setIsLoading(false);
-    });
+    deleteListing(id)
+      .then(() => {
+        getAllListings()
+          .then((listings) => {
+            setListings(listings);
+          })
+          .catch((err) => {
+            alert(err);
+          })
+          .finally(setIsLoading(false));
+      })
+      .catch((err) => {
+        alert(err);
+        setIsLoading(false);
+      });
   };
 
   if (!isAdmin) {
     return (
-      <h3 className="pt-5 text-center">
-        You need to be an admin to view this page
-      </h3>
+      <Container>
+        <h3 className="pt-5 text-center">
+          You need to be an admin to view this page
+        </h3>
+      </Container>
     );
   }
 

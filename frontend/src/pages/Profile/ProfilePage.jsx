@@ -64,7 +64,7 @@ const ProfilePage = () => {
   }, [username]);
 
   return (
-    <>
+    <Container>
       <Container className="d-flex justify-content-between">
         <h1>{pageTitle} Page</h1>
         {canEdit && !isEditing && !isLoading && (
@@ -113,7 +113,7 @@ const ProfilePage = () => {
         handleCloseModal={handleCloseReviewModal}
         accountUsername={username}
       />
-    </>
+    </Container>
   );
 };
 

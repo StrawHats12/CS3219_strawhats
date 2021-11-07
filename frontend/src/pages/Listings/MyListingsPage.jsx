@@ -21,7 +21,7 @@ const MyListingsPage = () => {
   }, []);
 
   return (
-    <>
+    <Container>
       <h1>{pageTitle} Page</h1>
       <Container className="mx-0 px-0">
         {isLoading ? (
@@ -34,7 +34,7 @@ const MyListingsPage = () => {
           <div>No listings to display</div>
         )}
       </Container>
-    </>
+    </Container>
   );
 };
 
