@@ -32,9 +32,6 @@ const ListingsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showStreamModal, setShowStreamModal] = useState(false);
-  // const [isStreamActive, setIsStreamActive] = useState(false); // Unused
-
   const {
     listing_name,
     description,
@@ -46,8 +43,6 @@ const ListingsPage = () => {
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
-  const handleCloseStreamModal = () => setShowStreamModal(false);
-  const handleShowStreamModal = () => setShowStreamModal(true);
   const handleDelete = async () => {
     setIsLoading(true);
     try {
@@ -122,16 +117,6 @@ const ListingsPage = () => {
     });
   }, [id, seller_username]);
 
-  const streamEntry = seller_username && (
-    <OverlayTrigger
-      placement="left"
-      delay={{ show: 250, hide: 300 }}
-      overlay={<Tooltip>Watch {seller_username}'s Stream.</Tooltip>}
-    >
-      <Button onClick={handleShowStreamModal}>Watch Stream</Button>
-    </OverlayTrigger>
-  );
-
   const chatButton = !isOwner && (
     <OverlayTrigger
       placement="left"
@@ -142,21 +127,6 @@ const ListingsPage = () => {
         Chat with seller!
       </Button>
     </OverlayTrigger>
-  );
-
-  const streamViewModal = seller_username && (
-    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>{seller_username}'s Stream</Modal.Title>
-      </Modal.Header>
-      <Livestream streamerId={seller_username} />
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseStreamModal}>
-          Back
-        </Button>
-      </Modal.Footer>
-    </Modal>
   );
 
   const deleteListingModal = (
@@ -218,7 +188,6 @@ const ListingsPage = () => {
 
   return (
     <>
-      {streamViewModal}
       {deleteListingModal}
       {isLoading ? (
         <StrawhatSpinner />
@@ -274,9 +243,7 @@ const ListingsPage = () => {
           <div className="d-flex">
             {listingsCarousel}
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
-              {/*<Livestream streamerId={profile.username}/>*/}
-              <Livestream streamerId={"kormingsoon"} />{" "}
-              {/*todo: unset when deploying*/}
+              <Livestream streamerId={profile?.username} />
               <br />
               <div>
                 <ListingProfileCard profile={profile} />
