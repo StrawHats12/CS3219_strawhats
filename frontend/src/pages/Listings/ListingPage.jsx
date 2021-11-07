@@ -182,36 +182,39 @@ const ListingsPage = () => {
     </Modal>
   );
 
-
-  const deadlineDisplay =  <div>
-    <div className="deadlineCard">
-      <div className="deadline-card-header">Deadline</div>
-      <div className="deadline-card-main">
-        <p>
-          {deadline && (
+  const deadlineDisplay = (
+    <div>
+      <div className="deadlineCard">
+        <div className="deadline-card-header">Deadline</div>
+        <div className="deadline-card-main">
+          <p>
+            {deadline && (
               <Countdown
-                  date={stringToDate(deadline)}
-                  renderer={countdownRenderer}
+                date={stringToDate(deadline)}
+                renderer={countdownRenderer}
               />
-          )}
-        </p>
+            )}
+          </p>
+        </div>
       </div>
     </div>
-  </div>
+  );
 
-  const listingsCarousel =<div className="flex-fill" style={{ paddingRight: "0.5em" }}>
-    <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
-    <div className="my-2">
-      <h3 className="py-1">Description</h3>
-      <div
+  const listingsCarousel = (
+    <div className="flex-fill" style={{ paddingRight: "0.5em" }}>
+      <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
+      <div className="my-2">
+        <h3 className="py-1">Description</h3>
+        <div
           className="p-2 m-0"
           style={{ whiteSpace: "pre-wrap", maxWidth: "50vw" }}
-      >
-        {description}
+        >
+          {description}
+        </div>
       </div>
+      {chatButton}
     </div>
-    {chatButton}
-  </div>
+  );
 
   return (
     <>
@@ -272,8 +275,9 @@ const ListingsPage = () => {
             {listingsCarousel}
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
               {/*<Livestream streamerId={profile.username}/>*/}
-              <Livestream streamerId={"kormingsoon"}/> {/*todo: unset when deploying*/}
-              <br/>
+              <Livestream streamerId={"kormingsoon"} />{" "}
+              {/*todo: unset when deploying*/}
+              <br />
               <div>
                 <ListingProfileCard profile={profile} />
               </div>
