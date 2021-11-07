@@ -22,12 +22,16 @@ const Livestream = (props) => {
 
   return currentUser?.username === streamerId ? (
     <>
-      <h1>{pageTitle}</h1>
+      <h1>
+        {streamerId}'s {pageTitle}
+      </h1>
       <StreamerControlPanel streamerId={streamerId} />
     </>
   ) : (
     <>
-      <h1>{pageTitle}</h1>
+      <h1>
+        {streamerId}'s {pageTitle}
+      </h1>
       <ViewerControlPanel streamerId={streamerId} />
     </>
   );

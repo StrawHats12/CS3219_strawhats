@@ -21,7 +21,6 @@ import {
 import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
-import Livestream from "../Livestream";
 import BidInfo from "../../components/Bids/BidInfo";
 import { ViewerControlPanel } from "../../components/Livestream";
 
@@ -247,7 +246,7 @@ const ListingsPage = () => {
                     </OverlayTrigger>
                   </>
                 ))}
-              {seller_username === profile.username && (
+              {isOwner && (
                 <Button className="m-1" onClick={handleStartStream}>
                   Start Stream
                 </Button>
@@ -257,10 +256,9 @@ const ListingsPage = () => {
           <div className="d-flex">
             {listingsCarousel}
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
-              {profile?.username && profile?.username !== seller_username && (
+              {profile && !isOwner && (
                 <ViewerControlPanel streamerId={profile?.username} />
               )}
-              <br />
               <div>
                 <ListingProfileCard profile={profile} />
               </div>

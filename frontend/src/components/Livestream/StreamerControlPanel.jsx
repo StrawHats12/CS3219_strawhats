@@ -3,18 +3,10 @@ import {
   fetchPrivateStreamDetails,
   generateStream,
 } from "../../services/livestream-service";
-import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
+import { Accordion, Button, Card, Container, Modal } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { StreamViewer } from "./index";
-import { MESSAGES } from "../../const";
-import {
-  BiHelpCircle,
-  BiShowAlt,
-  GoMute,
-  GoUnmute,
-  GrFormViewHide,
-  VscSettingsGear,
-} from "react-icons/all";
+import StrawhatSpinner from "../StrawhatSpinner";
 
 const StreamerControlPanel = (props) => {
   const { streamerId } = props;
@@ -22,51 +14,44 @@ const StreamerControlPanel = (props) => {
   const [playbackIds, setPlaybackIds] = useState([]);
   const [streamKey, setStreamKey] = useState(undefined);
   const [displayStream, setDisplayStream] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [volume, setVolume] = useState(0.6);
+  const [displayStreamKeyModal, setDisplayStreamKeyModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  // const [volume, setVolume] = useState(0.6);
+  const volume = 0.6;
   const [muted, setMuted] = useState(false);
 
-  const handleCloseHelp = () => setShowModal(false);
-  const handleShowHelp = () => setShowModal(true);
-
-  const handleStreamCreation = async (e) => {
+  const handleStreamCreation = (e) => {
     e.preventDefault();
+    setIsLoading(true);
     generateStream(streamerId)
       .then((streamData) => {
         setPlaybackIds(streamData.playback_ids); // to deprecate
         setStreamKey(streamData.stream_key);
         setLivestreamId(streamData.live_stream_id);
-        handleCloseSettings();
       })
       .catch((err) => {
         alert(err.toString());
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   };
 
-  const toggleDisplayStream = async (e) => {
-    e.preventDefault();
-    setDisplayStream(!displayStream);
-  };
-
-  const toggleMute = () => {
-    console.log("Togglemute");
-    setMuted(!muted);
-  };
-
-  const toggleShowSettings = () => {
-    console.log("Toggle show settings");
-    setShowSettings(!showSettings);
-  };
-  const handleCloseSettings = () => setShowSettings(false);
-  const handleOpenSettings = () => setShowSettings(true);
-
-  const handleStreamDestroy = async (e) => {
+  const handleStreamDestroy = (e) => {
     e.preventDefault();
     destroyStream(streamerId);
     setLivestreamId(undefined);
     setPlaybackIds([]);
     setStreamKey(undefined);
+  };
+
+  const toggleDisplayStream = (e) => {
+    e.preventDefault();
+    setDisplayStream(!displayStream);
+  };
+
+  const toggleMute = () => {
+    setMuted(!muted);
   };
 
   // attempt to fetch private stream details from the backend:
@@ -81,99 +66,123 @@ const StreamerControlPanel = (props) => {
     });
   }, [streamerId]);
 
-  const streamKeyDisplay = streamKey && (
-    <Card> Your Stream Key: {streamKey}</Card>
-  );
-
-  const muteToggler = (
-    <>
-      {muted ? (
-        <GoUnmute onClick={toggleMute} />
-      ) : (
-        <GoMute onClick={toggleMute} />
-      )}
-    </>
-  );
-
-  const helpModal = (pid) => {
-    return (
-      <Modal show={showModal} onHide={handleCloseHelp}>
-        <Modal.Header closeButton>
-          <Modal.Title>Streaming Instructions</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {streamKeyDisplay}
-          <Card> Playback id: {pid.id}</Card>
-          {MESSAGES.STREAMING_INSTRUCTIONS}
-        </Modal.Body>
-      </Modal>
-    );
+  // const streamKeyDisplay = streamKey && (
+  //   <Card> Your Stream Key: {streamKey}</Card>
+  // );
+  const showStreamKeyModal = () => {
+    setDisplayStreamKeyModal(true);
   };
 
-  const streamHelp = (pid) => (
-    <>
-      <BiHelpCircle onClick={handleShowHelp} />
-      {helpModal(pid)}
-    </>
+  const hideStreamKeyModal = () => {
+    setDisplayStreamKeyModal(false);
+  };
+
+  const streamKeyModal = (
+    <Modal show={displayStreamKeyModal} onHide={hideStreamKeyModal}>
+      <Modal.Header closeButton>
+        <Modal.Title>Stream Key</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        Your Stream Key:
+        <Card>{streamKey}</Card>
+      </Modal.Body>
+    </Modal>
   );
 
-  const streamViewToggler = displayStream ? (
-    <BiShowAlt onClick={toggleDisplayStream} />
+  return isLoading ? (
+    <StrawhatSpinner />
   ) : (
-    <GrFormViewHide onClick={toggleDisplayStream} />
-  );
-
-  const streamConfigContent = livestreamId ? (
-    <Button onClick={handleStreamDestroy}>Destroy Stream</Button>
-  ) : (
-    <Button size={"sm"} variant={"primary"} onClick={handleStreamCreation}>
-      Generate stream key
-    </Button>
-  );
-
-  const streamConfigTool = (
     <>
-      <VscSettingsGear onClick={handleOpenSettings} />
-      <Modal show={showSettings} onHide={handleCloseSettings}>
-        <Modal.Header closeButton>
-          <Modal.Title>Settings</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{streamConfigContent}</Modal.Body>
-      </Modal>
-    </>
-  );
-
-  const streamerControls =
-    playbackIds && playbackIds.length > 0 ? (
-      playbackIds.map((pid, idx) => {
-        return (
-          <div key={idx}>
-            {streamHelp(pid)}
-            {streamConfigTool}
-            {displayStream && muteToggler}
-            {streamViewToggler}
-          </div>
-        );
-      })
-    ) : (
-      <>{streamConfigTool}</>
-    );
-
-  return (
-    <>
+      {streamKeyModal}
       <Container>
-        {streamerControls}
-        <Row>
-          <Col xs={11}>
-            {livestreamId && displayStream && (
+        {livestreamId ? (
+          <>
+            <div className="my-2">
+              <Button variant="primary" onClick={handleStreamDestroy}>
+                End Stream
+              </Button>
+              {displayStream ? (
+                <>
+                  <Button
+                    className="mx-2"
+                    variant="primary"
+                    onClick={toggleDisplayStream}
+                  >
+                    Hide Stream
+                  </Button>
+                  {muted ? (
+                    <Button variant="primary" onClick={toggleMute}>
+                      Unmute
+                    </Button>
+                  ) : (
+                    <Button variant="primary" onClick={toggleMute}>
+                      Mute
+                    </Button>
+                  )}
+                </>
+              ) : (
+                <Button
+                  className="mx-2"
+                  variant="primary"
+                  onClick={toggleDisplayStream}
+                >
+                  Show Stream
+                </Button>
+              )}
+            </div>
+            {displayStream && (
               <StreamViewer
                 playbackIds={playbackIds}
                 volume={volume}
                 muted={muted}
               />
             )}
-          </Col>
-        </Row>
+            <Accordion className="my-2" defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Software Requirements</Accordion.Header>
+                <Accordion.Body>
+                  Streaming requires the use of streaming software. We recommend
+                  using OBS Studio for your streaming. OBS Studio is free and
+                  open source and can be downloaded here:{" "}
+                  <a href="https://obsproject.com">https://obsproject.com</a>.
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Streaming Instructions</Accordion.Header>
+                <Accordion.Body>
+                  To be able to stream, follow the instructions on streaming
+                  here:{" "}
+                  <a href="https://obsproject.com/wiki/OBS-Studio-Overview">
+                    https://obsproject.com/wiki/OBS-Studio-Overview
+                  </a>
+                  .
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="2">
+                <Accordion.Header>Stream Keys</Accordion.Header>
+                <Accordion.Body>
+                  Server URL: <Card>rtmp://global-live.mux.com:5222/app</Card>
+                  <Button className="my-2" onClick={showStreamKeyModal}>
+                    View Stream Keys
+                  </Button>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </>
+        ) : (
+          <Card className="mt-4">
+            <Card.Body>
+              <Card.Title>Start Streaming</Card.Title>
+              <Card.Text>
+                Welcome {streamerId}, click the button below when you are ready
+                to stream.
+              </Card.Text>
+              <Button variant="primary" onClick={handleStreamCreation}>
+                Start Stream
+              </Button>
+            </Card.Body>
+          </Card>
+        )}
       </Container>
     </>
   );
