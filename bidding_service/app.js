@@ -1,8 +1,10 @@
 const express = require("express");
-const { PORT } = require("./const");
+const { PORT, REDIS_HOST } = require("./const");
 const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
+const { createAdapter } = require("@socket.io/redis-adapter");
+const { createClient } = require("redis");
 
 app.use(express.json());
 app.use(cors());
@@ -19,6 +21,10 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST", "DELETE", "PUT"],
   },
 });
+
+const pubClient = createClient({ host: REDIS_HOST, port: 6379 });
+const subClient = pubClient.duplicate();
+io.adapter(createAdapter(pubClient, subClient));
 
 app.set("socketio", io);
 
