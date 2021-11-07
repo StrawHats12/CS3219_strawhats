@@ -8,3 +8,16 @@ services:
     build: ./listings_service
     ports:
       - "8080:8080"
+  messaging:
+    build: ./messaging_service
+    ports:
+      - "8081:8081"
+  livestream:
+    build: ./livestream_service
+    ports:
+      - "9000:9000"
+  bidding:
+    build: ./bidding_service
+    ports:
+      - "2001:2001"
+  
