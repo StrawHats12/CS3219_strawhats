@@ -45,7 +45,6 @@
   height: 60vh;
 }
 
-
 /* BID TABLE STYLING */
 .styled-table {
   border-collapse: collapse;
@@ -65,7 +64,7 @@
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+  padding: 12px 15px;
 }
 
 .styled-table tbody tr {
@@ -95,11 +94,11 @@
 }
 
 .deadlineCard {
-  border: 1px solid #CC3333;    /* Set up Border */
-  border-radius: 6px;           /* Slightly Curve edges */
-  overflow: hidden;             /* Fixes the corners */
-  display: flex;                /* Children use Flexbox */
-  flex-direction: column;       /* Rotate Axis */
+  border: 1px solid #cc3333; /* Set up Border */
+  border-radius: 6px; /* Slightly Curve edges */
+  overflow: hidden; /* Fixes the corners */
+  display: flex; /* Children use Flexbox */
+  flex-direction: column; /* Rotate Axis */
   height: 100%;
 }
 
@@ -107,30 +106,29 @@
   color: white;
   text-align: center;
   font-weight: 600;
-  border-bottom: 1px solid #CC3333;
-  background-color:#CC3333;
+  border-bottom: 1px solid #cc3333;
+  background-color: #cc3333;
   padding: 5px 10px;
   margin: 0;
   width: 100%;
-  
 }
 
 .deadline-card-main {
-  display: flex;              /* Children use Flexbox */
-  flex-direction: column;     /* Rotate Axis to Vertical */
-  justify-content: center;    /* Group Children in Center */
-  align-items: center;        /* Group Children in Center (+axis) */
-  padding: 15px 0;            /* Add padding to the top/bottom */
+  display: flex; /* Children use Flexbox */
+  flex-direction: column; /* Rotate Axis to Vertical */
+  justify-content: center; /* Group Children in Center */
+  align-items: center; /* Group Children in Center (+axis) */
+  padding: 15px 0; /* Add padding to the top/bottom */
   font-size: 15px;
 }
 
 /* Bid Card */
 .winningBidCard {
-  border: 1px solid #009879;    /* Set up Border */
-  border-radius: 6px;           /* Slightly Curve edges */
-  overflow: hidden;             /* Fixes the corners */
-  display: flex;                /* Children use Flexbox */
-  flex-direction: column;       /* Rotate Axis */
+  border: 1px solid #009879; /* Set up Border */
+  border-radius: 6px; /* Slightly Curve edges */
+  overflow: hidden; /* Fixes the corners */
+  display: flex; /* Children use Flexbox */
+  flex-direction: column; /* Rotate Axis */
 }
 
 .winningBid-card-header {
@@ -138,16 +136,16 @@
   text-align: center;
   font-weight: 600;
   border-bottom: 1px solid #009879;
-  background-color:#009879;
+  background-color: #009879;
   padding: 5px 10px;
 }
 
 .winning-card-main {
-  display: flex;              /* Children use Flexbox */
-  flex-direction: column;     /* Rotate Axis to Vertical */
-  justify-content: center;    /* Group Children in Center */
-  align-items: center;        /* Group Children in Center (+axis) */
-  padding: 15px 0;            /* Add padding to the top/bottom */
+  display: flex; /* Children use Flexbox */
+  flex-direction: column; /* Rotate Axis to Vertical */
+  justify-content: center; /* Group Children in Center */
+  align-items: center; /* Group Children in Center (+axis) */
+  padding: 15px 0; /* Add padding to the top/bottom */
 }
 
 .material-icons {

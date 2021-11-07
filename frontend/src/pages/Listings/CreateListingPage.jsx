@@ -7,7 +7,7 @@ const CreateListingPage = () => {
   return (
     <Container>
       <h1>{pageTitle} Page</h1>
-      <ListingForm create/>
+      <ListingForm create />
     </Container>
   );
 };

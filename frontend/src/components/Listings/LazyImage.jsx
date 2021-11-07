@@ -26,7 +26,7 @@ const LazyImage = (props) => {
     });
   }, [imagename]);
 
-  return image && <img style={{ "height": "120px" }} src={image} alt="" />;
+  return image && <img style={{ height: "120px" }} src={image} alt="" />;
 };
 
 export default LazyImage;

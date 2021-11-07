@@ -24,7 +24,7 @@ const ListingsCardVertical = (props) => {
 
   return (
     <Link to={"/listings/" + id} className="text-decoration-none text-reset">
-      <Card className="m-4" style={{width: "300px"}}>
+      <Card className="m-4" style={{ width: "300px" }}>
         <Card.Img variant="top" src={image} />
         <Card.Body>
           <Card.Title>{listing_name}</Card.Title>
