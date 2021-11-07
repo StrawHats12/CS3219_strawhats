@@ -1,3 +1,4 @@
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
 import {
   StreamerControlPanel,
@@ -21,19 +22,19 @@ const Livestream = (props) => {
   }
 
   return currentUser?.username === streamerId ? (
-    <>
+    <Container>
       <h1>
         {streamerId}'s {pageTitle}
       </h1>
       <StreamerControlPanel streamerId={streamerId} />
-    </>
+    </Container>
   ) : (
-    <>
+    <Container>
       <h1>
         {streamerId}'s {pageTitle}
       </h1>
       <ViewerControlPanel streamerId={streamerId} />
-    </>
+    </Container>
   );
 };
 

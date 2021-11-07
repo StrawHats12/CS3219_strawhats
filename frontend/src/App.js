@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Footer from "./components/Footer";
 import NavBar from "./components/NavBar";
@@ -30,51 +29,39 @@ function App() {
           <NavBar />
           <Switch>
             <Route path="/" component={Home} exact />
-            <Container>
-              <Switch>
-                <Route
-                  path="/profile/:username"
-                  component={ProfilePage}
-                  exact
-                />
-                <Route path="/listings" component={ListingsPage} exact />
-                <ProtectedRoute
-                  path="/listings/self"
-                  component={MyListingsPage}
-                  exact
-                />
-                <ProtectedRoute
-                  path="/listings/create"
-                  component={CreateListingPage}
-                  exact
-                />
-                <ProtectedRoute
-                  path="/listings/edit/:id"
-                  component={EditListingPage}
-                  exact
-                />
-                <Route path="/listings/:id" component={ListingPage} exact />
-                <ProtectedRoute
-                  path="/tv/:streamerId"
-                  component={Livestream}
-                  exact
-                />
-                <Route
-                  path="/authentication"
-                  component={Authentication}
-                  exact
-                />
-                <ProtectedRoute
-                  path="/tv/:streamerId"
-                  component={Livestream}
-                  exact
-                />
-                <ProtectedRoute path="/messenger" component={Messenger} exact />
-                <ProtectedRoute path="/UserBids" component={UserBids} exact />
-                <ProtectedRoute path="/admin" component={Admin} exact />
-                <Route component={NotFound} />
-              </Switch>
-            </Container>
+            <Route path="/profile/:username" component={ProfilePage} exact />
+            <Route path="/listings" component={ListingsPage} exact />
+            <ProtectedRoute
+              path="/listings/self"
+              component={MyListingsPage}
+              exact
+            />
+            <ProtectedRoute
+              path="/listings/create"
+              component={CreateListingPage}
+              exact
+            />
+            <ProtectedRoute
+              path="/listings/edit/:id"
+              component={EditListingPage}
+              exact
+            />
+            <Route path="/listings/:id" component={ListingPage} exact />
+            <ProtectedRoute
+              path="/tv/:streamerId"
+              component={Livestream}
+              exact
+            />
+            <Route path="/authentication" component={Authentication} exact />
+            <ProtectedRoute
+              path="/tv/:streamerId"
+              component={Livestream}
+              exact
+            />
+            <ProtectedRoute path="/messenger" component={Messenger} exact />
+            <ProtectedRoute path="/UserBids" component={UserBids} exact />
+            <ProtectedRoute path="/admin" component={Admin} exact />
+            <Route component={NotFound} />
           </Switch>
         </ErrorBoundary>
         <Footer />

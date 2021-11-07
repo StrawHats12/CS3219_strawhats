@@ -17,7 +17,11 @@ import "./Conversation.css";
 import { MESSAGING_SOCKET_ENDPOINT } from "../../const";
 
 export default function Conversation({ convo, user }) {
-  const { socket } = useSocket(convo.id, "/messaging/socket.io", MESSAGING_SOCKET_ENDPOINT);
+  const { socket } = useSocket(
+    convo.id,
+    "/messaging/socket.io",
+    MESSAGING_SOCKET_ENDPOINT
+  );
   const [text, setText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [messages, setMessages] = useState([]);

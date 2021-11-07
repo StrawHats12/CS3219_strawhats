@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
 import { ListingForm } from "../../components/Listings";
 import StrawhatSpinner from "../../components/StrawhatSpinner";
@@ -39,7 +40,7 @@ const EditListingPage = () => {
   }, [id]);
 
   return (
-    <>
+    <Container>
       <h1>{pageTitle} Page</h1>
       {isLoading ? (
         <StrawhatSpinner />
@@ -48,7 +49,7 @@ const EditListingPage = () => {
       ) : (
         <ListingForm edit item={listing} />
       )}
-    </>
+    </Container>
   );
 };
 

@@ -1,29 +1,29 @@
 .conversation-container {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    height: 100%;
-    background-color: #f9f9fa;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
+  background-color: #f9f9fa;
 }
 
 .conversation-header {
-    text-align: center;
-    padding: 10px;
-    display: flex;
-    background: white;
-    border: 1px #f9f9fa;
-    align-items: center;
+  text-align: center;
+  padding: 10px;
+  display: flex;
+  background: white;
+  border: 1px #f9f9fa;
+  align-items: center;
 }
 
 .conversation-messages-container {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-    overflow-y: auto;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .chat-input:focus {
-    box-shadow: none !important;
+  box-shadow: none !important;
 }

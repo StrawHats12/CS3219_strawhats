@@ -26,7 +26,7 @@ const Home = () => {
     <div>
       <div className="d-flex justify-content-around align-items-center flex-wrap text-white hero">
         <div className="d-flex justify-content-center">
-          <img src="/logo192.png" alt="" className="pr"/>
+          <img src="/logo192.png" alt="" className="pr" />
           <div className="d-flex justify-content-left align-items-center">
             <div className="mx-2">
               <h1>Strawhats</h1>

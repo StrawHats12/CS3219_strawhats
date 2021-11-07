@@ -22,7 +22,7 @@ const ListingsPage = () => {
   }, []);
 
   return (
-    <>
+    <Container>
       <h1>{pageTitle} Page</h1>
       <Container>
         {isLoading ? (
@@ -33,7 +33,7 @@ const ListingsPage = () => {
           ))
         )}
       </Container>
-    </>
+    </Container>
   );
 };
 

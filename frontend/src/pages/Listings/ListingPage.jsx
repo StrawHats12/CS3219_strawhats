@@ -195,7 +195,7 @@ const ListingsPage = () => {
   );
 
   return (
-    <>
+    <Container>
       {deleteListingModal}
       {isLoading ? (
         <StrawhatSpinner />
@@ -279,7 +279,7 @@ const ListingsPage = () => {
           correct.
         </Container>
       )}
-    </>
+    </Container>
   );
 };
 
