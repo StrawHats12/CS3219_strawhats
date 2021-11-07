@@ -21,8 +21,8 @@ import {
 import { getAccount } from "../../services/account-service";
 import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
-import Livestream from "../Livestream";
 import BidInfo from "../../components/Bids/BidInfo";
+import { ViewerControlPanel } from "../../components/Livestream";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -32,9 +32,6 @@ const ListingsPage = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [profile, setProfile] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showStreamModal, setShowStreamModal] = useState(false);
-  // const [isStreamActive, setIsStreamActive] = useState(false); // Unused
-
   const {
     listing_name,
     description,
@@ -46,8 +43,6 @@ const ListingsPage = () => {
 
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
   const handleShowDeleteModal = () => setShowDeleteModal(true);
-  const handleCloseStreamModal = () => setShowStreamModal(false);
-  const handleShowStreamModal = () => setShowStreamModal(true);
   const handleDelete = async () => {
     setIsLoading(true);
     try {
@@ -68,6 +63,14 @@ const ListingsPage = () => {
   const redirectToChat = async () => {
     if (profile) {
       history.push(`/messenger/?user=${profile.username}`);
+    } else {
+      alert("User profile not found.");
+    }
+  };
+
+  const handleStartStream = () => {
+    if (profile && profile.username) {
+      history.push(`/tv/${profile.username}`);
     } else {
       alert("User profile not found.");
     }
@@ -122,16 +125,6 @@ const ListingsPage = () => {
     });
   }, [id, seller_username]);
 
-  const streamEntry = seller_username && (
-    <OverlayTrigger
-      placement="left"
-      delay={{ show: 250, hide: 300 }}
-      overlay={<Tooltip>Watch {seller_username}'s Stream.</Tooltip>}
-    >
-      <Button onClick={handleShowStreamModal}>Watch Stream</Button>
-    </OverlayTrigger>
-  );
-
   const chatButton = !isOwner && (
     <OverlayTrigger
       placement="left"
@@ -142,21 +135,6 @@ const ListingsPage = () => {
         Chat with seller!
       </Button>
     </OverlayTrigger>
-  );
-
-  const streamViewModal = seller_username && (
-    <Modal show={showStreamModal} onHide={handleCloseStreamModal}>
-      <Modal.Header closeButton>
-        <Modal.Title>{seller_username}'s Stream</Modal.Title>
-      </Modal.Header>
-      <Livestream streamerId={seller_username} />
-
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleCloseStreamModal}>
-          Back
-        </Button>
-      </Modal.Footer>
-    </Modal>
   );
 
   const deleteListingModal = (
@@ -182,9 +160,42 @@ const ListingsPage = () => {
     </Modal>
   );
 
+  const deadlineDisplay = (
+    <div>
+      <div className="deadlineCard">
+        <div className="deadline-card-header">Deadline</div>
+        <div className="deadline-card-main">
+          <p>
+            {deadline && (
+              <Countdown
+                date={stringToDate(deadline)}
+                renderer={countdownRenderer}
+              />
+            )}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const listingsCarousel = (
+    <div className="flex-fill" style={{ paddingRight: "0.5em" }}>
+      <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
+      <div className="my-2">
+        <h3 className="py-1">Description</h3>
+        <div
+          className="p-2 m-0"
+          style={{ whiteSpace: "pre-wrap", maxWidth: "50vw" }}
+        >
+          {description}
+        </div>
+      </div>
+      {chatButton}
+    </div>
+  );
+
   return (
     <>
-      {streamViewModal}
       {deleteListingModal}
       {isLoading ? (
         <StrawhatSpinner />
@@ -235,43 +246,24 @@ const ListingsPage = () => {
                     </OverlayTrigger>
                   </>
                 ))}
-              {chatButton}
-              {streamEntry}
+              {isOwner && (
+                <Button className="m-1" onClick={handleStartStream}>
+                  Start Stream
+                </Button>
+              )}
             </div>
           </div>
           <div className="d-flex">
-            <div className="flex-fill" style={{ paddingRight: "0.5em" }}>
-              <ListingsCarousel seller_uid={seller_uid} imageUris={images} />
-              <div className="my-2">
-                <h3 className="py-1">Description</h3>
-                <div
-                  className="p-2 m-0"
-                  style={{ whiteSpace: "pre-wrap", maxWidth: "50vw" }}
-                >
-                  {description}
-                </div>
-              </div>
-            </div>
+            {listingsCarousel}
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
+              {profile && !isOwner && (
+                <ViewerControlPanel streamerId={profile?.username} />
+              )}
               <div>
                 <ListingProfileCard profile={profile} />
               </div>
               <br />
-              <div>
-                <div className="deadlineCard">
-                  <div className="deadline-card-header">Deadline</div>
-                  <div className="deadline-card-main">
-                    <p>
-                      {deadline && (
-                        <Countdown
-                          date={stringToDate(deadline)}
-                          renderer={countdownRenderer}
-                        />
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              {deadlineDisplay}
               <br />
               <BidInfo
                 isOwner={isOwner}
