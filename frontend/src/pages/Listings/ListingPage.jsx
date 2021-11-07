@@ -23,6 +23,7 @@ import { formatDate, stringToDate } from "../../utils/DateTime";
 import Countdown from "react-countdown";
 import Livestream from "../Livestream";
 import BidInfo from "../../components/Bids/BidInfo";
+import { ViewerControlPanel } from "../../components/Livestream";
 
 const ListingsPage = () => {
   const { id } = useParams();
@@ -63,6 +64,14 @@ const ListingsPage = () => {
   const redirectToChat = async () => {
     if (profile) {
       history.push(`/messenger/?user=${profile.username}`);
+    } else {
+      alert("User profile not found.");
+    }
+  };
+
+  const handleStartStream = () => {
+    if (profile && profile.username) {
+      history.push(`/tv/${profile.username}`);
     } else {
       alert("User profile not found.");
     }
@@ -238,12 +247,19 @@ const ListingsPage = () => {
                     </OverlayTrigger>
                   </>
                 ))}
+              {seller_username === profile.username && (
+                <Button className="m-1" onClick={handleStartStream}>
+                  Start Stream
+                </Button>
+              )}
             </div>
           </div>
           <div className="d-flex">
             {listingsCarousel}
             <div className="flex-fill" style={{ paddingLeft: "0.5em" }}>
-              <Livestream streamerId={profile?.username} />
+              {profile?.username && profile?.username !== seller_username && (
+                <ViewerControlPanel streamerId={profile?.username} />
+              )}
               <br />
               <div>
                 <ListingProfileCard profile={profile} />

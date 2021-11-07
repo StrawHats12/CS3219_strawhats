@@ -13,17 +13,21 @@ const Livestream = (props) => {
   const { currentUser } = useAuth();
 
   if (!streamerId) {
-    return <></>;
+    return (
+      <>
+        <p>Invalid streamer id</p>
+      </>
+    );
   }
 
   return currentUser?.username === streamerId ? (
     <>
-      <title>{pageTitle}</title>
+      <h1>{pageTitle}</h1>
       <StreamerControlPanel streamerId={streamerId} />
     </>
   ) : (
     <>
-      <title>{pageTitle}</title>
+      <h1>{pageTitle}</h1>
       <ViewerControlPanel streamerId={streamerId} />
     </>
   );
