@@ -7,6 +7,7 @@ const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY;
 const BIDDINGS_TABLE_NAME = "strawhats_biddings";
 
 const PORT = 2001;
+const REDIS_HOST = process.env.REDIS_HOST || "localhost";
 
 module.exports = {
   AWS_REGION,
@@ -14,4 +15,5 @@ module.exports = {
   AWS_SECRET_ACCESS_KEY,
   BIDDINGS_TABLE_NAME,
   PORT,
+  REDIS_HOST,
 };
