@@ -5,7 +5,6 @@ on:
       - "listings_service/**"
     branches:
       - deploy
-      - cd-pipeline-listings
 jobs:
   build:
     name: Build Image
