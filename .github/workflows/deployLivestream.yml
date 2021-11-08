@@ -1,0 +1,41 @@
+name: Livestream CD
+on:
+  push:
+    paths:
+      - "livestream_service/**"
+    branches:
+      - deploy
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./livestream_service
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-southeast-1
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: stawhats-livestream
+          IMAGE_TAG: latest
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID}}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          REDIS_HOST: ${{ secrets.REDIS_HOST }}
+          MUX_TOKEN_ID: ${{ secrets.MUX_TOKEN_ID }}
+          MUX_TOKEN_SECRET: ${{ secrets.MUX_TOKEN_SECRET }}
+        run: |
+          docker build --build-arg AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID --build-arg AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY --build-arg REDIS_HOST=$REDIS_HOST --build-arg MUX_TOKEN_ID=$MUX_TOKEN_ID --build-arg MUX_TOKEN_SECRET=$MUX_TOKEN_SECRET -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG

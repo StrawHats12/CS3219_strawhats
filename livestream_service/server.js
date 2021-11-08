@@ -36,8 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 
-const server = app.listen(process.env.SERVER_PORT, function () {
-  console.log("Your app is listening on port " + process.env.SERVER_PORT);
+const server = app.listen(9000, function () {
+  console.log("Your app is listening on port 9000");
 });
 
 //Chat IO
