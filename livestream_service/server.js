@@ -5,7 +5,6 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const Mux = require("@mux/mux-node");
-
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID,
   process.env.MUX_TOKEN_SECRET

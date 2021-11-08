@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const { createAdapter } = require("@socket.io/redis-adapter");
 const { createClient } = require("redis");
-
 const conversationRoute = require("./routes/conversation");
 const messageRoute = require("./routes/message");
 const { auth, roles } = require("./auth");

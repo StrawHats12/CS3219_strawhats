@@ -7,7 +7,6 @@ const {
   deleteAccount,
   getAccountById,
 } = require("./dynamoDb");
-
 const cors = require("cors");
 const app = express();
 const morgan = require("morgan");
