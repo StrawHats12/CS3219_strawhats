@@ -1,12 +1,13 @@
-# Hi.
+# Strawhats Auctions Site 
 
-![Luffy Young](./tmp/luffy.png)
+> CS3219 Team 12  
+> [Deployed Application](https://deploy.d35y0d6u0ucr1n.amplifyapp.com/)  
+> [Original Repo](https://github.com/StrawHats12/CS3219_strawhats)
 
 This is a monorepo containing the following:
-1. service_core
-2. listings_service 
-3. bidding_service
-4. payments_service
-5. livestream_service
-6. messaging_service
-7. Dummy: for tinkering
+1. [Frontend Core Application](./frontend/)
+2. [Accounts Service](./accounts_service/)
+3. [Bidding Service](./bidding_service/)
+4. [Listings Service](./listings_service/)
+5. [Livestream Service](./livestream_service/)
+6. [Messaging Service](./messaging_service/)
