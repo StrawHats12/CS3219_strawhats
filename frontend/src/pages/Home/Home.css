@@ -3,8 +3,16 @@
   background-color: rgba(33, 37, 41, 1);
 }
 
+@media only screen and (max-width: 1077px) {
+  .hero {
+    height: 650px;
+  }
+}
+
 .hero-img {
-  height: 250px;
+  display:block;
+  margin: auto;
+  height: 400px;
 }
 
 .pr {

@@ -5,6 +5,8 @@ const express = require("express");
 const app = express();
 const morgan = require("morgan");
 const Mux = require("@mux/mux-node");
+const { createAdapter } = require("@socket.io/redis-adapter");
+const { createClient } = require("redis");
 const { Video } = new Mux(
   process.env.MUX_TOKEN_ID,
   process.env.MUX_TOKEN_SECRET
@@ -18,6 +20,7 @@ const {
 } = require("./dynamoDb");
 
 const { auth, roles } = require("./auth");
+const { REDIS_HOST } = require("./const");
 
 // Sanity Checks
 if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
@@ -47,6 +50,10 @@ const io = require("socket.io")(server, {
     methods: ["GET", "POST"],
   },
 });
+
+const pubClient = createClient({ host: REDIS_HOST, port: 6379 });
+const subClient = pubClient.duplicate();
+io.adapter(createAdapter(pubClient, subClient));
 
 // Livestream messages
 io.on("connection", (socket) => {

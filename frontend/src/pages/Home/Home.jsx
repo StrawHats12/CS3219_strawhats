@@ -24,8 +24,8 @@ const Home = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-around align-items-center flex-wrap text-white hero">
-        <div className="d-flex justify-content-center">
+      <div className="d-flex align-items-center flex-wrap text-white hero">
+        <div className="d-flex justify-content-center flex-fill">
           <img src="/logo192.png" alt="" className="pr" />
           <div className="d-flex justify-content-left align-items-center">
             <div className="mx-2">
@@ -45,7 +45,9 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <img src={hero} alt="" className="hero-img" />
+        <div className="flex-fill">
+          <img src={hero} alt="" className="hero-img" />
+        </div>
       </div>
       <Container>
         <h1 className="heading">Featured Listings</h1>

@@ -3,10 +3,10 @@
 exports[`Home page renders correctly 1`] = `
 <div>
   <div
-    className="d-flex justify-content-around align-items-center flex-wrap text-white hero"
+    className="d-flex align-items-center flex-wrap text-white hero"
   >
     <div
-      className="d-flex justify-content-center"
+      className="d-flex justify-content-center flex-fill"
     >
       <img
         alt=""
@@ -47,11 +47,15 @@ exports[`Home page renders correctly 1`] = `
         </div>
       </div>
     </div>
-    <img
-      alt=""
-      className="hero-img"
-      src="hero.png"
-    />
+    <div
+      className="flex-fill"
+    >
+      <img
+        alt=""
+        className="hero-img"
+        src="hero.png"
+      />
+    </div>
   </div>
   <div
     className="container"
